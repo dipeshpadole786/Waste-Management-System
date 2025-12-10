@@ -1,0 +1,718 @@
+/* Tracking.css - Government Theme */
+.government-tracking-page {
+    background: #F8F9FA;
+    min-height: 100vh;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Page Header Banner */
+.page-header-banner {
+    background: linear-gradient(135deg, #000080, #1A237E);
+    color: white;
+    padding: 25px 0;
+    border-bottom: 4px solid #FF9933;
+    margin-bottom: 30px;
+}
+
+.page-header-banner .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.page-header-banner h1 {
+    margin: 0;
+    font-size: 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.header-icon {
+    font-size: 32px;
+    margin-right: 15px;
+}
+
+.sub-header {
+    font-size: 16px;
+    color: #E3F2FD;
+    font-weight: 400;
+    margin-top: 5px;
+}
+
+.header-badge {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 10px 20px;
+    border-radius: 30px;
+    border: 2px solid #FF9933;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    backdrop-filter: blur(10px);
+}
+
+.badge-icon {
+    font-size: 18px;
+}
+
+/* Alert Bar */
+.alert-info-bar {
+    background: #E3F2FD;
+    border: 1px solid #2196F3;
+    border-left: 4px solid #2196F3;
+    border-radius: 4px;
+    padding: 12px 20px;
+    margin-bottom: 30px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.alert-icon {
+    font-size: 20px;
+}
+
+.alert-text {
+    flex-grow: 1;
+    color: #0D47A1;
+    font-weight: 500;
+}
+
+.refresh-time {
+    background: #2196F3;
+    color: white;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+/* Main Content Layout */
+.tracking-main-content {
+    display: grid;
+    grid-template-columns: 1fr 400px;
+    gap: 30px;
+    margin-bottom: 40px;
+}
+
+@media (max-width: 992px) {
+    .tracking-main-content {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Government Card Base */
+.government-card {
+    background: white;
+    border-radius: 8px;
+    border: 1px solid #E0E0E0;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.government-card .card-header {
+    background: linear-gradient(to right, #F5F5F5, #FAFAFA);
+    padding: 15px 20px;
+    border-bottom: 2px solid #000080;
+    border-radius: 8px 8px 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.government-card .card-header h3 {
+    margin: 0;
+    font-size: 18px;
+    color: #000080;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.card-icon {
+    font-size: 20px;
+}
+
+/* Map Section */
+.map-section .card-body {
+    padding: 20px;
+}
+
+.live-badge {
+    background: #4CAF50;
+    color: white;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.live-dot {
+    width: 8px;
+    height: 8px;
+    background: #FFEB3B;
+    border-radius: 50%;
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.5;
+    }
+}
+
+.live-map-container {
+    height: 400px;
+    background: #E8F5E8;
+    border: 1px solid #C8E6C9;
+    border-radius: 4px;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 15px;
+}
+
+.map-visualization {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.map-grid {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(0deg, #E8F5E8 0%, #C8E6C9 100%);
+    position: relative;
+}
+
+.map-route {
+    position: absolute;
+    top: 50%;
+    left: 10%;
+    right: 10%;
+    height: 3px;
+    background: #FF9933;
+    border-radius: 2px;
+}
+
+.map-route::before {
+    content: '';
+    position: absolute;
+    top: -1px;
+    bottom: -1px;
+    left: 0;
+    right: 0;
+    background: repeating-linear-gradient(to right,
+            transparent,
+            transparent 10px,
+            white 10px,
+            white 20px);
+}
+
+.map-truck {
+    position: absolute;
+    left: 60%;
+    top: calc(50% - 20px);
+    animation: moveTruck 5s linear infinite;
+}
+
+@keyframes moveTruck {
+    0% {
+        left: 10%;
+    }
+
+    100% {
+        left: 80%;
+    }
+}
+
+.truck-icon {
+    font-size: 40px;
+    display: block;
+}
+
+.truck-label {
+    background: #000080;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 600;
+    margin-top: 5px;
+    text-align: center;
+}
+
+.dustbin-marker {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.dustbin-marker.full {
+    color: #F44336;
+}
+
+.dustbin-marker.medium {
+    color: #FF9800;
+}
+
+.dustbin-marker.empty {
+    color: #4CAF50;
+}
+
+.bin-icon {
+    font-size: 30px;
+}
+
+.bin-tooltip {
+    position: absolute;
+    top: -30px;
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    opacity: 0;
+    transition: opacity 0.3s;
+    white-space: nowrap;
+}
+
+.dustbin-marker:hover .bin-tooltip {
+    opacity: 1;
+}
+
+.map-legend {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 10px 15px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 5px;
+    font-size: 12px;
+}
+
+.legend-item:last-child {
+    margin-bottom: 0;
+}
+
+.legend-color {
+    width: 15px;
+    height: 15px;
+    border-radius: 3px;
+}
+
+.legend-color.full {
+    background: #F44336;
+}
+
+.legend-color.medium {
+    background: #FF9800;
+}
+
+.legend-color.empty {
+    background: #4CAF50;
+}
+
+.map-controls {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+/* Fleet Stats */
+.fleet-section {
+    padding: 20px;
+}
+
+.fleet-section h3 {
+    margin: 0 0 20px 0;
+    color: #000080;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.fleet-stats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+}
+
+.stat-card {
+    background: #F8F9FA;
+    border: 1px solid #E0E0E0;
+    border-radius: 6px;
+    padding: 15px;
+    text-align: center;
+    transition: transform 0.3s;
+}
+
+.stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.stat-number {
+    font-size: 28px;
+    font-weight: 700;
+    color: #000080;
+    margin-bottom: 5px;
+}
+
+.stat-label {
+    font-size: 12px;
+    color: #666;
+    font-weight: 500;
+}
+
+/* Truck Details */
+.truck-details-card {
+    padding: 20px;
+}
+
+.vehicle-status {
+    background: #4CAF50;
+    color: white;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.info-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.info-label {
+    font-size: 12px;
+    color: #666;
+    font-weight: 500;
+}
+
+.info-value {
+    font-size: 14px;
+    font-weight: 600;
+    color: #000080;
+}
+
+.govt-number {
+    background: #E3F2FD;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-family: monospace;
+    font-size: 15px;
+}
+
+.arrival-time {
+    color: #D32F2F;
+    font-weight: 700;
+}
+
+.status-badge {
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    display: inline-block;
+}
+
+.status-badge.on-route {
+    background: #FFF3E0;
+    color: #EF6C00;
+    border: 1px solid #FFB74D;
+}
+
+.schedule-info {
+    background: #F5F5F5;
+    padding: 15px;
+    border-radius: 6px;
+    border-left: 3px solid #FF9933;
+}
+
+.schedule-info h4 {
+    margin: 0 0 10px 0;
+    font-size: 14px;
+    color: #000080;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.schedule-icon {
+    font-size: 16px;
+}
+
+.schedule-info p {
+    margin: 5px 0;
+    font-size: 13px;
+    color: #555;
+}
+
+/* Dustbin Table */
+.dustbin-card {
+    padding: 20px;
+}
+
+.dustbin-table {
+    border: 1px solid #E0E0E0;
+    border-radius: 6px;
+    overflow: hidden;
+    margin: 15px 0;
+}
+
+.table-header {
+    background: #000080;
+    color: white;
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr 1.5fr;
+    padding: 12px 15px;
+    font-weight: 600;
+    font-size: 13px;
+}
+
+.table-body {
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.table-row {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr 1.5fr;
+    padding: 10px 15px;
+    border-bottom: 1px solid #F0F0F0;
+    align-items: center;
+}
+
+.table-row:last-child {
+    border-bottom: none;
+}
+
+.col {
+    font-size: 13px;
+}
+
+.bin-id {
+    font-weight: 600;
+    color: #000080;
+    font-family: monospace;
+}
+
+.status-indicator {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.status-indicator.full {
+    background: #FFEBEE;
+    color: #D32F2F;
+    border: 1px solid #FFCDD2;
+}
+
+.status-indicator.medium {
+    background: #FFF3E0;
+    color: #EF6C00;
+    border: 1px solid #FFCC80;
+}
+
+.status-indicator.empty {
+    background: #E8F5E9;
+    color: #388E3C;
+    border: 1px solid #C8E6C9;
+}
+
+.last-collected {
+    color: #666;
+    font-size: 12px;
+}
+
+.view-all-link {
+    color: #000080;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: color 0.3s;
+}
+
+.view-all-link:hover {
+    color: #FF9933;
+}
+
+/* Action Cards */
+.action-cards-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin: 20px 0;
+}
+
+@media (max-width: 576px) {
+    .action-cards-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.action-card {
+    padding: 20px;
+    text-align: center;
+    border-top: 4px solid;
+}
+
+.pickup-card {
+    border-top-color: #D32F2F;
+}
+
+.complaint-card {
+    border-top-color: #FF9800;
+}
+
+.action-icon {
+    font-size: 32px;
+    margin-bottom: 10px;
+}
+
+.action-card h4 {
+    margin: 0 0 10px 0;
+    color: #000080;
+    font-size: 16px;
+}
+
+.action-card p {
+    font-size: 12px;
+    color: #666;
+    margin-bottom: 15px;
+    line-height: 1.4;
+}
+
+/* Quick Links */
+.quick-links-card {
+    padding: 20px;
+}
+
+.quick-links-card h4 {
+    margin: 0 0 15px 0;
+    color: #000080;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.quick-links {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+}
+
+.quick-link {
+    background: #F5F5F5;
+    color: #000080;
+    text-decoration: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    font-size: 13px;
+    font-weight: 500;
+    transition: all 0.3s;
+    text-align: center;
+    border: 1px solid #E0E0E0;
+}
+
+.quick-link:hover {
+    background: #000080;
+    color: white;
+    transform: translateY(-2px);
+}
+
+/* Button Styles */
+.btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.btn-primary {
+    background: #000080;
+    color: white;
+}
+
+.btn-primary:hover {
+    background: #1A237E;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.btn-secondary {
+    background: #FF9800;
+    color: white;
+}
+
+.btn-secondary:hover {
+    background: #F57C00;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.btn-emergency {
+    background: #D32F2F;
+    color: white;
+}
+
+.btn-emergency:hover {
+    background: #C62828;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
