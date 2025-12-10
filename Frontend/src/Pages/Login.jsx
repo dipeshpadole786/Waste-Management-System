@@ -1,6 +1,7 @@
 // AadhaarLoginLarge.jsx
 import React, { useState, useEffect, useRef } from 'react';
 import './Login.css';
+import API from '../API/api_req';
 
 // Mock user database
 const mockUserDatabase = {
@@ -122,7 +123,7 @@ const AadhaarLoginLarge = () => {
     };
 
     // Handle Aadhaar Submission
-    const handleAadhaarSubmit = (e) => {
+    const handleAadhaarSubmit = async (e) => {
         e.preventDefault();
         setError('');
 
@@ -139,11 +140,25 @@ const AadhaarLoginLarge = () => {
             return;
         }
 
-        // Check if user exists
-        if (!mockUserDatabase[aadhaarNumber]) {
-            setError('Aadhaar number not found in our system.');
-            return;
+        try {
+            const res = await API.post("/aadhar", { aadharnumber: aadhaarNumber });
+
+            if (res.data === 0) {   // <-- use res.data
+                setError('Aadhar number not found');
+                return;
+            }
+
+            // Aadhaar exists, continue your logic
+        } catch (error) {
+            console.error(error);
+            setError('Server error');
         }
+
+        // Check if user exists
+        // if (!mockUserDatabase[aadhaarNumber]) {
+        //     setError('Aadhaar number not found in our system.');
+        //     return;
+        // }
 
         // Start loading
         setLoading(true);
@@ -169,7 +184,7 @@ const AadhaarLoginLarge = () => {
     };
 
     // Handle OTP Verification
-    const handleOtpSubmit = (e) => {
+    const handleOtpSubmit = async (e) => {
         e.preventDefault();
         setError('');
 
@@ -196,8 +211,15 @@ const AadhaarLoginLarge = () => {
         setOtpVerified(true);
 
         // Get user data
-        const user = mockUserDatabase[aadhaarNumber];
-        setUserData(user);
+        const res = await API.get("/userget", {
+            params: { aadharnumber: aadhaarNumber } // sends as query param
+        });
+
+        setUserData(res.data); // user data from backend
+
+
+        // const user = mockUserDatabase[aadhaarNumber];
+        // setUserData(user);
 
         // Move to user details step
         setStep(3);
@@ -236,9 +258,23 @@ const AadhaarLoginLarge = () => {
 
     // Handle Login
     const handleLogin = () => {
+        if (!userData) return;
+
+        const expiryTime = new Date().getTime() + 7 * 24 * 60 * 60 * 1000; // 7 days in ms
+
+        localStorage.setItem('loggedInUser', JSON.stringify({
+            username: userData.fullName,
+            aadhaarNumber: userData.aadhaarNumber,
+            email: userData.email,
+            mobileNumber: userData.mobileNumber,
+            expiry: expiryTime
+        }));
+
         alert(`✅ WELCOME ${userData.fullName}!\n\nYou have successfully logged in using Aadhaar authentication.`);
+
         window.location.href = '/dashboard';
     };
+
 
     // Handle Go Back
     const handleGoBack = () => {

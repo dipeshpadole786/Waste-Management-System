@@ -3,10 +3,17 @@ const mongoose = require("mongoose");
 const port = 3000;
 const app = express();
 const User = require("./Models/user");
+const cors = require("cors");
+app.use(express.json()); // to parse JSON body
+
 const main = async () => {
-    await mongoose.connect("mongodb://localhost:27017/database_name");
+    await mongoose.connect("mongodb://localhost:27017/waste-management");
     console.log("mongodb is connected ");
 };
+app.use(cors({
+    origin: "http://localhost:5173" // or your React dev server port
+}));
+
 
 
 
@@ -16,6 +23,43 @@ app.get("/", (req, res) => {
     res.send("Hello here is backend server ");
 
 })
+
+app.post("/aadhar", async (req, res) => {
+    const { aadharnumber } = req.body; // <-- use req.body here
+    console.log("Received Aadhaar:", aadharnumber);
+
+    try {
+        const user = await User.findOne({ aadhaarNumber: aadharnumber });
+
+        if (user) {
+            res.json(1); // Aadhaar exists
+        } else {
+            res.json(0); // Aadhaar not found
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Server error" });
+    }
+});
+
+app.get("/userget", async (req, res) => {
+    const { aadharnumber } = req.query; // read from query params
+
+    try {
+        const user = await User.findOne({ aadhaarNumber: aadharnumber });
+
+        if (user) {
+            res.json(user); // send user data
+        } else {
+            res.status(404).json({ message: "User not found" });
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Server error" });
+    }
+});
+
+
 
 app.get("/:username/:email/:phone", async (req, res) => {
     const { username, email, phone } = req.params;

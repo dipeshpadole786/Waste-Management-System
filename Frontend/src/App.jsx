@@ -8,26 +8,49 @@ import Footer from "./Componets/Footer";
 import AadhaarLogin from "./Pages/Login";
 import { Top } from "./Componets/top";
 import TrainingAwareness from "./Pages/TrainingAwarness";
+import ProtectedRoute from "./Componets/ProtectedRoute";
 
 function App() {
   return (
     <Router>
-      <div>
-        <Top></Top>
-        <Header />
-
-      </div>
-
+      <Top />
+      <Header />
 
       <Routes>
-        <Route path="/" element={
 
-          <Home></Home>
-        } />
-        <Route path="/tracking" element={<Tracking />} />
-        <Route path="/filecom" element={<FileComplaint />} />
-        <Route path="/login" element={<AadhaarLogin></AadhaarLogin>} />
-        <Route path="/training" element={<TrainingAwareness></TrainingAwareness>} />
+        {/* Public Route */}
+        <Route path="/" element={<Home />} />
+
+        <Route path="/login" element={<AadhaarLogin />} />
+
+        {/* Protected Routes */}
+        <Route
+          path="/tracking"
+          element={
+            <ProtectedRoute>
+              <Tracking />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/filecom"
+          element={
+            <ProtectedRoute>
+              <FileComplaint />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/training"
+          element={
+            <ProtectedRoute>
+              <TrainingAwareness />
+            </ProtectedRoute>
+          }
+        />
+
       </Routes>
 
       <Footer />

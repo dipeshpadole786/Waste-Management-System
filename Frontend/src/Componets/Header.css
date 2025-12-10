@@ -168,10 +168,6 @@
     width: 80%;
 }
 
-.nav-icon {
-    font-size: 16px;
-}
-
 .notification-badge {
     background: #DC3545;
     color: white;
@@ -189,6 +185,7 @@
     gap: 20px;
 }
 
+/* Emergency Quick */
 .emergency-quick {
     display: flex;
     align-items: center;
@@ -198,6 +195,7 @@
     border-radius: 6px;
     border: 2px solid #DC3545;
     animation: pulse 2s infinite;
+    cursor: pointer;
 }
 
 @keyframes pulse {
@@ -214,18 +212,6 @@
 
 .emergency-icon {
     font-size: 20px;
-    color: white;
-}
-
-.emergency-info {
-    display: flex;
-    flex-direction: column;
-}
-
-.emergency-label {
-    font-size: 10px;
-    color: white;
-    font-weight: 500;
 }
 
 .emergency-number {
@@ -235,7 +221,13 @@
     letter-spacing: 1px;
 }
 
-.user-profile .login-button {
+/* User Section */
+.user-section {
+    position: relative;
+}
+
+/* Login Button (when not logged in) */
+.login-button {
     display: flex;
     align-items: center;
     gap: 8px;
@@ -248,16 +240,145 @@
     transition: all 0.3s ease;
     font-weight: 600;
     font-size: 14px;
+    min-width: 150px;
+    justify-content: center;
 }
 
-.user-profile .login-button:hover {
-    background: #138808;
+.login-button:hover {
+    background: #1A237E;
     transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 128, 0.2);
+    box-shadow: 0 4px 12px rgba(0, 0, 128, 0.2);
+}
+
+.login-icon {
+    font-size: 16px;
+}
+
+/* User Profile (when logged in) */
+.user-profile {
+    position: relative;
+}
+
+/* Profile Button */
+.profile-button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    background: #000080;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 600;
+    font-size: 14px;
+    min-width: 160px;
+    justify-content: space-between;
+}
+
+.profile-button:hover {
+    background: #1A237E;
 }
 
 .user-icon {
     font-size: 18px;
+}
+
+.user-name {
+    flex-grow: 1;
+    text-align: left;
+    padding: 0 8px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.dropdown-arrow {
+    font-size: 10px;
+    transition: transform 0.3s ease;
+}
+
+.profile-button.active .dropdown-arrow {
+    transform: rotate(180deg);
+}
+
+/* Profile Dropdown */
+.profile-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: 10px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+    min-width: 180px;
+    z-index: 1000;
+    overflow: hidden;
+    border: 1px solid #E0E0E0;
+    animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.profile-dropdown a,
+.profile-dropdown button {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    width: 100%;
+    text-align: left;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    color: #333;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    border-bottom: 1px solid #F5F5F5;
+}
+
+.profile-dropdown a:last-child,
+.profile-dropdown button:last-child {
+    border-bottom: none;
+}
+
+.profile-dropdown a:hover,
+.profile-dropdown button:hover {
+    background: #F8F9FA;
+    color: #000080;
+    padding-left: 20px;
+}
+
+.dropdown-icon {
+    font-size: 16px;
+    width: 20px;
+    text-align: center;
+}
+
+.profile-dropdown a:hover .dropdown-icon,
+.profile-dropdown button:hover .dropdown-icon {
+    transform: scale(1.1);
+}
+
+.profile-dropdown button {
+    color: #D32F2F;
+}
+
+.profile-dropdown button:hover {
+    background: #FFEBEE;
+    color: #C62828;
 }
 
 /* Hamburger Menu */
@@ -294,6 +415,16 @@
 
     .emergency-quick {
         display: none;
+    }
+
+    .login-button,
+    .profile-button {
+        min-width: auto;
+        padding: 8px 12px;
+    }
+
+    .user-name {
+        max-width: 80px;
     }
 }
 
@@ -350,6 +481,37 @@
 
     .government-nav.open+.header-right {
         display: flex;
+    }
+
+    .user-section {
+        width: 100%;
+    }
+
+    .login-button,
+    .profile-button {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .profile-dropdown {
+        position: fixed;
+        top: auto;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        margin: 0;
+        border-radius: 12px 12px 0 0;
+        animation: slideUp 0.3s ease;
+    }
+
+    @keyframes slideUp {
+        from {
+            transform: translateY(100%);
+        }
+
+        to {
+            transform: translateY(0);
+        }
     }
 }
 
