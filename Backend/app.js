@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const port = 3000;
 const app = express();
 const User = require("./Models/user");
+const Article = require("./Models/Training");
 const cors = require("cors");
 app.use(express.json()); // to parse JSON body
 
@@ -71,6 +72,18 @@ app.get("/see", async (req, res) => {
     const data = await User.find();  // ✅ wait for data
     res.send(data);
 })
+// =======================
+// GET ALL ARTICLES
+// =======================
+app.get("/articles", async (req, res) => {
+    try {
+        const articles = await Article.find().sort({ createdAt: -1 });
+        res.status(200).json(articles);
+    } catch (error) {
+        console.error("Error fetching articles:", error);
+        res.status(500).json({ message: "Server error" });
+    }
+});
 
 
 app.listen(port, () => {
