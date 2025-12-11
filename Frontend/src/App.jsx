@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Home } from "./Pages/Home";
 import Tracking from "./Pages/Tracking";
 import FileComplaint from "./Pages/FileComplaint";
+import FileSuccess from "./Pages/File_succes";
 import "./App.css";
 import Header from "./Componets/Header";
 import Footer from "./Componets/Footer";
@@ -18,9 +19,8 @@ function App() {
 
       <Routes>
 
-        {/* Public Route */}
+        {/* Public Routes */}
         <Route path="/" element={<Home />} />
-
         <Route path="/login" element={<AadhaarLogin />} />
 
         {/* Protected Routes */}
@@ -37,7 +37,19 @@ function App() {
           path="/filecom"
           element={
             <ProtectedRoute>
+              <br />
+              <br />
               <FileComplaint />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* ⭐ NEW SUCCESS PAGE ROUTE */}
+        <Route
+          path="/file_succes"
+          element={
+            <ProtectedRoute>
+              <FileSuccess />
             </ProtectedRoute>
           }
         />

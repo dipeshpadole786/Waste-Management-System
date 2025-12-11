@@ -1,0 +1,72 @@
+/* PAGE */
+.gov-success-page {
+    background-color: #f2f2f2;
+    padding: 30px 10px;
+    min-height: 80vh;
+}
+
+/* CONTAINER */
+.gov-container {
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+/* CARD */
+.gov-card {
+    background: white;
+    padding: 25px;
+    border: 1px solid #d0d0d0;
+    border-radius: 6px;
+    box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* HEADER TEXT */
+.gov-title {
+    font-size: 22px;
+    color: #064e3b;
+    /* Dark government green */
+    margin-bottom: 5px;
+    text-align: center;
+}
+
+.gov-subtitle {
+    font-size: 14px;
+    color: #333;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* DETAILS BOX */
+.gov-details-box {
+    background: #fafafa;
+    border: 1px solid #ccc;
+    padding: 15px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+}
+
+.gov-details-box p {
+    margin: 8px 0;
+    font-size: 15px;
+    color: #222;
+}
+
+/* BUTTONS */
+.gov-actions {
+    display: flex;
+    justify-content: space-between;
+}
+
+.gov-btn {
+    background-color: #14532d;
+    /* govt green */
+    color: white;
+    padding: 10px 16px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.gov-btn:hover {
+    background-color: #0e3d22;
+}

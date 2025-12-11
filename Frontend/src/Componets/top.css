@@ -1,3 +1,43 @@
 .government-top-banner {
-    background-color: rgb(100, 231, 231);
+    /* background-color: rgb(100, 231, 231); */
+    background-color: rgb(39, 196, 196);
+
+}
+
+@media (max-width: 768px) {
+    .government-top-banner .container {
+        flex-direction: column;
+        text-align: center;
+        gap: 15px;
+        height: 150px;
+    }
+
+    .tricolor-flag {
+        width: 100px;
+        height: 60px;
+    }
+
+    .portal-title h1 {
+        font-size: 22px;
+    }
+
+    .portal-title h2 {
+        font-size: 16px;
+    }
+
+    .services-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .stat-item {
+        min-width: 120px;
+    }
+
+    .stat-value {
+        font-size: 28px;
+    }
+
+    .citizen-links {
+        justify-content: center;
+    }
 }

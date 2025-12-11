@@ -4,8 +4,10 @@ const port = 3000;
 const app = express();
 const User = require("./Models/user");
 const Article = require("./Models/Training");
+const Complaint = require("./Models/Filecomplaint");
 const cors = require("cors");
 app.use(express.json()); // to parse JSON body
+
 
 const main = async () => {
     await mongoose.connect("mongodb://localhost:27017/waste-management");
@@ -42,6 +44,39 @@ app.post("/aadhar", async (req, res) => {
         res.status(500).json({ error: "Server error" });
     }
 });
+
+app.post("/filecomplaint", async (req, res) => {
+    try {
+        const { complaintId, complaintType, description, address, name, mobile } = req.body;
+
+        if (!complaintType || !description || !address || !name || !mobile) {
+            return res.status(400).json({ message: "All fields are required" });
+        }
+
+        const newComplaint = await Complaint.insertMany([
+            {
+                complaintId,
+                complaintType,
+                description,
+                address,
+                name,
+                mobile
+            }
+        ]);
+
+        res.status(201).json({
+            message: "Complaint submitted successfully",
+            complaint: newComplaint[0]
+        });
+
+    } catch (error) {
+        console.error("Error submitting complaint:", error);
+        res.status(500).json({ message: "Internal Server Error" });
+    }
+});
+
+
+
 
 app.get("/userget", async (req, res) => {
     const { aadharnumber } = req.query; // read from query params

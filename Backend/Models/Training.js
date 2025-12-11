@@ -60,6 +60,165 @@ const articleSchema = new mongoose.Schema(
 
 const articles = [
     {
+        title: "Smart Waste Monitoring Technology",
+        category: "technology",
+        level: "intermediate",
+        readTime: "6 min read",
+        posterColor: "#2979FF",
+        icon: "🖥️",
+        summary:
+            "Learn how smart sensors and IoT systems are transforming waste management.",
+        fullContent: `# Smart Waste Monitoring Technology
+
+## 1. What is Smart Waste Monitoring?
+Smart waste monitoring uses IoT sensors to track waste levels, temperature, and bin activity in real time.
+
+## 2. Key Components
+- Ultrasonic sensors  
+- LoRaWAN or Wi-Fi modules  
+- Cloud dashboard  
+
+## 3. How It Works
+Sensors detect fill levels → Data sent to cloud → Dashboard shows bin status.
+
+## 4. Benefits
+- Reduces overflow  
+- Optimizes collection routes  
+- Saves time and money  
+
+## 5. Applications
+Smart cities, malls, airports, campuses
+`,
+    },
+
+    {
+        title: "AI-based Waste Sorting",
+        category: "technology",
+        level: "advanced",
+        readTime: "8 min read",
+        posterColor: "#00C853",
+        icon: "🤖",
+        summary:
+            "Discover how AI and computer vision help automate waste segregation.",
+        fullContent: `# AI-based Waste Sorting
+
+## 1. Introduction
+AI helps machines identify and sort different types of waste using images and sensors.
+
+## 2. Technology Used
+- Computer vision  
+- Machine learning algorithms  
+- Robotic arms  
+
+## 3. How It Works
+Camera scans the waste → AI model identifies material → Robot separates items.
+
+## 4. Benefits
+- Faster and more accurate sorting  
+- Reduces human effort  
+- Improves recycling efficiency  
+
+## 5. Where It Is Used
+Recycling plants, industries, municipal waste centers
+`,
+    },
+
+    {
+        title: "GPS-enabled Garbage Trucks",
+        category: "technology",
+        level: "beginner",
+        readTime: "5 min read",
+        posterColor: "#FF6D00",
+        icon: "🛻",
+        summary:
+            "Understand how GPS helps improve waste collection and route planning.",
+        fullContent: `# GPS-enabled Garbage Trucks
+
+## 1. What is GPS Tracking?
+GPS allows real-time tracking of garbage trucks for efficient waste collection.
+
+## 2. Components
+- GPS device  
+- Tracking server  
+- Fleet monitoring app  
+
+## 3. Working System
+Device sends truck location → Server updates map → Admin monitors movement.
+
+## 4. Benefits
+- Reduces fuel use  
+- Prevents missed bins  
+- Enhances route planning  
+
+## 5. Common Usage
+Municipal trucks, private waste companies, industrial zones
+`,
+    },
+
+    {
+        title: "Waste-to-Energy Technology",
+        category: "technology",
+        level: "intermediate",
+        readTime: "7 min read",
+        posterColor: "#D50000",
+        icon: "⚡",
+        summary:
+            "Learn how waste can be converted into usable electricity and heat.",
+        fullContent: `# Waste-to-Energy Technology
+
+## 1. Introduction
+Waste-to-energy (WTE) converts solid waste into energy using thermal or biological methods.
+
+## 2. Processes
+- Incineration  
+- Pyrolysis  
+- Anaerobic digestion  
+
+## 3. How It Works
+Waste is burned or processed → Heat is produced → Turbines generate power.
+
+## 4. Advantages
+- Reduces landfill usage  
+- Produces clean energy  
+- Handles large waste volumes  
+
+## 5. Applications
+Power plants, large industries, municipal waste treatment facilities
+`,
+    },
+
+    {
+        title: "RFID-based Waste Tracking",
+        category: "technology",
+        level: "intermediate",
+        readTime: "6 min read",
+        posterColor: "#AA00FF",
+        icon: "📡",
+        summary:
+            "Explore how RFID tags help track waste bins and collection activity.",
+        fullContent: `# RFID-based Waste Tracking
+
+## 1. What is RFID?
+RFID uses radio-frequency tags to identify and track objects automatically.
+
+## 2. Components
+- RFID tags on bins  
+- RFID readers on trucks  
+- Data management software  
+
+## 3. Working
+Truck reader scans bin → Tag ID recorded → Data stored in system.
+
+## 4. Benefits
+- Tracks collection history  
+- Ensures accountability  
+- Reduces missed pickup issues  
+
+## 5. Who Uses It?
+Municipal corporations, private waste contractors, large housing societies
+`,
+    },
+    {
         title: "Smart Waste Segregation Guide",
         category: "segregation",
         level: "beginner",
@@ -491,10 +650,10 @@ Contains hazardous materials:
 
 const Article = mongoose.model("Article", articleSchema);
 module.exports = Article;
-// const addData = async () => {
-//     await Article.deleteMany({});
-//     await Article.insertMany(articles);
-//     console.log("✅ New Articles Inserted Successfully");
-// }
-// // addData();
+const addData = async () => {
+    await Article.deleteMany({});
+    await Article.insertMany(articles);
+    console.log("✅ New Articles Inserted Successfully");
+}
+// addData();
 

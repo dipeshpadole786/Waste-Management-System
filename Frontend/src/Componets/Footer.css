@@ -1,8 +1,9 @@
 /* Footer.css - Government Theme */
 .government-footer {
-    background: linear-gradient(to bottom, #F8F9FA, #E9ECEF);
+
+    /* centers the image */
     border-top: 5px solid #000080;
-    color: #343A40;
+    color: white;
     position: relative;
     margin-top: 40px;
 }
