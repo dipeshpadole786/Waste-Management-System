@@ -45,28 +45,75 @@ app.post("/aadhar", async (req, res) => {
     }
 });
 
+app.get("/getUserComplaints/:aadhaar", async (req, res) => {
+    try {
+        const aadhaar = req.params.aadhaar;
+
+        const user = await User.findOne({ aadhaarNumber: aadhaar })
+            .populate("complaints");
+
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        res.status(200).json({
+            message: "Data fetched successfully",
+            user,
+            complaints: user.complaints
+        });
+
+    } catch (error) {
+        console.error("Error fetching complaints:", error);
+        res.status(500).json({ message: "Internal Server Error" });
+    }
+});
+
+
 app.post("/filecomplaint", async (req, res) => {
     try {
-        const { complaintId, complaintType, description, address, name, mobile } = req.body;
+        const { complaintId, complaintType, description, address, name, mobile, aadhaar } = req.body;
 
-        if (!complaintType || !description || !address || !name || !mobile) {
+        // ----------------------------------------
+        // 🟥 1. Validate Required Fields
+        // ----------------------------------------
+        if (!complaintType || !description || !address || !name || !mobile || !aadhaar) {
             return res.status(400).json({ message: "All fields are required" });
         }
 
-        const newComplaint = await Complaint.insertMany([
-            {
-                complaintId,
-                complaintType,
-                description,
-                address,
-                name,
-                mobile
-            }
-        ]);
+        // ----------------------------------------
+        // 🟦 2. Find User By Aadhaar
+        // ----------------------------------------
+        const user = await User.findOne({ aadhaarNumber: aadhaar });
 
+        if (!user) {
+            return res.status(404).json({ message: "User not found with this Aadhaar" });
+        }
+
+        // ----------------------------------------
+        // 🟩 3. Create Complaint
+        // ----------------------------------------
+        const newComplaint = await Complaint.create({
+            complaintId,
+            complaintType,
+            description,
+            address,
+            name,
+            mobile,
+            user: user._id   // ⭐ store user reference
+        });
+
+        // ----------------------------------------
+        // 🟪 4. Add Complaint ID to User
+        // ----------------------------------------
+        user.complaints.push(newComplaint._id);
+        await user.save();
+
+        // ----------------------------------------
+        // 🟧 5. Send Response
+        // ----------------------------------------
         res.status(201).json({
             message: "Complaint submitted successfully",
-            complaint: newComplaint[0]
+            complaint: newComplaint
         });
 
     } catch (error) {
@@ -74,6 +121,7 @@ app.post("/filecomplaint", async (req, res) => {
         res.status(500).json({ message: "Internal Server Error" });
     }
 });
+
 
 
 

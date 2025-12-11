@@ -5,6 +5,11 @@ import { useNavigate } from "react-router-dom";
 
 const FileComplaint = () => {
     const navigate = useNavigate();
+    const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+
+    const aadhaar = loggedInUser?.aadhaarNumber;  // safe access
+
+    console.log(aadhaar);
 
     const [formData, setFormData] = useState({
         complaintType: "",
@@ -43,6 +48,7 @@ const FileComplaint = () => {
         try {
             const res = await API.post("/filecomplaint", {
                 complaintId,
+                aadhaar,
                 ...formData
             });
 

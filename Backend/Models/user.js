@@ -53,7 +53,13 @@ const userSchema = new mongoose.Schema({
     photo: {
         type: String,   // Could be URL or emoji
         default: "👤"
-    }
+    }, complaints: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Complaint"
+        }
+    ]
+
 }, { timestamps: true });
 
 const User = mongoose.model("User", userSchema);

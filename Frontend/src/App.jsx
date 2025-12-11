@@ -4,6 +4,7 @@ import Tracking from "./Pages/Tracking";
 import FileComplaint from "./Pages/FileComplaint";
 import FileSuccess from "./Pages/File_succes";
 import "./App.css";
+import TrackStatus from "./Pages/TrackStatus";
 import Header from "./Componets/Header";
 import Footer from "./Componets/Footer";
 import AadhaarLogin from "./Pages/Login";
@@ -59,6 +60,14 @@ function App() {
           element={
             <ProtectedRoute>
               <TrainingAwareness />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/track"
+          element={
+            <ProtectedRoute>
+              <TrackStatus />
             </ProtectedRoute>
           }
         />

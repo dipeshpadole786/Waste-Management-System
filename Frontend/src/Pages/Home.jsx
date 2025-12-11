@@ -67,7 +67,10 @@ export function Home() {
                                 <div className="service-content">
                                     <h4>Track Status</h4>
                                     <p>Check complaint status</p>
-                                    <button className="btn btn-secondary">Track</button>
+                                    <a href="/track">
+                                        <button className="btn btn-secondary">Track</button>
+                                    </a>
+
                                 </div>
                             </div>
 
