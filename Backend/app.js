@@ -6,6 +6,7 @@ const User = require("./Models/user");
 const Article = require("./Models/Training");
 const Complaint = require("./Models/Filecomplaint");
 const cors = require("cors");
+const UserProgress = require("./Models/UserProgress");
 app.use(express.json()); // to parse JSON body
 
 
@@ -42,6 +43,99 @@ app.post("/aadhar", async (req, res) => {
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: "Server error" });
+    }
+});
+
+// =======================
+// UPDATE USER PROGRESS
+// =======================
+app.post("/progress/update", async (req, res) => {
+    try {
+        const {
+            aadhaar,
+            articleId,
+            status,
+            progressPercent,
+            timeSpent,
+        } = req.body;
+
+        if (!aadhaar || !articleId) {
+            return res.status(400).json({ message: "Missing data" });
+        }
+
+        const user = await User.findOne({ aadhaarNumber: aadhaar });
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        let progress = await UserProgress.findOne({
+            user: user._id,
+            article: articleId,
+        });
+
+        if (!progress) {
+            progress = new UserProgress({
+                user: user._id,
+                article: articleId,
+                status: "not_started",
+                progressPercent: 0,
+                timeSpent: 0
+            });
+        }
+
+        // Update fields if provided
+        if (status) progress.status = status;
+        if (progressPercent !== undefined)
+            progress.progressPercent = Math.min(100, Math.max(0, progressPercent)); // Clamp between 0-100
+
+        if (timeSpent) progress.timeSpent += timeSpent;
+
+        progress.lastReadAt = new Date();
+
+        // If status is completed, set completion details
+        if (status === "completed") {
+            progress.completedAt = new Date();
+            progress.progressPercent = 100;
+        }
+        // If progress reaches 100%, mark as completed
+        else if (progress.progressPercent >= 100) {
+            progress.status = "completed";
+            progress.completedAt = new Date();
+        }
+        // If progress is > 0 but not completed, mark as in_progress
+        else if (progress.progressPercent > 0 && progress.progressPercent < 100) {
+            progress.status = "in_progress";
+        }
+
+        await progress.save();
+
+        res.status(200).json({
+            message: "Progress updated",
+            progress,
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Server error" });
+    }
+});
+
+// Get all progress for a user
+app.get("/progress/user/:aadhaar", async (req, res) => {
+    try {
+        const { aadhaar } = req.params;
+
+        const user = await User.findOne({ aadhaarNumber: aadhaar });
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        const progress = await UserProgress.find({ user: user._id })
+            .populate("article", "title category readTime level");
+
+        res.status(200).json(progress);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Server error" });
     }
 });
 

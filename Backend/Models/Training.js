@@ -648,6 +648,7 @@ Contains hazardous materials:
 
 
 
+
 const Article = mongoose.model("Article", articleSchema);
 module.exports = Article;
 const addData = async () => {
