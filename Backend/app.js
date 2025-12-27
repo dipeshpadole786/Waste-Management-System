@@ -163,6 +163,43 @@ app.get("/getUserComplaints/:aadhaar", async (req, res) => {
 });
 
 
+// =======================
+// GET USER PROFILE
+// =======================
+app.get("/user/profile/:aadhaarNumber", async (req, res) => {
+    try {
+        const { aadhaarNumber } = req.params;
+
+        console.log("Aadhaar received:", aadhaarNumber); // 👈 ADD THIS
+
+        const user = await User.findOne({ aadhaarNumber })
+            .select("-__v -createdAt -updatedAt")
+            .populate("complaints");
+
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                message: "User not found",
+            });
+        }
+
+        res.status(200).json(user);
+    } catch (error) {
+        console.error("Profile Fetch Error:", error);
+        res.status(500).json({
+            success: false,
+            message: "Server error",
+        });
+    }
+});
+
+// =======================
+// SERVER START
+// =======================
+
+
+
+
 app.post("/filecomplaint", async (req, res) => {
     try {
         const { complaintId, complaintType, description, address, name, mobile, aadhaar } = req.body;

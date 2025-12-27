@@ -11,6 +11,7 @@ import AadhaarLogin from "./Pages/Login";
 import { Top } from "./Componets/top";
 import TrainingAwareness from "./Pages/TrainingAwarness";
 import ProtectedRoute from "./Componets/ProtectedRoute";
+import Profile from "./Pages/Profile";
 
 function App() {
   return (
@@ -51,6 +52,14 @@ function App() {
           element={
             <ProtectedRoute>
               <FileSuccess />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <Profile />
             </ProtectedRoute>
           }
         />
