@@ -6,17 +6,20 @@ const userSchema = new mongoose.Schema({
         required: true,
         trim: true
     },
+
     aadhaarNumber: {
         type: String,
         required: true,
         unique: true,
-        match: /^[0-9]{12}$/  // Aadhaar must be 12 digits
+        match: /^[0-9]{12}$/
     },
+
     mobileNumber: {
         type: String,
         required: true,
-        match: /^[0-9]{10}$/   // 10-digit mobile
+        match: /^[0-9]{10}$/
     },
+
     email: {
         type: String,
         required: true,
@@ -24,36 +27,52 @@ const userSchema = new mongoose.Schema({
         lowercase: true,
         trim: true
     },
+
     address: {
         type: String,
         required: true
     },
+
     pincode: {
         type: String,
         required: true,
-        match: /^[0-9]{6}$/   // Indian PIN Code
+        match: /^[0-9]{6}$/
     },
+
     district: {
         type: String,
         required: true
     },
+
     state: {
         type: String,
         required: true
     },
+
     dob: {
-        type: String,  // If you want Date type, change to Date
+        type: String,
         required: true
     },
+
     gender: {
         type: String,
         enum: ["Male", "Female", "Other"],
         required: true
     },
+
     photo: {
-        type: String,   // Could be URL or emoji
+        type: String,
         default: "👤"
-    }, complaints: [
+    },
+
+    // 🔑 ROLE FIELD
+    role: {
+        type: String,
+        enum: ["user", "monitor"],
+        default: "user"   // 👈 DEFAULT ROLE
+    },
+
+    complaints: [
         {
             type: mongoose.Schema.Types.ObjectId,
             ref: "Complaint"
@@ -61,6 +80,7 @@ const userSchema = new mongoose.Schema({
     ]
 
 }, { timestamps: true });
+
 
 const User = mongoose.model("User", userSchema);
 

@@ -260,19 +260,26 @@ const AadhaarLoginLarge = () => {
     const handleLogin = () => {
         if (!userData) return;
 
-        const expiryTime = new Date().getTime() + 7 * 24 * 60 * 60 * 1000; // 7 days in ms
+        const expiryTime = new Date().getTime() + 7 * 24 * 60 * 60 * 1000;
 
-        localStorage.setItem('loggedInUser', JSON.stringify({
-            username: userData.fullName,
+        localStorage.setItem("loggedInUser", JSON.stringify({
+            _id: userData._id,
+            fullName: userData.fullName,
             aadhaarNumber: userData.aadhaarNumber,
             email: userData.email,
             mobileNumber: userData.mobileNumber,
+            role: userData.role || "user", // ⭐ REQUIRED
             expiry: expiryTime
         }));
 
-        alert(`✅ WELCOME ${userData.fullName}!\n\nYou have successfully logged in using Aadhaar authentication.`);
+        alert(`✅ Welcome ${userData.fullName}`);
 
-        window.location.href = '/dashboard';
+        // ✅ role-based redirect
+        if (userData.role === "monitor") {
+            window.location.href = "/newhome";
+        } else {
+            window.location.href = "/";
+        }
     };
 
 

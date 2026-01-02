@@ -1,35 +1,50 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
+import { useEffect, useState } from "react";
+
 import { Home } from "./Pages/Home";
+import Homef from "./Office/Home";
 import Tracking from "./Pages/Tracking";
 import FileComplaint from "./Pages/FileComplaint";
 import FileSuccess from "./Pages/File_succes";
-import "./App.css";
 import TrackStatus from "./Pages/TrackStatus";
-import Header from "./Componets/Header";
-import Footer from "./Componets/Footer";
-import AadhaarLogin from "./Pages/Login";
-import { Top } from "./Componets/top";
 import TrainingAwareness from "./Pages/TrainingAwarness";
-import ProtectedRoute from "./Componets/ProtectedRoute";
 import Profile from "./Pages/Profile";
+import ShowComplaints from "./Office/showcomplain";
+import AadhaarLogin from "./Pages/Login";
 
-function App() {
+import Header from "./Componets/Header";
+import Headerh from "./Office/Header";
+import Footer from "./Componets/Footer";
+import { Top } from "./Componets/top";
+import ProtectedRoute from "./Componets/ProtectedRoute";
+
+function Layout() {
+  const location = useLocation();
+  const [role, setRole] = useState(null);
+
+  // 🔹 get role from localStorage
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("loggedInUser"));
+    setRole(user?.role);
+  }, []);
+
   return (
-    <Router>
+    <>
       <Top />
-      <Header />
+
+      {/* 🔁 HEADER SWITCH BASED ON ROLE */}
+      {role === "monitor" ? <Headerh /> : <Header />}
 
       <Routes>
-
-        {/* Public Routes */}
+        {/* 🌐 PUBLIC */}
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<AadhaarLogin />} />
 
-        {/* Protected Routes */}
+        {/* 👤 USER ROUTES */}
         <Route
           path="/tracking"
           element={
-            <ProtectedRoute>
+            <ProtectedRoute allowedRoles={["user"]}>
               <Tracking />
             </ProtectedRoute>
           }
@@ -38,27 +53,25 @@ function App() {
         <Route
           path="/filecom"
           element={
-            <ProtectedRoute>
-              <br />
-              <br />
+            <ProtectedRoute allowedRoles={["user"]}>
               <FileComplaint />
             </ProtectedRoute>
           }
         />
 
-        {/* ⭐ NEW SUCCESS PAGE ROUTE */}
         <Route
           path="/file_succes"
           element={
-            <ProtectedRoute>
+            <ProtectedRoute allowedRoles={["user"]}>
               <FileSuccess />
             </ProtectedRoute>
           }
         />
+
         <Route
           path="/profile"
           element={
-            <ProtectedRoute>
+            <ProtectedRoute allowedRoles={["user"]}>
               <Profile />
             </ProtectedRoute>
           }
@@ -67,23 +80,50 @@ function App() {
         <Route
           path="/training"
           element={
-            <ProtectedRoute>
+            <ProtectedRoute allowedRoles={["user"]}>
               <TrainingAwareness />
             </ProtectedRoute>
           }
         />
+
         <Route
           path="/track"
           element={
-            <ProtectedRoute>
+            <ProtectedRoute allowedRoles={["user"]}>
               <TrackStatus />
             </ProtectedRoute>
           }
         />
 
+        {/* 🏢 MONITOR ROUTES */}
+        <Route
+          path="/newhome"
+          element={
+            <ProtectedRoute allowedRoles={["monitor"]}>
+              <Homef />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/show-complaints"
+          element={
+            <ProtectedRoute allowedRoles={["monitor"]}>
+              <ShowComplaints />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
 
       <Footer />
+    </>
+  );
+}
+
+function App() {
+  return (
+    <Router>
+      <Layout />
     </Router>
   );
 }
