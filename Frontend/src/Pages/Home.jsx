@@ -1,36 +1,27 @@
-// Home.jsx (The Middle Portion)
-
-// ... (Imports and CameraReporter/NotificationFeed components remain the same) ...
-
-// --- Main Exported Home Component ---
-import Header from "../Componets/Header";
-import Footer from "../Componets/Footer";
-import CameraReporter from "../Componets/Camera";
-import NotificationFeed from "../Componets/Notification";
 // Home.jsx
 import "./Home.css";
-
+import { useState } from "react"; // Add this import
 import { Top } from "../Componets/top";
+import CameraReporter from "../Componets/Camera";
+import NotificationFeed from "../Componets/Notification";
+
 export function Home() {
+    // Add state to control camera visibility
+    const [showCamera, setShowCamera] = useState(false);
+    const [cameraMode, setCameraMode] = useState("emergency"); // Default mode
+
+    // Function to handle emergency report click
+    const handleEmergencyReport = () => {
+        setCameraMode("emergency");
+        setShowCamera(true);
+        // Scroll to camera section for better UX
+        document.querySelector(".camera-reporter-section")?.scrollIntoView({
+            behavior: "smooth"
+        });
+    };
+
     return (
         <div className="app-layout government-portal">
-            {/* <Header /> */}
-
-            {/* Government Top Banner */}
-
-
-            {/* Alert Bar */}
-            {/* <div className="alert-bar">
-                <div className="container">
-                    <span className="alert-icon">⚠️</span>
-                    <span className="alert-text">
-                        <strong>Emergency:</strong> Dial 112 for Police, 108 for Ambulance, 101 for Fire
-                    </span>
-                    <span className="alert-badge">24x7 HELPLINE</span>
-                </div>
-            </div> */}
-
-
             <main className="main-content">
                 <div className="container">
                     {/* Quick Services Section */}
@@ -46,9 +37,17 @@ export function Home() {
                                 <div className="service-content">
                                     <h4>Emergency Reporting</h4>
                                     <p>Immediate police assistance</p>
-                                    <button className="btn btn-emergency">Report Now</button>
+                                    {/* Add onClick handler */}
+                                    <button
+                                        className="btn btn-emergency"
+                                        onClick={handleEmergencyReport}
+                                    >
+                                        Report Now
+                                    </button>
                                 </div>
                             </div>
+
+                            {/* Other service cards remain the same */}
                             <a href="/filecom">
                                 <div className="service-card">
                                     <div className="service-icon complaint">📋</div>
@@ -60,8 +59,6 @@ export function Home() {
                                 </div>
                             </a>
 
-
-
                             <div className="service-card">
                                 <div className="service-icon status">📊</div>
                                 <div className="service-content">
@@ -70,7 +67,6 @@ export function Home() {
                                     <a href="/track">
                                         <button className="btn btn-secondary">Track</button>
                                     </a>
-
                                 </div>
                             </div>
 
@@ -85,21 +81,59 @@ export function Home() {
                         </div>
                     </section>
 
-                    {/* Main Action Section */}
-                    <div className="main-action-section">
+                    {/* Main Action Section - Add a class for scrolling */}
+                    <div className="main-action-section camera-reporter-section">
                         <div className="action-grid">
                             {/* Left Column - Camera Reporter */}
                             <div className="action-column">
                                 <div className="government-card">
                                     <div className="card-header">
-                                        <h3><span className="card-header-icon">📷</span> Camera Incident Report</h3>
+                                        <h3>
+                                            <span className="card-header-icon">📷</span>
+                                            {showCamera ? "Camera Incident Report - Emergency Mode" : "Camera Incident Report"}
+                                        </h3>
                                         <div className="official-tag">
                                             <span className="tricolor-dot"></span>
                                             Official Portal
                                         </div>
                                     </div>
                                     <div className="card-body">
-                                        <CameraReporter />
+                                        {/* Conditionally render CameraReporter or show prompt */}
+                                        {showCamera ? (
+                                            <div className="camera-active-container">
+                                                <div className="emergency-alert-banner">
+                                                    ⚠️ <strong>EMERGENCY MODE ACTIVE</strong> - Your report will be prioritized
+                                                </div>
+                                                <CameraReporter mode={cameraMode} />
+                                                <div className="camera-controls">
+                                                    <button
+                                                        className="btn btn-outline"
+                                                        onClick={() => setShowCamera(false)}
+                                                    >
+                                                        Close Camera
+                                                    </button>
+                                                    <button
+                                                        className="btn btn-secondary"
+                                                        onClick={() => {
+                                                            // Optional: Add logic to switch to regular mode
+                                                            setCameraMode("regular");
+                                                        }}
+                                                    >
+                                                        Switch to Regular Mode
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        ) : (
+                                            <div className="camera-prompt">
+                                                <div className="prompt-icon">📷</div>
+                                                <h4>Camera Reporting System</h4>
+                                                <p>Click "Report Now" in Emergency Services or use the camera below for regular reporting</p>
+                                                <div className="prompt-hint">
+                                                    <small>For emergency reporting, use the "Report Now" button above</small>
+                                                </div>
+                                                <CameraReporter mode="regular" />
+                                            </div>
+                                        )}
                                     </div>
                                     <div className="card-footer">
                                         <div className="security-note">
@@ -109,7 +143,7 @@ export function Home() {
                                     </div>
                                 </div>
 
-                                {/* Important Contacts */}
+                                {/* Important Contacts (remains the same) */}
                                 <div className="government-card contacts-card">
                                     <h4><span className="card-icon">📞</span> Important Contacts</h4>
                                     <div className="contacts-list">
@@ -133,7 +167,7 @@ export function Home() {
                                 </div>
                             </div>
 
-                            {/* Right Column - Notifications */}
+                            {/* Right Column - Notifications (remains the same) */}
                             <div className="notification-column">
                                 <div className="government-card">
                                     <div className="card-header">
@@ -150,7 +184,6 @@ export function Home() {
                                     </div>
                                 </div>
 
-                                {/* Government Schemes */}
                                 <div className="government-card schemes-card">
                                     <h4><span className="card-icon">🏛️</span> Government Schemes</h4>
                                     <ul className="schemes-list">
@@ -176,7 +209,7 @@ export function Home() {
                         </div>
                     </div>
 
-                    {/* Statistics Section */}
+                    {/* Statistics Section (remains the same) */}
                     <div className="statistics-section">
                         <div className="stats-container">
                             <div className="stat-item">
@@ -201,7 +234,7 @@ export function Home() {
                         </div>
                     </div>
 
-                    {/* Citizen Corner */}
+                    {/* Citizen Corner (remains the same) */}
                     <div className="citizen-corner">
                         <h3><span className="section-icon">👥</span> Citizen's Corner</h3>
                         <div className="citizen-links">
@@ -214,10 +247,6 @@ export function Home() {
                     </div>
                 </div>
             </main>
-
-
         </div>
     );
 }
-
-// ...

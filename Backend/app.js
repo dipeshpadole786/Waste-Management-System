@@ -47,6 +47,25 @@ app.get("/monitor/users", async (req, res) => {
     }
 });
 
+// GET user progress
+app.get("/users/progress", async (req, res) => {
+    try {
+        const progress = await UserProgress.find()
+            .populate("user", "fullName mobileNumber")
+            .populate("article", "title")
+            .sort({ createdAt: -1 });
+
+        res.json({
+            success: true,
+            data: progress
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, message: "Server error" });
+    }
+});
+
+
 // 2. GET ALL COMPLAINTS
 app.get("/monitor/complaints", async (req, res) => {
     try {

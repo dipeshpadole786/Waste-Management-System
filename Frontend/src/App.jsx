@@ -11,7 +11,7 @@ import TrainingAwareness from "./Pages/TrainingAwarness";
 import Profile from "./Pages/Profile";
 import ShowComplaints from "./Office/showcomplain";
 import AadhaarLogin from "./Pages/Login";
-
+import UserProgress from "./Office/Userprogress";
 import Header from "./Componets/Header";
 import Headerh from "./Office/Header";
 import Footer from "./Componets/Footer";
@@ -50,6 +50,14 @@ function Layout() {
           }
         />
 
+        <Route
+          path="/file-complaint"
+          element={
+            <ProtectedRoute allowedRoles={["user"]}>
+              <FileComplaint />
+            </ProtectedRoute>
+          }
+        />
         <Route
           path="/filecom"
           element={
@@ -104,12 +112,23 @@ function Layout() {
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/user-progress"
+          element={
+            <ProtectedRoute allowedRoles={["monitor"]}>
+              <UserProgress />
+            </ProtectedRoute>
+          }
+        />
 
         <Route
           path="/show-complaints"
           element={
             <ProtectedRoute allowedRoles={["monitor"]}>
+              <hr />
+              <hr />
               <ShowComplaints />
+              
             </ProtectedRoute>
           }
         />
