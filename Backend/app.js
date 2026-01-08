@@ -729,6 +729,135 @@ app.get("/articles", async (req, res) => {
     }
 });
 
+app.post("/articles", async (req, res) => {
+    try {
+        const {
+            title,
+            category,
+            level,
+            readTime,
+            posterColor,
+            icon,
+            summary,
+            fullContent
+        } = req.body;
+
+        const article = new Article({
+            title,
+            category,
+            level,
+            readTime,
+            posterColor,
+            icon,
+            summary,
+            fullContent
+        });
+
+        await article.save();
+
+        res.status(201).json({ success: true, article });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+app.get("/articles/:id", async (req, res) => {
+    try {
+        const { id } = req.params;
+        console.log("Article ID:", id);
+
+        const article = await Article.findById(id);
+
+        if (!article) {
+            return res.status(404).json({
+                success: false,
+                message: "Article not found"
+            });
+        }
+
+        res.status(200).json({
+            success: true,
+            data: article
+        });
+    } catch (error) {
+        console.error("Error fetching article:", error);
+        res.status(500).json({
+            success: false,
+            message: "Server error"
+        });
+    }
+});
+app.put("/articles/:id", async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const updatedArticle = await Article.findByIdAndUpdate(
+            id,
+            {
+                title: req.body.title,
+                category: req.body.category,
+                level: req.body.level,
+                readTime: req.body.readTime,
+                posterColor: req.body.posterColor,
+                icon: req.body.icon,
+                summary: req.body.summary,
+                fullContent: req.body.fullContent,
+            },
+            { new: true } // return updated document
+        );
+
+        if (!updatedArticle) {
+            return res.status(404).json({
+                success: false,
+                message: "Article not found"
+            });
+        }
+
+        res.status(200).json({
+            success: true,
+            updatedArticle
+        });
+
+    } catch (error) {
+        console.error("Error updating article:", error);
+        res.status(500).json({
+            success: false,
+            message: "Failed to update article"
+        });
+    }
+});
+
+app.delete("/articles/:id", async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const deletedArticle = await Article.findByIdAndDelete(id);
+
+        if (!deletedArticle) {
+            return res.status(404).json({
+                success: false,
+                message: "Article not found"
+            });
+        }
+
+        res.status(200).json({
+            success: true,
+            message: "Article deleted successfully"
+        });
+
+    } catch (error) {
+        console.error("Error deleting article:", error);
+        res.status(500).json({
+            success: false,
+            message: "Failed to delete article"
+        });
+    }
+});
+
+
+
+
+
 
 app.listen(port, () => {
     console.log("Server is runningo on port " + port);

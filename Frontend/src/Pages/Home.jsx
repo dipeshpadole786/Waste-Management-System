@@ -4,6 +4,7 @@ import { useState } from "react"; // Add this import
 import { Top } from "../Componets/top";
 import CameraReporter from "../Componets/Camera";
 import NotificationFeed from "../Componets/Notification";
+import { Link } from "react-router-dom";
 
 export function Home() {
     // Add state to control camera visibility
@@ -70,14 +71,21 @@ export function Home() {
                                 </div>
                             </div>
 
+
+
                             <div className="service-card">
                                 <div className="service-icon guidelines">📚</div>
+
                                 <div className="service-content">
                                     <h4>Safety Guidelines</h4>
                                     <p>Government advisories</p>
-                                    <button className="btn btn-outline">View</button>
+
+                                    <Link to="/safety" className="btn btn-outline">
+                                        View
+                                    </Link>
                                 </div>
                             </div>
+
                         </div>
                     </section>
 

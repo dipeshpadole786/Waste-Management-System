@@ -22,11 +22,19 @@ const Homef = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [activeTab, setActiveTab] = useState('activities'); // 'activities' or 'progress'
+    const [articleCount, setArticleCount] = useState(0);
 
     const navigate = useNavigate();
 
     // Fetch all data on component mount
+    const pp = async () => {
+        const res = await API.get(`/articles`);
+        setArticleCount(res.data.length);
+    }
+
     useEffect(() => {
+        pp();
+
         fetchDashboardData();
 
         const interval = setInterval(() => {
@@ -68,14 +76,15 @@ const Homef = () => {
 
 
 
-    const handleComplaintStatus = async (status) => {
+    const handleTriningData = async (status) => {
         try {
-            const res = await API.get(`/complaints/status/${status}`);
-            navigate("/complaint-status", {
+            const res = await API.get(`/articles`);
+            navigate("/editArtical", {
                 state: {
                     data: res.data,
                     status: status
                 }
+
             });
         } catch (error) {
             console.error(`Error fetching ${status} complaints:`, error);
@@ -351,7 +360,7 @@ const Homef = () => {
                     </div>
 
                     {/* Pending Complaints */}
-                    <div className="metric-card" onClick={() => handleComplaintStatus('pending')} style={{ cursor: 'pointer' }}>
+                    {/* <div className="metric-card" onClick={() => handleComplaintStatus('pending')} style={{ cursor: 'pointer' }}>
                         <div className="metric-header">
                             <div className="metric-icon" style={{ backgroundColor: '#f59e0b15' }}>
                                 <span style={{ color: '#f59e0b' }}>⏳</span>
@@ -362,10 +371,10 @@ const Homef = () => {
                         </div>
                         <div className="metric-title">Pending</div>
                         <div className="metric-subtitle">Click to view</div>
-                    </div>
+                    </div> */}
 
                     {/* In Progress Complaints */}
-                    <div className="metric-card" onClick={() => handleComplaintStatus('in-progress')} style={{ cursor: 'pointer' }}>
+                    {/* <div className="metric-card" onClick={() => handleComplaintStatus('in-progress')} style={{ cursor: 'pointer' }}>
                         <div className="metric-header">
                             <div className="metric-icon" style={{ backgroundColor: '#3b82f615' }}>
                                 <span style={{ color: '#3b82f6' }}>🔄</span>
@@ -376,10 +385,10 @@ const Homef = () => {
                         </div>
                         <div className="metric-title">In Progress</div>
                         <div className="metric-subtitle">Click to view</div>
-                    </div>
+                    </div> */}
 
                     {/* Resolved Complaints */}
-                    <div className="metric-card" onClick={() => handleComplaintStatus('resolved')} style={{ cursor: 'pointer' }}>
+                    {/* <div className="metric-card" onClick={() => handleComplaintStatus('resolved')} style={{ cursor: 'pointer' }}>
                         <div className="metric-header">
                             <div className="metric-icon" style={{ backgroundColor: '#10b98115' }}>
                                 <span style={{ color: '#10b981' }}>✅</span>
@@ -390,6 +399,19 @@ const Homef = () => {
                         </div>
                         <div className="metric-title">Resolved</div>
                         <div className="metric-subtitle">Click to view</div>
+                    </div> */}
+                    <div className="metric-card" onClick={() => handleTriningData('resolved')} style={{ cursor: 'pointer' }}>
+                        <div className="metric-header">
+                            <div className="metric-icon" style={{ backgroundColor: '#10b98115' }}>
+                                <span style={{ color: '#10b981' }}>✅</span>
+                            </div>
+                        </div>
+                        <div className="metric-value">
+                            {articleCount}
+                        </div>
+
+                        <div className="metric-title">Edit Artical</div>
+                        <div className="metric-subtitle">Click to start</div>
                     </div>
                 </div>
 
