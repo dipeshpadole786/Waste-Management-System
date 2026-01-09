@@ -7,6 +7,7 @@ const Article = require("./Models/Training");
 const Complaint = require("./Models/Filecomplaint");
 const cors = require("cors");
 const UserProgress = require("./Models/UserProgress");
+const DustBin = require("./Models/dustbin_location");
 app.use(express.json()); // to parse JSON body
 
 
@@ -854,7 +855,14 @@ app.delete("/articles/:id", async (req, res) => {
     }
 });
 
-
+app.get("/dustbins", async (req, res) => {
+    try {
+        const dustbins = await DustBin.find();
+        res.status(200).json(dustbins);
+    } catch (error) {
+        res.status(500).json({ message: "Failed to fetch dustbins" });
+    }
+});
 
 
 

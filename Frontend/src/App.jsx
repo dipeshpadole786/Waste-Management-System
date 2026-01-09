@@ -21,10 +21,8 @@ import SafetyGuidelines from "./Pages/Safety";
 import EditArticle from "./Office/ArticalEdit";
 
 function Layout() {
-  const location = useLocation();
   const [role, setRole] = useState(null);
 
-  // 🔹 get role from localStorage
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("loggedInUser"));
     setRole(user?.role);
@@ -34,9 +32,10 @@ function Layout() {
     <>
       <Top />
 
-      {/* 🔁 HEADER SWITCH BASED ON ROLE */}
+      {/* HEADER BASED ON ROLE */}
       {role === "monitor" ? <Headerh /> : <Header />}
 
+      {/* ✅ SINGLE ROUTES BLOCK */}
       <Routes>
         {/* 🌐 PUBLIC */}
         <Route path="/" element={<Home />} />
@@ -51,6 +50,7 @@ function Layout() {
             </ProtectedRoute>
           }
         />
+
         <Route
           path="/safety"
           element={
@@ -68,6 +68,7 @@ function Layout() {
             </ProtectedRoute>
           }
         />
+
         <Route
           path="/filecom"
           element={
@@ -122,6 +123,7 @@ function Layout() {
             </ProtectedRoute>
           }
         />
+
         <Route
           path="/user-progress"
           element={
@@ -135,104 +137,7 @@ function Layout() {
           path="/show-complaints"
           element={
             <ProtectedRoute allowedRoles={["monitor"]}>
-              <hr />
-              <hr />
               <ShowComplaints />
-
-            </ProtectedRoute>
-          }
-        />
-      </Routes>
-      <Routes>
-        {/* 🌐 PUBLIC */}
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<AadhaarLogin />} />
-
-        {/* 👤 USER ROUTES */}
-        <Route
-          path="/tracking"
-          element={
-            <ProtectedRoute allowedRoles={["user"]}>
-              <Tracking />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/safety"
-          element={
-            <ProtectedRoute allowedRoles={["user"]}>
-              <SafetyGuidelines />
-            </ProtectedRoute>
-          }
-        />
-
-        <Route
-          path="/file-complaint"
-          element={
-            <ProtectedRoute allowedRoles={["user"]}>
-              <FileComplaint />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/filecom"
-          element={
-            <ProtectedRoute allowedRoles={["user"]}>
-              <FileComplaint />
-            </ProtectedRoute>
-          }
-        />
-
-        <Route
-          path="/file_succes"
-          element={
-            <ProtectedRoute allowedRoles={["user"]}>
-              <FileSuccess />
-            </ProtectedRoute>
-          }
-        />
-
-        <Route
-          path="/profile"
-          element={
-            <ProtectedRoute allowedRoles={["user"]}>
-              <Profile />
-            </ProtectedRoute>
-          }
-        />
-
-        <Route
-          path="/training"
-          element={
-            <ProtectedRoute allowedRoles={["user"]}>
-              <TrainingAwareness />
-            </ProtectedRoute>
-          }
-        />
-
-        <Route
-          path="/track"
-          element={
-            <ProtectedRoute allowedRoles={["user"]}>
-              <TrackStatus />
-            </ProtectedRoute>
-          }
-        />
-
-        {/* 🏢 MONITOR ROUTES */}
-        <Route
-          path="/newhome"
-          element={
-            <ProtectedRoute allowedRoles={["monitor"]}>
-              <Homef />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/user-progress"
-          element={
-            <ProtectedRoute allowedRoles={["monitor"]}>
-              <UserProgress />
             </ProtectedRoute>
           }
         />
@@ -241,9 +146,7 @@ function Layout() {
           path="/editArtical"
           element={
             <ProtectedRoute allowedRoles={["monitor"]}>
-
               <EditArticle />
-
             </ProtectedRoute>
           }
         />
