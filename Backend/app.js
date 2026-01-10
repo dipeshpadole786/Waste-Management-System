@@ -8,6 +8,7 @@ const Complaint = require("./Models/Filecomplaint");
 const cors = require("cors");
 const UserProgress = require("./Models/UserProgress");
 const DustBin = require("./Models/dustbin_location");
+const Message = require("./Models/message");
 app.use(express.json()); // to parse JSON body
 
 
@@ -864,6 +865,69 @@ app.get("/dustbins", async (req, res) => {
     }
 });
 
+app.post("/messages/send", async (req, res) => {
+    try {
+        const {
+            receiver,
+            title,
+            body,
+            messageType,
+            relatedArticle
+        } = req.body;
+
+        if (!receiver || !title || !body || !messageType) {
+            return res.status(400).json({ message: "Missing required fields" });
+        }
+
+        const message = await Message.create({
+            receiver,
+            title,
+            body,
+            messageType,
+            relatedArticle
+        });
+
+        // Optional: attach message to user
+        await User.findByIdAndUpdate(receiver, {
+            $push: { messages: message._id }
+        });
+
+        res.status(201).json({
+            success: true,
+            message: "Message sent successfully",
+            data: message
+        });
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: "Server error" });
+    }
+});
+
+app.get("/ma/:id", async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const user = await User.findById(id)
+            .populate({
+                path: "messages",
+                options: { sort: { createdAt: -1 } } // latest first
+            });
+
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        res.status(200).json({
+            success: true,
+            data: user.messages
+        });
+
+    } catch (error) {
+        console.error("Populate messages error:", error);
+        res.status(500).json({ message: "Server error" });
+    }
+});
 
 
 

@@ -159,44 +159,46 @@ const Tracking = () => {
     }, []);
 
     // Fetch dustbins from backend
-    const fetchDustbins = async () => {
-        try {
-            setLoading(true);
-            const res = await API.get("/dustbins");
+   const fetchDustbins = async () => {
+    try {
+        setLoading(true);
+        const res = await API.get("/dustbins");
 
-            const formatted = res.data
-                .filter(
-                    (bin) =>
-                        bin.location?.lat !== undefined &&
-                        bin.location?.lng !== undefined &&
-                        !isNaN(bin.location.lat) &&
-                        !isNaN(bin.location.lng)
-                )
-                .map((bin, index) => {
-                    const level = parseInt(bin.level) || 0;
-                    let status = "Empty";
-                    if (level >= 80) status = "Full";
-                    else if (level >= 40) status = "Medium";
+        const formatted = res.data
+            .filter(
+                (bin) =>
+                    bin.coordinates?.lat !== undefined &&
+                    bin.coordinates?.lng !== undefined &&
+                    !isNaN(bin.coordinates.lat) &&
+                    !isNaN(bin.coordinates.lng)
+            )
+            .map((bin, index) => {
+                const level = Number(bin.level) || 0;
 
-                    return {
-                        uniqueKey: `${bin.dustbin_id || index}-${Date.now()}`,
-                        id: bin.dustbin_id || `Dustbin-${index + 1}`,
-                        address: bin.location.address || "No address provided",
-                        lat: parseFloat(bin.location.lat),
-                        lng: parseFloat(bin.location.lng),
-                        level: level,
-                        status: status,
-                        lastUpdated: bin.last_updated || new Date().toISOString()
-                    };
-                });
-            setDustbins(formatted);
-            setLoading(false);
-        } catch (error) {
-            console.error("Error fetching dustbins", error);
-            setError("Failed to load dustbin data. Please try again.");
-            setLoading(false);
-        }
-    };
+                let status = "Empty";
+                if (level >= 80) status = "Full";
+                else if (level >= 40) status = "Medium";
+
+                return {
+                    uniqueKey: `${bin.dustbin_id}-${index}`,
+                    id: bin.dustbin_id,
+                    lat: Number(bin.coordinates.lat),
+                    lng: Number(bin.coordinates.lng),
+                    level,
+                    status,
+                    lastUpdated: bin.updatedAt || bin.createdAt
+                };
+            });
+
+        setDustbins(formatted);
+        setLoading(false);
+    } catch (error) {
+        console.error("Error fetching dustbins", error);
+        setError("Failed to load dustbin data. Please try again.");
+        setLoading(false);
+    }
+};
+
 
     // Find dustbins near user location
     const findNearbyDustbins = useCallback((location) => {

@@ -5,6 +5,7 @@ import { Top } from "../Componets/top";
 import CameraReporter from "../Componets/Camera";
 import NotificationFeed from "../Componets/Notification";
 import { Link } from "react-router-dom";
+import Notification from "./Notification";
 
 export function Home() {
     // Add state to control camera visibility
@@ -179,14 +180,14 @@ export function Home() {
                             <div className="notification-column">
                                 <div className="government-card">
                                     <div className="card-header">
-                                        <h3><span className="card-header-icon">📢</span> Government Notifications</h3>
+                                        <h3><span className="card-header-icon">📢</span>  Notifications</h3>
                                         <div className="notification-badge">LATEST</div>
                                     </div>
                                     <div className="card-body">
-                                        <NotificationFeed />
+                                        <Notification />
                                     </div>
                                     <div className="card-footer">
-                                        <a href="#" className="view-all-link">
+                                        <a href="/notifications" className="view-all-link">
                                             View All Notifications →
                                         </a>
                                     </div>

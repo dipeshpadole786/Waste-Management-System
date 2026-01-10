@@ -91,7 +91,7 @@ const Header = () => {
                             </li>
                             <li>
                                 <a href="/tracking" onClick={toggleMenu}>
-                                    🚚 Vehicles Tracking
+                                    Dustbin Tracking
                                 </a>
                             </li>
                             <li>
@@ -100,7 +100,7 @@ const Header = () => {
                                 </a>
                             </li>
                             <li>
-                                <a href="#notifications" onClick={toggleMenu}>
+                                <a href="/notifications" onClick={toggleMenu}>
                                     📢 Notifications <span className="notification-badge">5</span>
                                 </a>
                             </li>

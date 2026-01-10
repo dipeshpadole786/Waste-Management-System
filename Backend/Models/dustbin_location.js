@@ -6,10 +6,19 @@ const Dust_add = new mongoose.Schema({
         required: true,
         unique: true
     },
-    location: {
-        type: String,
-        required: true,
-        trim: true
+    coordinates: {
+        lat: {
+            type: Number,
+            required: true,
+            min: -90,
+            max: 90
+        },
+        lng: {
+            type: Number,
+            required: true,
+            min: -180,
+            max: 180
+        }
     },
     level: {
         type: Number,
@@ -19,50 +28,52 @@ const Dust_add = new mongoose.Schema({
     }
 }, { timestamps: true });
 
+
 const DustBin = mongoose.model("DustBin", Dust_add);
 
 const data = [
     {
         dustbin_id: 1,
-        location: "Yeshwantrao Chavan College of Engineering, Hingna Road, Wanadongri, Nagpur, Maharashtra 441110",
+        coordinates: { lat: 21.09499, lng: 78.98026 },
         level: 20
     },
     {
         dustbin_id: 2,
-        location: "Opp. YCCE Bhasin's Armani Girls Hostel, Plot 88/89, Sainagar Ugale Layout, Hingna Road, Wanadongri, Nagpur, Maharashtra 441110",
+        coordinates: { lat: 21.09390, lng: 78.97750 },
         level: 35
     },
     {
         dustbin_id: 3,
-        location: "Arya Girls Hostel, Plot No. 7, Matoshri Nagar, Wanadongri, Hingna Road, Nagpur, Maharashtra 441110",
+        coordinates: { lat: 21.09388, lng: 78.97609 },
         level: 45
     },
     {
         dustbin_id: 4,
-        location: "Zoop Cafe, Shop No.1, Pioneer Woods, Near YCCE College, Hingna Road, Wanadongri, Nagpur, Maharashtra 441110",
+        coordinates: { lat: 21.09450, lng: 78.97900 },
         level: 30
     },
     {
         dustbin_id: 5,
-        location: "Snooker World And Cafe, Opposite YCCE College, Near Green Park, Hingna Road, Wanadongri, Nagpur, Maharashtra 441110",
+        coordinates: { lat: 21.09550, lng: 78.97950 },
         level: 50
     },
     {
         dustbin_id: 6,
-        location: "Hingna Road Bus Stop near YCCE College, Wanadongri, Nagpur, Maharashtra 441110",
+        coordinates: { lat: 21.09510, lng: 78.98100 },
         level: 15
     },
     {
         dustbin_id: 7,
-        location: "Main Gate YCCE Campus, Hingna Road, Wanadongri, Nagpur, Maharashtra 441110",
+        coordinates: { lat: 21.09550, lng: 78.98050 },
         level: 60
     },
     {
         dustbin_id: 8,
-        location: "Pioneer Apartments Entrance, Hingna Road, Near YCCE, Wanadongri, Nagpur, Maharashtra 441110",
+        coordinates: { lat: 21.09580, lng: 78.97800 },
         level: 25
     }
 ];
+
 
 const add = async () => {
     try {

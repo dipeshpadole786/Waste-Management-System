@@ -19,6 +19,7 @@ import { Top } from "./Componets/top";
 import ProtectedRoute from "./Componets/ProtectedRoute";
 import SafetyGuidelines from "./Pages/Safety";
 import EditArticle from "./Office/ArticalEdit";
+import Notification from "./Pages/Notification";
 
 function Layout() {
   const [role, setRole] = useState(null);
@@ -47,6 +48,14 @@ function Layout() {
           element={
             <ProtectedRoute allowedRoles={["user"]}>
               <Tracking />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/notifications"
+          element={
+            <ProtectedRoute allowedRoles={["user"]}>
+              <Notification />
             </ProtectedRoute>
           }
         />
