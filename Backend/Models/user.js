@@ -68,7 +68,7 @@ const userSchema = new mongoose.Schema({
     // 🔑 ROLE FIELD
     role: {
         type: String,
-        enum: ["user", "monitor"],
+        enum: ["user", "monitor", "worker"],
         default: "user"   // 👈 DEFAULT ROLE
     },
 
@@ -90,6 +90,149 @@ const userSchema = new mongoose.Schema({
 
 
 const User = mongoose.model("User", userSchema);
+
+const da = [
+    {
+        fullName: "Amit Sharma",
+        aadhaarNumber: "900000000001",
+        mobileNumber: "9000000001",
+        email: "amit.worker1@gmail.com",
+        address: "Sector 12, Noida",
+        pincode: "201301",
+        district: "Gautam Buddha Nagar",
+        state: "Uttar Pradesh",
+        dob: "1990-05-12",
+        gender: "Male",
+        photo: "👷",
+        role: "worker"
+    },
+    {
+        fullName: "Ravi Kumar",
+        aadhaarNumber: "900000000002",
+        mobileNumber: "9000000002",
+        email: "ravi.worker2@gmail.com",
+        address: "MG Road, Bengaluru",
+        pincode: "560001",
+        district: "Bangalore Urban",
+        state: "Karnataka",
+        dob: "1988-11-20",
+        gender: "Male",
+        photo: "👷",
+        role: "worker"
+    },
+    {
+        fullName: "Suresh Yadav",
+        aadhaarNumber: "900000000003",
+        mobileNumber: "9000000003",
+        email: "suresh.worker3@gmail.com",
+        address: "Borivali West, Mumbai",
+        pincode: "400092",
+        district: "Mumbai",
+        state: "Maharashtra",
+        dob: "1992-03-15",
+        gender: "Male",
+        photo: "👷",
+        role: "worker"
+    },
+    {
+        fullName: "Mahesh Patil",
+        aadhaarNumber: "900000000004",
+        mobileNumber: "9000000004",
+        email: "mahesh.worker4@gmail.com",
+        address: "Kothrud, Pune",
+        pincode: "411038",
+        district: "Pune",
+        state: "Maharashtra",
+        dob: "1989-07-09",
+        gender: "Male",
+        photo: "👷",
+        role: "worker"
+    },
+    {
+        fullName: "Rahul Verma",
+        aadhaarNumber: "900000000005",
+        mobileNumber: "9000000005",
+        email: "rahul.worker5@gmail.com",
+        address: "Alambagh, Lucknow",
+        pincode: "226005",
+        district: "Lucknow",
+        state: "Uttar Pradesh",
+        dob: "1993-01-22",
+        gender: "Male",
+        photo: "👷",
+        role: "worker"
+    },
+    {
+        fullName: "Vikas Singh",
+        aadhaarNumber: "900000000006",
+        mobileNumber: "9000000006",
+        email: "vikas.worker6@gmail.com",
+        address: "Patel Nagar, Delhi",
+        pincode: "110008",
+        district: "New Delhi",
+        state: "Delhi",
+        dob: "1987-10-30",
+        gender: "Male",
+        photo: "👷",
+        role: "worker"
+    },
+    {
+        fullName: "Sunil Joshi",
+        aadhaarNumber: "900000000007",
+        mobileNumber: "9000000007",
+        email: "sunil.worker7@gmail.com",
+        address: "Palasia, Indore",
+        pincode: "452001",
+        district: "Indore",
+        state: "Madhya Pradesh",
+        dob: "1991-06-18",
+        gender: "Male",
+        photo: "👷",
+        role: "worker"
+    },
+    {
+        fullName: "Anil Mehta",
+        aadhaarNumber: "900000000008",
+        mobileNumber: "9000000008",
+        email: "anil.worker8@gmail.com",
+        address: "Satellite, Ahmedabad",
+        pincode: "380015",
+        district: "Ahmedabad",
+        state: "Gujarat",
+        dob: "1986-12-05",
+        gender: "Male",
+        photo: "👷",
+        role: "worker"
+    },
+    {
+        fullName: "Deepak Chauhan",
+        aadhaarNumber: "900000000009",
+        mobileNumber: "9000000009",
+        email: "deepak.worker9@gmail.com",
+        address: "Civil Lines, Jaipur",
+        pincode: "302006",
+        district: "Jaipur",
+        state: "Rajasthan",
+        dob: "1994-09-14",
+        gender: "Male",
+        photo: "👷",
+        role: "worker"
+    },
+    {
+        fullName: "Kunal Mishra",
+        aadhaarNumber: "900000000010",
+        mobileNumber: "9000000010",
+        email: "kunal.worker10@gmail.com",
+        address: "Gomti Nagar, Lucknow",
+        pincode: "226010",
+        district: "Lucknow",
+        state: "Uttar Pradesh",
+        dob: "1995-04-27",
+        gender: "Male",
+        photo: "👷",
+        role: "worker"
+    }
+]
 
 // const sampleUsers = [
 //     {
@@ -224,17 +367,17 @@ const User = mongoose.model("User", userSchema);
 //     }
 // ];
 
-// const addData = async () => {
-//     try {
-//         await User.deleteMany({});
-//         console.log("Old users deleted.");
+const addData = async () => {
+    try {
+        // await User.deleteMany({});
+        console.log("Old users deleted.");
 
-//         await User.insertMany(sampleUsers);
-//         console.log("Sample users inserted successfully!");
-//     } catch (err) {
-//         console.error("Error inserting sample data:", err);
-//     }
-// };
+        await User.insertMany(da);
+        console.log("Sample users inserted successfully!");
+    } catch (err) {
+        console.error("Error inserting sample data:", err);
+    }
+};
 
 // addData();
 

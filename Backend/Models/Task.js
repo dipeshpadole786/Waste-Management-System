@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const ComplaintSchema = new mongoose.Schema(
+const TaskSchema = new mongoose.Schema(
     {
         complaintId: {
             type: String,
@@ -43,36 +43,15 @@ const ComplaintSchema = new mongoose.Schema(
             type: String,
             required: true,
             match: /^[0-9]{10}$/
-        },
-
-        // 👤 Complaint raised by user
-        user: {
+        }, user: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "User",
             required: true
-        },
-
-        // 👷 ASSIGNED WORKER
-        assignedWorker: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "User",
-            default: null
-        },
-
-        // 📌 STATUS
-        status: {
-            type: String,
-            enum: ["pending", "in-progress", "completed"],
-            default: "pending"
-        },
-
-        // ⏱ ASSIGN TIME
-        assignedAt: {
-            type: Date
         }
+
     },
     { timestamps: true }
 );
 
-const Complaint = mongoose.model("Complaint", ComplaintSchema);
-module.exports = Complaint;
+const Task = mongoose.model("Task", TaskSchema);
+module.exports = Task;

@@ -929,6 +929,52 @@ app.get("/ma/:id", async (req, res) => {
     }
 });
 
+app.get("/workers", async (req, res) => {
+    try {
+        const workers = await User.find({ role: "worker" });
+
+        res.status(200).json(workers);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+});
+
+
+
+// ASSIGN COMPLAINT TO WORKER
+app.get("/worker/complaints", async (req, res) => {
+    try {
+        const { workerId } = req.query;
+
+        if (!workerId) {
+            return res.status(400).json({
+                success: false,
+                message: "workerId is required"
+            });
+        }
+
+        const complaints = await Complaint.find({
+            assignedWorker: workerId
+        })
+            .populate("user", "fullName mobileNumber")
+            .sort({ assignedAt: -1, createdAt: -1 });
+
+        res.status(200).json({
+            success: true,
+            complaints
+        });
+
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "Failed to fetch worker complaints",
+            error: error.message
+        });
+    }
+});
+
+
+
 
 
 app.listen(port, () => {

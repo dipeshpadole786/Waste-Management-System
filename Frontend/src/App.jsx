@@ -1,48 +1,77 @@
-import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useEffect, useState } from "react";
 
+/* 🌐 USER PAGES */
 import { Home } from "./Pages/Home";
-import Homef from "./Office/Home";
 import Tracking from "./Pages/Tracking";
 import FileComplaint from "./Pages/FileComplaint";
 import FileSuccess from "./Pages/File_succes";
 import TrackStatus from "./Pages/TrackStatus";
 import TrainingAwareness from "./Pages/TrainingAwarness";
 import Profile from "./Pages/Profile";
-import ShowComplaints from "./Office/showcomplain";
 import AadhaarLogin from "./Pages/Login";
+import SafetyGuidelines from "./Pages/Safety";
+import Notification from "./Pages/Notification";
+
+/* 🏢 MONITOR */
+import Homef from "./Office/Home";
+import ShowComplaints from "./Office/showcomplain";
 import UserProgress from "./Office/Userprogress";
+import EditArticle from "./Office/ArticalEdit";
+
+/* 👷 WORKER */
+import Homew from "./Worker/Home";
+
+/* 🧩 COMPONENTS */
 import Header from "./Componets/Header";
 import Headerh from "./Office/Header";
+import Headerw from "./Worker/Header";
 import Footer from "./Componets/Footer";
+import Footerw from "./Worker/Footer";
 import { Top } from "./Componets/top";
 import ProtectedRoute from "./Componets/ProtectedRoute";
-import SafetyGuidelines from "./Pages/Safety";
-import EditArticle from "./Office/ArticalEdit";
-import Notification from "./Pages/Notification";
 
 function Layout() {
   const [role, setRole] = useState(null);
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("loggedInUser"));
-    setRole(user?.role);
+    setRole(user?.role || "user");
   }, []);
 
   return (
     <>
       <Top />
 
-      {/* HEADER BASED ON ROLE */}
-      {role === "monitor" ? <Headerh /> : <Header />}
+      {/* 🔰 ROLE BASED HEADER */}
+      {role === "monitor" ? (
+        <Headerh />
+      ) : role === "worker" ? (
+        <Headerw />
+      ) : (
+        <Header />
+      )}
 
-      {/* ✅ SINGLE ROUTES BLOCK */}
+      {/* 🚦 ROUTES */}
       <Routes>
+        {/* 🌐 HOME BASED ON ROLE */}
+        <Route
+          path="/"
+          element={
+            role === "monitor" ? (
+              <Homef />
+            ) : role === "worker" ? (
+              <Homew />
+            ) : (
+              <Home />
+            )
+          }
+        />
+
         {/* 🌐 PUBLIC */}
-        <Route path="/" element={<Home />} />
         <Route path="/login" element={<AadhaarLogin />} />
 
-        {/* 👤 USER ROUTES */}
+        {/* 👤 USER */}
         <Route
           path="/tracking"
           element={
@@ -51,6 +80,7 @@ function Layout() {
             </ProtectedRoute>
           }
         />
+
         <Route
           path="/notifications"
           element={
@@ -77,7 +107,6 @@ function Layout() {
             </ProtectedRoute>
           }
         />
-
         <Route
           path="/filecom"
           element={
@@ -123,9 +152,9 @@ function Layout() {
           }
         />
 
-        {/* 🏢 MONITOR ROUTES */}
+        {/* 🏢 MONITOR */}
         <Route
-          path="/newhome"
+          path="/monitor"
           element={
             <ProtectedRoute allowedRoles={["monitor"]}>
               <Homef />
@@ -159,9 +188,20 @@ function Layout() {
             </ProtectedRoute>
           }
         />
+
+        {/* 👷 WORKER */}
+        <Route
+          path="/worker-home"
+          element={
+            <ProtectedRoute allowedRoles={["worker"]}>
+              <Homew />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
 
-      <Footer />
+      {/* 🔻 FOOTER */}
+      {role === "worker" ? <Footerw /> : <Footer />}
     </>
   );
 }
