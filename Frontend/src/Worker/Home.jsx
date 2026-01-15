@@ -1,57 +1,44 @@
 import React, { useEffect, useState } from "react";
 import API from "../API/api_req";
-// import "./WorkerDashboard.css";
+import "./Home.css";
 
 const WorkerDashboard = () => {
     const [assignedComplaints, setAssignedComplaints] = useState([]);
-    const [workerStats, setWorkerStats] = useState({
-        pendingComplaints: 0
-    });
+    const [loading, setLoading] = useState(true);
 
-    // 🔹 FETCH WORKER COMPLAINTS
+    // 🔹 Fetch complaints assigned to logged-in worker
     const fetchWorkerComplaints = async () => {
         try {
             const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
-            if (!loggedInUser || loggedInUser.role !== "worker") return;
+
+            if (!loggedInUser || loggedInUser.role !== "worker") {
+                console.error("Worker not logged in");
+                return;
+            }
 
             const res = await API.get("/worker/complaints", {
                 params: { workerId: loggedInUser._id }
             });
 
-            const complaints = res.data.complaints.map((c, index) => ({
-                id: index + 1,
-                _id: c._id,
-                complaintId: c.complaintId,
-                complaintType: c.complaintType,
-                address: c.address,
-                status: c.status, // pending | in-progress | completed
-                description: c.description,
-                reportedAt: new Date(c.createdAt).toLocaleString()
-            }));
-
-            setAssignedComplaints(complaints);
-
-            setWorkerStats({
-                pendingComplaints: complaints.filter(
-                    c => c.status === "pending"
-                ).length
-            });
-
+            setAssignedComplaints(res.data.complaints);
         } catch (error) {
-            console.error("Error fetching complaints:", error);
+            console.error("Error fetching worker complaints:", error);
+        } finally {
+            setLoading(false);
         }
     };
 
-    // 🔹 UPDATE COMPLAINT STATUS
-    const handleUpdateComplaintStatus = async (complaintMongoId, status) => {
+    // 🔹 Update complaint status
+    const updateStatus = async (complaintId, status) => {
         try {
-            await API.put(`/worker/complaints/${complaintMongoId}/status`, {
+            await API.put(`/worker/complaints/${complaintId}/status`, {
                 status
             });
 
-            fetchWorkerComplaints(); // 🔄 refresh list
+            // refresh after update
+            fetchWorkerComplaints();
         } catch (error) {
-            console.error("Error updating status:", error);
+            console.error("Error updating complaint status:", error);
         }
     };
 
@@ -59,71 +46,69 @@ const WorkerDashboard = () => {
         fetchWorkerComplaints();
     }, []);
 
+    if (loading) {
+        return <p style={{ textAlign: "center" }}>Loading complaints...</p>;
+    }
+
     return (
         <div className="worker-dashboard">
             <h2>👷 Worker Dashboard</h2>
 
-            {/* 🔢 STATS */}
-            <div className="worker-stats">
-                <div className="stat-card">
-                    <h3>{workerStats.pendingComplaints}</h3>
-                    <p>Pending Complaints</p>
-                </div>
-            </div>
-
-            {/* 📋 COMPLAINT LIST */}
-            <div className="complaint-list">
-                {assignedComplaints.length === 0 ? (
-                    <p>No complaints assigned yet.</p>
-                ) : (
-                    assignedComplaints.map(complaint => (
-                        <div key={complaint._id} className="complaint-card">
-                            <div className="complaint-header">
-                                <h4>{complaint.complaintType}</h4>
-                                <span className={`status-badge ${complaint.status}`}>
-                                    {complaint.status}
-                                </span>
-                            </div>
-
-                            <p><strong>ID:</strong> {complaint.complaintId}</p>
-                            <p><strong>Address:</strong> {complaint.address}</p>
-                            <p><strong>Description:</strong> {complaint.description}</p>
-                            <p><strong>Reported:</strong> {complaint.reportedAt}</p>
-
-                            {/* 🎯 ACTION BUTTONS */}
-                            <div className="action-buttons">
-                                {complaint.status === "pending" && (
-                                    <button
-                                        className="btn start"
-                                        onClick={() =>
-                                            handleUpdateComplaintStatus(
-                                                complaint._id,
-                                                "in-progress"
-                                            )
-                                        }
-                                    >
-                                        ▶️ Start Work
-                                    </button>
-                                )}
-
-                                {complaint.status === "in-progress" && (
-                                    <button
-                                        className="btn complete"
-                                        onClick={() =>
-                                            handleUpdateComplaintStatus(
-                                                complaint._id,
-                                                "completed"
-                                            )
-                                        }
-                                    >
-                                        ✅ Mark Completed
-                                    </button>
-                                )}
-                            </div>
+            {assignedComplaints.length === 0 ? (
+                <p>No complaints assigned yet.</p>
+            ) : (
+                assignedComplaints.map((complaint) => (
+                    <div className="complaint-card" key={complaint._id}>
+                        <div className="complaint-header">
+                            <h4>{complaint.complaintType}</h4>
+                            <span className={`status ${complaint.status}`}>
+                                {complaint.status}
+                            </span>
                         </div>
-                    ))
-                )}
-            </div>
+
+                        <p><strong>Complaint ID:</strong> {complaint.complaintId}</p>
+                        <p><strong>Name:</strong> {complaint.name}</p>
+                        <p><strong>Mobile:</strong> {complaint.mobile}</p>
+                        <p><strong>Address:</strong> {complaint.address}</p>
+                        <p><strong>Description:</strong> {complaint.description}</p>
+                        <p>
+                            <strong>Reported At:</strong>{" "}
+                            {new Date(complaint.createdAt).toLocaleString()}
+                        </p>
+
+                        {/* 🔘 ACTION BUTTONS */}
+                        <div className="actions">
+                            {complaint.status === "pending" && (
+                                <button
+                                    className="btn start"
+                                    onClick={() =>
+                                        updateStatus(complaint._id, "in-progress")
+                                    }
+                                >
+                                    ▶ Start Work
+                                </button>
+                            )}
+
+                            {complaint.status === "in-progress" && (
+                                <button
+                                    className="btn complete"
+                                    onClick={() =>
+                                        updateStatus(complaint._id, "completed")
+                                    }
+                                >
+                                    ✅ Mark Completed
+                                </button>
+                            )}
+
+                            {complaint.status === "completed" && (
+                                <p className="completed-text">
+                                    ✔ Work Completed
+                                </p>
+                            )}
+                        </div>
+                    </div>
+                ))
+            )}
         </div>
     );
 };

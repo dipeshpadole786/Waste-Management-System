@@ -972,6 +972,146 @@ app.get("/worker/complaints", async (req, res) => {
         });
     }
 });
+// ASSIGN COMPLAINT TO WORKER
+app.put("/complaints/:id/assign", async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { workerId, status, assignedAt } = req.body;
+
+        if (!workerId) {
+            return res.status(400).json({
+                success: false,
+                message: "workerId is required"
+            });
+        }
+
+        const complaint = await Complaint.findByIdAndUpdate(
+            id,
+            {
+                assignedWorker: workerId,
+                status: status || "in-progress",
+                assignedAt: assignedAt || new Date()
+            },
+            { new: true }
+        ).populate("assignedWorker", "fullName mobileNumber");
+
+        if (!complaint) {
+            return res.status(404).json({
+                success: false,
+                message: "Complaint not found"
+            });
+        }
+
+        res.status(200).json({
+            success: true,
+            complaint
+        });
+
+    } catch (error) {
+        console.error("Assign complaint error:", error);
+        res.status(500).json({
+            success: false,
+            message: "Failed to assign complaint",
+            error: error.message
+        });
+    }
+});
+//send worker details 
+app.get("/workers/:id", async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        // 🔎 Validate ID
+        if (!id) {
+            return res.status(400).json({
+                success: false,
+                message: "Worker ID is required"
+            });
+        }
+
+        // 👤 Find worker from User collection
+        const worker = await User.findById(id).select(
+            "fullName email mobileNumber aadhaarNumber address pincode district state gender photo role createdAt"
+        );
+
+        // ❌ Not found
+        if (!worker) {
+            return res.status(404).json({
+                success: false,
+                message: "Worker not found"
+            });
+        }
+
+        // 🔐 Role check
+        if (worker.role !== "worker") {
+            return res.status(403).json({
+                success: false,
+                message: "User is not a worker"
+            });
+        }
+
+        // ✅ Success
+        res.status(200).json(worker);
+
+    } catch (error) {
+        console.error("Fetch Worker Error:", error);
+        res.status(500).json({
+            success: false,
+            message: "Failed to fetch worker details",
+            error: error.message
+        });
+    }
+});
+
+
+
+//mark as done 
+app.put("/worker/complaints/:id/status", async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { status } = req.body;
+
+        if (!["pending", "in-progress", "completed"].includes(status)) {
+            return res.status(400).json({ message: "Invalid status" });
+        }
+
+        // ✅ populate correct field
+        const complaint = await Complaint.findById(id).populate("user");
+
+        if (!complaint) {
+            return res.status(404).json({ message: "Complaint not found" });
+        }
+
+        complaint.status = status;
+        await complaint.save();
+
+        // ✅ Send message when completed
+        if (status === "completed") {
+            const message = await Message.create({
+                receiver: complaint.user._id,   // ✅ FIXED
+                sender: "Admin",
+                title: "Complaint Resolved ✅",
+                body: `Your complaint "${complaint.complaintType}" has been successfully resolved.`,
+                messageType: "reminder"
+            });
+
+            await User.findByIdAndUpdate(
+                complaint.user._id,
+                { $push: { messages: message._id } }
+            );
+        }
+
+        res.status(200).json({
+            success: true,
+            message: "Status updated successfully",
+            complaint
+        });
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Server error" });
+    }
+});
 
 
 

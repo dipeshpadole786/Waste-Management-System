@@ -30,6 +30,7 @@ import Footer from "./Componets/Footer";
 import Footerw from "./Worker/Footer";
 import { Top } from "./Componets/top";
 import ProtectedRoute from "./Componets/ProtectedRoute";
+import WorkerProfile from "./Worker/Profile";
 
 function Layout() {
   const [role, setRole] = useState(null);
@@ -198,7 +199,16 @@ function Layout() {
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/worker-profile"
+          element={
+            <ProtectedRoute allowedRoles={["worker"]}>
+              <WorkerProfile />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
+
 
       {/* 🔻 FOOTER */}
       {role === "worker" ? <Footerw /> : <Footer />}
