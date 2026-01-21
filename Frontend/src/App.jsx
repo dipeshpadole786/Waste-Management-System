@@ -12,6 +12,7 @@ import Profile from "./Pages/Profile";
 import AadhaarLogin from "./Pages/Login";
 import SafetyGuidelines from "./Pages/Safety";
 import Notification from "./Pages/Notification";
+import WasteClassifier from "./Componets/Waste_classifier";
 
 /* 🏢 MONITOR */
 import Homef from "./Office/Home";
@@ -87,6 +88,14 @@ function Layout() {
           element={
             <ProtectedRoute allowedRoles={["user"]}>
               <Notification />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/predict"
+          element={
+            <ProtectedRoute allowedRoles={["user"]}>
+              <WasteClassifier />
             </ProtectedRoute>
           }
         />
