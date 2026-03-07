@@ -6,10 +6,7 @@ import { useNavigate } from "react-router-dom";
 const FileComplaint = () => {
     const navigate = useNavigate();
     const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
-
-    const aadhaar = loggedInUser?.aadhaarNumber;  // safe access
-
-    console.log(aadhaar);
+    const aadhaar = loggedInUser?.aadhaarNumber;
 
     const [formData, setFormData] = useState({
         complaintType: "",
@@ -29,158 +26,236 @@ const FileComplaint = () => {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setFormData((prev) => ({ ...prev, [name]: value }));
+        setFormData(prev => ({ ...prev, [name]: value }));
     };
 
-    const generateComplaintId = () => {
-        const random = Math.floor(1000 + Math.random() * 9000);
-        return `CMP-${random}`;
-    };
-
+    const generateComplaintId = () => `CMP-${Math.floor(1000 + Math.random() * 9000)}`;
     const [complaintId] = useState(generateComplaintId());
 
-    // ----------------------------------------
-    // SUBMIT FUNCTION
-    // ----------------------------------------
     const handleSubmit = async (e) => {
         e.preventDefault();
-
         try {
-            const res = await API.post("/filecomplaint", {
-                complaintId,
-                aadhaar,
-                ...formData
-            });
-
-            // Navigate with backend data
+            const res = await API.post("/filecomplaint", { complaintId, aadhaar, ...formData });
             navigate("/file_succes", { state: res.data });
-
         } catch (error) {
             console.error("Error submitting:", error);
             alert("Something went wrong. Try again.");
         }
     };
 
+    const previewFields = [
+        { label: "Complaint ID", val: complaintId },
+        { label: "Type", val: formData.complaintType },
+        { label: "Description", val: formData.description },
+        { label: "Address", val: formData.address },
+        { label: "Name", val: formData.name },
+        { label: "Mobile", val: formData.mobile },
+    ];
+
+    const filledFields = previewFields.filter(f => f.val && f.label !== "Complaint ID").length;
+    const totalFields = previewFields.length - 1;
+    const progressPct = Math.round((filledFields / totalFields) * 100);
+
     return (
-        <main className="file-complaint-page">
-            <div className="container">
-                <div className="complaint-main-content">
+        <main className="fc-page">
+            <div className="fc-container">
 
-                    {/* LEFT SIDE FORM */}
-                    <div className="complaint-form-column">
-                        <div className="government-card complaint-form-card">
-                            <div className="card-header">
-                                <h3><span className="card-icon">📝</span> File a Complaint</h3>
+                {/* Page Header */}
+                <div className="fc-page-header">
+                    <div>
+                        <div className="fc-eyebrow">Citizen Services</div>
+                        <h1 className="fc-page-title">File a Complaint</h1>
+                        <p className="fc-page-sub">Submit your waste management complaint and we'll address it within 24–48 hours.</p>
+                    </div>
+                    <div className="fc-id-chip">
+                        🆔 {complaintId}
+                    </div>
+                </div>
+
+                <div className="fc-grid">
+
+                    {/* LEFT: FORM */}
+                    <div className="fc-form-col">
+                        <div className="fc-card">
+                            <div className="fc-card-head">
+                                <span>📝</span>
+                                <h3>Complaint Details</h3>
                             </div>
+                            <div className="fc-card-body">
+                                <form className="fc-form" onSubmit={handleSubmit}>
 
-                            <form className="complaint-form" onSubmit={handleSubmit}>
-                                <div className="form-group">
-                                    <label htmlFor="complaintType">Complaint Type *</label>
-                                    <select
-                                        id="complaintType"
-                                        name="complaintType"
-                                        value={formData.complaintType}
-                                        onChange={handleChange}
-                                        className="govt-select"
-                                        required
-                                    >
-                                        <option value="">Select Type</option>
-                                        {complaintTypes.map((t, i) => (
-                                            <option key={i} value={t}>{t}</option>
-                                        ))}
-                                    </select>
-                                </div>
+                                    {/* Complaint Type */}
+                                    <div className="fc-field">
+                                        <label className="fc-label" htmlFor="complaintType">
+                                            COMPLAINT TYPE <span className="fc-required">*</span>
+                                        </label>
+                                        <div className="fc-select-wrap">
+                                            <select
+                                                id="complaintType"
+                                                name="complaintType"
+                                                value={formData.complaintType}
+                                                onChange={handleChange}
+                                                className="fc-select"
+                                                required
+                                            >
+                                                <option value="">Select complaint category…</option>
+                                                {complaintTypes.map((t, i) => (
+                                                    <option key={i} value={t}>{t}</option>
+                                                ))}
+                                            </select>
+                                            <span className="fc-select-arrow">▾</span>
+                                        </div>
+                                    </div>
 
-                                <div className="form-group">
-                                    <label htmlFor="description">Short Description *</label>
-                                    <textarea
-                                        id="description"
-                                        name="description"
-                                        value={formData.description}
-                                        onChange={handleChange}
-                                        placeholder="Describe the issue..."
-                                        className="govt-textarea"
-                                        rows="3"
-                                        required
-                                    />
-                                </div>
+                                    {/* Description */}
+                                    <div className="fc-field">
+                                        <label className="fc-label" htmlFor="description">
+                                            DESCRIPTION <span className="fc-required">*</span>
+                                        </label>
+                                        <textarea
+                                            id="description"
+                                            name="description"
+                                            value={formData.description}
+                                            onChange={handleChange}
+                                            placeholder="Describe the issue in detail…"
+                                            className="fc-textarea"
+                                            rows="4"
+                                            required
+                                        />
+                                        <div className="fc-field-hint">{formData.description.length}/500 characters</div>
+                                    </div>
 
-                                <div className="form-group">
-                                    <label htmlFor="address">Address *</label>
-                                    <input
-                                        type="text"
-                                        id="address"
-                                        name="address"
-                                        value={formData.address}
-                                        onChange={handleChange}
-                                        className="govt-input"
-                                        required
-                                    />
-                                </div>
-
-                                <div className="form-row">
-                                    <div className="form-group">
-                                        <label htmlFor="name">Full Name *</label>
+                                    {/* Address */}
+                                    <div className="fc-field">
+                                        <label className="fc-label" htmlFor="address">
+                                            LOCATION / ADDRESS <span className="fc-required">*</span>
+                                        </label>
                                         <input
                                             type="text"
-                                            id="name"
-                                            name="name"
-                                            value={formData.name}
+                                            id="address"
+                                            name="address"
+                                            value={formData.address}
                                             onChange={handleChange}
-                                            className="govt-input"
+                                            placeholder="Enter complete address…"
+                                            className="fc-input"
                                             required
                                         />
                                     </div>
 
-                                    <div className="form-group">
-                                        <label htmlFor="mobile">Mobile *</label>
-                                        <input
-                                            type="tel"
-                                            id="mobile"
-                                            name="mobile"
-                                            value={formData.mobile}
-                                            onChange={handleChange}
-                                            className="govt-input"
-                                            pattern="[0-9]{10}"
-                                            required
-                                        />
+                                    {/* Name + Mobile */}
+                                    <div className="fc-row">
+                                        <div className="fc-field">
+                                            <label className="fc-label" htmlFor="name">
+                                                FULL NAME <span className="fc-required">*</span>
+                                            </label>
+                                            <input
+                                                type="text"
+                                                id="name"
+                                                name="name"
+                                                value={formData.name}
+                                                onChange={handleChange}
+                                                placeholder="Your full name"
+                                                className="fc-input"
+                                                required
+                                            />
+                                        </div>
+                                        <div className="fc-field">
+                                            <label className="fc-label" htmlFor="mobile">
+                                                MOBILE NUMBER <span className="fc-required">*</span>
+                                            </label>
+                                            <input
+                                                type="tel"
+                                                id="mobile"
+                                                name="mobile"
+                                                value={formData.mobile}
+                                                onChange={handleChange}
+                                                placeholder="10-digit number"
+                                                className="fc-input"
+                                                pattern="[0-9]{10}"
+                                                required
+                                            />
+                                        </div>
                                     </div>
-                                </div>
 
-                                <div className="form-actions">
-                                    <button type="submit" className="btn btn-primary">
-                                        <span className="submit-icon">📤</span> Submit Complaint
-                                    </button>
-                                </div>
-                            </form>
+                                    <div className="fc-form-footer">
+                                        <div className="fc-disclaimer">
+                                            🔒 Your data is encrypted and protected. By submitting, you confirm this complaint is accurate.
+                                        </div>
+                                        <button type="submit" className="fc-submit-btn">
+                                            📤 Submit Complaint
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
                     </div>
 
-                    {/* RIGHT SIDE PREVIEW */}
-                    <div className="complaint-info-column">
-                        <div className="government-card info-card">
-                            <h4><span className="card-icon">👁️</span> Complaint Preview</h4>
+                    {/* RIGHT: PREVIEW + TIPS */}
+                    <div className="fc-info-col">
 
-                            <div className="preview-box">
-                                <p><strong>Complaint ID:</strong> {complaintId}</p>
-                                <p><strong>Type:</strong> {formData.complaintType || "—"}</p>
-                                <p><strong>Description:</strong> {formData.description || "—"}</p>
-                                <p><strong>Address:</strong> {formData.address || "—"}</p>
-                                <p><strong>Name:</strong> {formData.name || "—"}</p>
-                                <p><strong>Mobile:</strong> {formData.mobile || "—"}</p>
+                        {/* Progress */}
+                        <div className="fc-card fc-progress-card">
+                            <div className="fc-progress-head">
+                                <span className="fc-progress-label">Form Completion</span>
+                                <span className="fc-progress-pct">{progressPct}%</span>
+                            </div>
+                            <div className="fc-progress-track">
+                                <div className="fc-progress-fill" style={{ width: `${progressPct}%` }}></div>
                             </div>
                         </div>
 
-                        <div className="government-card info-card">
-                            <h4><span className="card-icon">💡</span> Tips</h4>
-                            <ul className="tips-list">
-                                <li>Write a clear description.</li>
-                                <li>Add exact location.</li>
-                                <li>Choose correct category.</li>
-                            </ul>
+                        {/* Preview */}
+                        <div className="fc-card">
+                            <div className="fc-card-head">
+                                <span>👁️</span>
+                                <h3>Complaint Preview</h3>
+                            </div>
+                            <div className="fc-card-body fc-preview-body">
+                                {previewFields.map(f => (
+                                    <div className="fc-preview-row" key={f.label}>
+                                        <span className="fc-preview-label">{f.label}</span>
+                                        <span className={`fc-preview-val ${!f.val ? 'fc-preview-empty' : ''}`}>
+                                            {f.val || '—'}
+                                        </span>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
-                    </div>
 
+                        {/* Tips */}
+                        <div className="fc-card">
+                            <div className="fc-card-head">
+                                <span>💡</span>
+                                <h3>Filing Tips</h3>
+                            </div>
+                            <div className="fc-card-body">
+                                <ul className="fc-tips">
+                                    {[
+                                        "Be specific about the location — include landmarks.",
+                                        "Describe the issue clearly and concisely.",
+                                        "Select the correct complaint category.",
+                                        "Provide an active mobile number for follow-up.",
+                                    ].map((tip, i) => (
+                                        <li key={i} className="fc-tip">
+                                            <span className="fc-tip-num">{i + 1}</span>
+                                            <span>{tip}</span>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        </div>
+
+                        {/* Helpline */}
+                        <div className="fc-helpline-card">
+                            <div className="fc-helpline-icon">📞</div>
+                            <div>
+                                <div className="fc-helpline-title">Need Help?</div>
+                                <div className="fc-helpline-num">1800-XXX-XXXX</div>
+                                <div className="fc-helpline-sub">Available 24/7 · Toll Free</div>
+                            </div>
+                        </div>
+
+                    </div>
                 </div>
             </div>
         </main>

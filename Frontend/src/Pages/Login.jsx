@@ -1,36 +1,10 @@
-// AadhaarLoginLarge.jsx
 import React, { useState, useEffect, useRef } from 'react';
 import './Login.css';
 import API from '../API/api_req';
 
-// Mock user database
 const mockUserDatabase = {
-    '123456789012': {
-        fullName: 'RAJESH KUMAR SHARMA',
-        aadhaarNumber: '123456789012',
-        mobileNumber: '9876543210',
-        email: 'rajesh.sharma@example.com',
-        address: 'House No. 123, Sector 15, Noida, Uttar Pradesh',
-        pincode: '201301',
-        district: 'Gautam Buddha Nagar',
-        state: 'Uttar Pradesh',
-        dob: '15-08-1985',
-        gender: 'Male',
-        photo: '👨'
-    },
-    '987654321098': {
-        fullName: 'PRIYA SINGH',
-        aadhaarNumber: '987654321098',
-        mobileNumber: '8765432109',
-        email: 'priya.singh@example.com',
-        address: 'Flat No. 45, GK Enclave, Delhi',
-        pincode: '110048',
-        district: 'South Delhi',
-        state: 'Delhi',
-        dob: '22-03-1992',
-        gender: 'Female',
-        photo: '👩'
-    }
+    '123456789012': { fullName: 'RAJESH KUMAR SHARMA', aadhaarNumber: '123456789012', mobileNumber: '9876543210', email: 'rajesh.sharma@example.com', address: 'House No. 123, Sector 15, Noida, Uttar Pradesh', pincode: '201301', district: 'Gautam Buddha Nagar', state: 'Uttar Pradesh', dob: '15-08-1985', gender: 'Male', photo: '👨' },
+    '987654321098': { fullName: 'PRIYA SINGH', aadhaarNumber: '987654321098', mobileNumber: '8765432109', email: 'priya.singh@example.com', address: 'Flat No. 45, GK Enclave, Delhi', pincode: '110048', district: 'South Delhi', state: 'Delhi', dob: '22-03-1992', gender: 'Female', photo: '👩' }
 };
 
 const AadhaarLoginLarge = () => {
@@ -39,578 +13,338 @@ const AadhaarLoginLarge = () => {
     const [otp, setOtp] = useState('');
     const [captcha, setCaptcha] = useState('');
     const [userCaptcha, setUserCaptcha] = useState('');
-    const [otpSent, setOtpSent] = useState(false);
-    const [otpVerified, setOtpVerified] = useState(false);
     const [otpTimer, setOtpTimer] = useState(0);
     const [userData, setUserData] = useState(null);
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
-
     const canvasRef = useRef(null);
 
-    // Generate CAPTCHA
     const generateCaptcha = () => {
         const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-        let captchaText = '';
-        for (let i = 0; i < 6; i++) {
-            captchaText += chars.charAt(Math.floor(Math.random() * chars.length));
-        }
-        setCaptcha(captchaText);
+        let text = '';
+        for (let i = 0; i < 6; i++) text += chars.charAt(Math.floor(Math.random() * chars.length));
+        setCaptcha(text);
         setUserCaptcha('');
-        drawCaptcha(captchaText);
+        drawCaptcha(text);
     };
 
     const drawCaptcha = (text) => {
         const canvas = canvasRef.current;
         if (!canvas) return;
-
         const ctx = canvas.getContext('2d');
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-        // Background
-        ctx.fillStyle = '#f0f0f0';
+        ctx.fillStyle = '#EEF2F8';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-        // Add noise
-        for (let i = 0; i < 50; i++) {
+        for (let i = 0; i < 30; i++) {
             ctx.beginPath();
             ctx.moveTo(Math.random() * canvas.width, Math.random() * canvas.height);
             ctx.lineTo(Math.random() * canvas.width, Math.random() * canvas.height);
-            ctx.strokeStyle = '#999';
+            ctx.strokeStyle = '#B0BEC5';
+            ctx.lineWidth = 0.8;
             ctx.stroke();
         }
-
-        // Draw text with distortion
-        ctx.font = 'bold 40px Arial';
-        ctx.fillStyle = '#000080';
-
+        ctx.font = 'bold 36px Georgia, serif';
+        ctx.fillStyle = '#0C1B33';
         for (let i = 0; i < text.length; i++) {
-            const char = text[i];
-            const x = 30 + i * 35;
-            const y = 50 + Math.random() * 15;
-            const rotation = (Math.random() - 0.5) * 0.2;
-
+            const x = 22 + i * 38;
+            const y = 52 + Math.random() * 10;
+            const rot = (Math.random() - 0.5) * 0.25;
             ctx.save();
             ctx.translate(x, y);
-            ctx.rotate(rotation);
-            ctx.fillText(char, 0, 0);
+            ctx.rotate(rot);
+            ctx.fillText(text[i], 0, 0);
             ctx.restore();
         }
     };
 
-    useEffect(() => {
-        generateCaptcha();
-    }, []);
+    useEffect(() => { generateCaptcha(); }, []);
 
-    // OTP Timer
     useEffect(() => {
         let timer;
-        if (otpTimer > 0) {
-            timer = setTimeout(() => setOtpTimer(otpTimer - 1), 1000);
-        }
+        if (otpTimer > 0) timer = setTimeout(() => setOtpTimer(otpTimer - 1), 1000);
         return () => clearTimeout(timer);
     }, [otpTimer]);
 
-    // Validate Aadhaar Number
-    const validateAadhaar = (number) => {
-        const aadhaarRegex = /^\d{12}$/;
-        return aadhaarRegex.test(number);
-    };
+    const formatAadhaar = (num) => num.replace(/(\d{4})(\d{4})(\d{4})/, '$1 $2 $3');
+    const generateOTP = () => Math.floor(100000 + Math.random() * 900000).toString();
 
-    // Generate OTP
-    const generateOTP = () => {
-        return Math.floor(100000 + Math.random() * 900000).toString();
-    };
-
-    // Handle Aadhaar Submission
     const handleAadhaarSubmit = async (e) => {
         e.preventDefault();
         setError('');
-
-        // Validate Aadhaar number
-        if (!validateAadhaar(aadhaarNumber)) {
-            setError('Please enter a valid 12-digit Aadhaar number');
-            return;
-        }
-
-        // Validate CAPTCHA
-        if (userCaptcha !== captcha) {
-            setError('CAPTCHA verification failed. Please try again.');
-            generateCaptcha();
-            return;
-        }
-
+        if (!/^\d{12}$/.test(aadhaarNumber)) { setError('Please enter a valid 12-digit Aadhaar number'); return; }
+        if (userCaptcha !== captcha) { setError('CAPTCHA verification failed. Please try again.'); generateCaptcha(); return; }
         try {
             const res = await API.post("/aadhar", { aadharnumber: aadhaarNumber });
-
-            if (res.data === 0) {   // <-- use res.data
-                setError('Aadhar number not found');
-                return;
-            }
-
-            // Aadhaar exists, continue your logic
-        } catch (error) {
-            console.error(error);
-            setError('Server error');
-        }
-
-        // Check if user exists
-        // if (!mockUserDatabase[aadhaarNumber]) {
-        //     setError('Aadhaar number not found in our system.');
-        //     return;
-        // }
-
-        // Start loading
+            if (res.data === 0) { setError('Aadhaar number not found'); return; }
+        } catch { setError('Server error'); return; }
         setLoading(true);
-
-        // Simulate API call
         setTimeout(() => {
-            // Generate OTP
             const generatedOTP = generateOTP();
-
-            // Show OTP in alert for demo
-            alert(`🔐 SECURE LOGIN - OTP VERIFICATION\n\n📱 Aadhaar Number: ${aadhaarNumber}\n🔢 Your OTP: ${generatedOTP}\n⏰ Valid for: 2 minutes\n\n💡 Note: In production, OTP is sent to registered mobile number.`);
-
-            // Store OTP
+            alert(`🔐 SECURE LOGIN - OTP VERIFICATION\n\n📱 Aadhaar: ${aadhaarNumber}\n🔢 OTP: ${generatedOTP}\n⏰ Valid for 2 minutes`);
             sessionStorage.setItem('aadhaar_otp', generatedOTP);
             sessionStorage.setItem('aadhaar_number', aadhaarNumber);
-
-            // Set timer for 2 minutes
             setOtpTimer(120);
-            setOtpSent(true);
             setLoading(false);
             setStep(2);
         }, 1500);
     };
 
-    // Handle OTP Verification
     const handleOtpSubmit = async (e) => {
         e.preventDefault();
         setError('');
-
-        if (otp.length !== 6) {
-            setError('Please enter 6-digit OTP');
-            return;
-        }
-
-        // Get stored OTP
+        if (otp.length !== 6) { setError('Please enter 6-digit OTP'); return; }
         const storedOtp = sessionStorage.getItem('aadhaar_otp');
         const storedAadhaar = sessionStorage.getItem('aadhaar_number');
-
-        if (!storedOtp || storedAadhaar !== aadhaarNumber) {
-            setError('OTP session expired. Please try again.');
-            return;
-        }
-
-        if (otp !== storedOtp) {
-            setError('Invalid OTP. Please try again.');
-            return;
-        }
-
-        // OTP verified successfully
-        setOtpVerified(true);
-
-        // Get user data
-        const res = await API.get("/userget", {
-            params: { aadharnumber: aadhaarNumber } // sends as query param
-        });
-
-        setUserData(res.data); // user data from backend
-
-
-        // const user = mockUserDatabase[aadhaarNumber];
-        // setUserData(user);
-
-        // Move to user details step
+        if (!storedOtp || storedAadhaar !== aadhaarNumber) { setError('OTP session expired. Please try again.'); return; }
+        if (otp !== storedOtp) { setError('Invalid OTP. Please try again.'); return; }
+        const res = await API.get("/userget", { params: { aadharnumber: aadhaarNumber } });
+        setUserData(res.data);
         setStep(3);
-
-        // Clear session storage
         sessionStorage.removeItem('aadhaar_otp');
         sessionStorage.removeItem('aadhaar_number');
     };
 
-    // Resend OTP
     const handleResendOtp = () => {
-        if (otpTimer > 0) {
-            setError(`Please wait ${otpTimer} seconds before requesting new OTP`);
-            return;
-        }
-
+        if (otpTimer > 0) { setError(`Please wait ${otpTimer}s before requesting new OTP`); return; }
         const generatedOTP = generateOTP();
-        alert(`🔄 NEW OTP GENERATED\n\n📱 Aadhaar Number: ${aadhaarNumber}\n🔢 Your New OTP: ${generatedOTP}\n⏰ Valid for: 2 minutes`);
-
-        // Store new OTP
+        alert(`🔄 NEW OTP\n\nAadhaar: ${aadhaarNumber}\nOTP: ${generatedOTP}`);
         sessionStorage.setItem('aadhaar_otp', generatedOTP);
         setOtpTimer(120);
         setError('');
         setOtp('');
     };
 
-    // Refresh CAPTCHA
-    const handleRefreshCaptcha = () => {
-        generateCaptcha();
-    };
-
-    // Format Aadhaar number
-    const formatAadhaar = (num) => {
-        return num.replace(/(\d{4})(\d{4})(\d{4})/, '$1 $2 $3');
-    };
-
-    // Handle Login
     const handleLogin = () => {
         if (!userData) return;
-
         const expiryTime = new Date().getTime() + 7 * 24 * 60 * 60 * 1000;
-
         localStorage.setItem("loggedInUser", JSON.stringify({
-            _id: userData._id,
-            fullName: userData.fullName,
-            aadhaarNumber: userData.aadhaarNumber,
-            email: userData.email,
-            mobileNumber: userData.mobileNumber,
-            role: userData.role || "user", // ⭐ REQUIRED
-            expiry: expiryTime
+            _id: userData._id, fullName: userData.fullName, aadhaarNumber: userData.aadhaarNumber,
+            email: userData.email, mobileNumber: userData.mobileNumber, role: userData.role || "user", expiry: expiryTime
         }));
-
         alert(`✅ Welcome ${userData.fullName}`);
-
-        // ✅ role-based redirect
-        if (userData.role === "monitor") {
-            window.location.href = "/newhome";
-        } else {
-            window.location.href = "/";
-        }
+        window.location.href = userData.role === "monitor" ? "/newhome" : "/";
     };
 
-
-    // Handle Go Back
     const handleGoBack = () => {
-        if (step === 2) {
-            setStep(1);
-            setOtpSent(false);
-            setOtpTimer(0);
-        } else if (step === 3) {
-            setStep(2);
-        }
+        if (step === 2) { setStep(1); setOtpTimer(0); }
+        else if (step === 3) setStep(2);
         setError('');
     };
 
     return (
-        <div className="aadhaar-login-large-page">
-            {/* Left Side - Government Information */}
-            <div className="login-info-panel">
-                <div className="government-emblem-large">
-                    <div className="ashoka-chakra-large">☸</div>
-                    <div className="emblem-text">
+        <div className="lg-page">
+
+            {/* Left Info Panel */}
+            <div className="lg-info-panel">
+                <div className="lg-emblem-wrap">
+                    <div className="lg-chakra-ring">
+                        <span className="lg-chakra">☸</span>
+                    </div>
+                    <div className="lg-emblem-text">
                         <h1>भारत सरकार</h1>
                         <h2>Government of India</h2>
                     </div>
                 </div>
 
-                <div className="government-message">
-                    <h3><span className="message-icon">🔐</span> Secure Aadhaar Authentication</h3>
-                    <p className="large-text">
-                        Your Aadhaar authentication is 100% secure and protected under the Aadhaar Act, 2016
-                    </p>
-
-                    <div className="features-list">
-                        <div className="feature-item">
-                            <span className="feature-icon">✅</span>
-                            <div className="feature-content">
-                                <h4>Secure Login</h4>
-                                <p>Two-factor authentication with OTP</p>
+                <div className="lg-info-message">
+                    <h3>🔐 Secure Aadhaar Authentication</h3>
+                    <p>Your Aadhaar authentication is 100% secure and protected under the Aadhaar Act, 2016.</p>
+                    <div className="lg-features">
+                        {[
+                            { icon: "✅", title: "Secure Login", desc: "Two-factor authentication with OTP" },
+                            { icon: "🛡️", title: "Data Protection", desc: "Your data is encrypted and secure" },
+                            { icon: "⚡", title: "Quick Access", desc: "Instant authentication in 3 steps" },
+                        ].map(f => (
+                            <div className="lg-feature" key={f.title}>
+                                <div className="lg-feature-icon">{f.icon}</div>
+                                <div>
+                                    <div className="lg-feature-title">{f.title}</div>
+                                    <div className="lg-feature-desc">{f.desc}</div>
+                                </div>
                             </div>
-                        </div>
-                        <div className="feature-item">
-                            <span className="feature-icon">🛡️</span>
-                            <div className="feature-content">
-                                <h4>Data Protection</h4>
-                                <p>Your data is encrypted and secure</p>
-                            </div>
-                        </div>
-                        <div className="feature-item">
-                            <span className="feature-icon">⚡</span>
-                            <div className="feature-content">
-                                <h4>Quick Access</h4>
-                                <p>Instant authentication in 3 steps</p>
-                            </div>
-                        </div>
+                        ))}
                     </div>
                 </div>
 
-                <div className="helpline-section">
-                    <h4><span className="helpline-icon">📞</span> Need Help?</h4>
-                    <div className="helpline-number">
-                        <span className="number-label">UIDAI Helpline:</span>
-                        <span className="number-value">1947</span>
-                    </div>
-                    <div className="helpline-number">
-                        <span className="number-label">Toll Free:</span>
-                        <span className="number-value">1800-300-1947</span>
-                    </div>
+                <div className="lg-helpline">
+                    <div className="lg-helpline-head">📞 Need Help?</div>
+                    {[{ label: "UIDAI Helpline", num: "1947" }, { label: "Toll Free", num: "1800-300-1947" }].map(h => (
+                        <div className="lg-helpline-row" key={h.label}>
+                            <span className="lg-helpline-label">{h.label}</span>
+                            <span className="lg-helpline-num">{h.num}</span>
+                        </div>
+                    ))}
                 </div>
             </div>
 
-            {/* Right Side - Login Form */}
-            <div className="login-form-panel">
+            {/* Right Form Panel */}
+            <div className="lg-form-panel">
+
                 {/* Step Indicators */}
-                <div className="step-indicators-large">
-                    <div className={`step-indicator-large ${step >= 1 ? 'active' : ''}`}>
-                        <div className="step-number-large">1</div>
-                        <div className="step-label-large">Enter Aadhaar</div>
-                    </div>
-                    <div className="step-connector"></div>
-                    <div className={`step-indicator-large ${step >= 2 ? 'active' : ''}`}>
-                        <div className="step-number-large">2</div>
-                        <div className="step-label-large">Verify OTP</div>
-                    </div>
-                    <div className="step-connector"></div>
-                    <div className={`step-indicator-large ${step >= 3 ? 'active' : ''}`}>
-                        <div className="step-number-large">3</div>
-                        <div className="step-label-large">Access Portal</div>
-                    </div>
+                <div className="lg-steps">
+                    {[{ n: 1, label: "Enter Aadhaar" }, { n: 2, label: "Verify OTP" }, { n: 3, label: "Access Portal" }].map((s, i, arr) => (
+                        <React.Fragment key={s.n}>
+                            <div className={`lg-step ${step >= s.n ? 'active' : ''} ${step === s.n ? 'current' : ''}`}>
+                                <div className="lg-step-num">{step > s.n ? '✓' : s.n}</div>
+                                <div className="lg-step-label">{s.label}</div>
+                            </div>
+                            {i < arr.length - 1 && <div className={`lg-step-connector ${step > s.n ? 'active' : ''}`}></div>}
+                        </React.Fragment>
+                    ))}
                 </div>
 
-                {/* Login Form Container */}
-                <div className="login-form-container-large">
-                    {/* Step 1: Aadhaar Input */}
+                {/* Form Container */}
+                <div className="lg-form-box">
+
+                    {/* Step 1 */}
                     {step === 1 && (
-                        <div className="step-1-container-large">
-                            <div className="step-header-large">
-                                <h2><span className="header-icon-large">🆔</span> Aadhaar Authentication</h2>
-                                <p className="step-description-large">
-                                    Enter your 12-digit Aadhaar number for secure login
-                                </p>
+                        <>
+                            <div className="lg-form-head">
+                                <h2>🆔 Aadhaar Authentication</h2>
+                                <p>Enter your 12-digit Aadhaar number for secure login</p>
                             </div>
 
-                            <form onSubmit={handleAadhaarSubmit} className="aadhaar-form-large">
-                                <div className="form-group-large">
-                                    <label htmlFor="aadhaarNumber" className="form-label-large">
-                                        AADHAAR NUMBER
-                                    </label>
+                            <form onSubmit={handleAadhaarSubmit} className="lg-form">
+                                <div className="lg-field">
+                                    <label className="lg-label">AADHAAR NUMBER</label>
                                     <input
                                         type="text"
-                                        id="aadhaarNumber"
                                         value={aadhaarNumber}
-                                        onChange={(e) => setAadhaarNumber(e.target.value.replace(/\D/g, ''))}
+                                        onChange={e => setAadhaarNumber(e.target.value.replace(/\D/g, ''))}
                                         placeholder="Enter 12-digit Aadhaar number"
                                         maxLength="12"
                                         required
-                                        className="govt-input-large"
+                                        className="lg-input"
                                     />
-                                    <div className="input-help-large">
-                                        <span className="help-icon-large">ℹ️</span>
-                                        Enter without spaces (Example: 123456789012)
-                                    </div>
+                                    <div className="lg-field-hint">ℹ️ Enter without spaces (e.g. 123456789012)</div>
                                 </div>
 
-                                {/* CAPTCHA Section */}
-                                <div className="captcha-section-large">
-                                    <label className="captcha-label-large">SECURITY VERIFICATION</label>
-                                    <div className="captcha-container-large">
-                                        <canvas
-                                            ref={canvasRef}
-                                            width="300"
-                                            height="80"
-                                            className="captcha-canvas-large"
-                                        />
-                                        <button
-                                            type="button"
-                                            className="refresh-captcha-large"
-                                            onClick={handleRefreshCaptcha}
-                                            title="Refresh CAPTCHA"
-                                        >
-                                            🔄 Refresh
-                                        </button>
+                                <div className="lg-field">
+                                    <label className="lg-label">SECURITY VERIFICATION</label>
+                                    <div className="lg-captcha-row">
+                                        <canvas ref={canvasRef} width="260" height="70" className="lg-captcha-canvas" />
+                                        <button type="button" className="lg-captcha-refresh" onClick={generateCaptcha}>🔄 Refresh</button>
                                     </div>
                                     <input
                                         type="text"
                                         value={userCaptcha}
-                                        onChange={(e) => setUserCaptcha(e.target.value)}
-                                        placeholder="Type the text you see above"
+                                        onChange={e => setUserCaptcha(e.target.value)}
+                                        placeholder="Type the text shown above"
                                         required
-                                        className="captcha-input-large"
+                                        className="lg-input"
                                     />
                                 </div>
 
-                                {/* Terms and Conditions */}
-                                <div className="terms-section-large">
-                                    <label className="checkbox-label-large">
-                                        <input type="checkbox" required className="large-checkbox" />
-                                        <span className="checkmark-large"></span>
-                                        <span className="terms-text-large">
+                                <div className="lg-checkbox-row">
+                                    <label className="lg-checkbox-label">
+                                        <input type="checkbox" required className="lg-checkbox" />
+                                        <span className="lg-checkmark"></span>
+                                        <span className="lg-checkbox-text">
                                             I agree to share my Aadhaar details for authentication as per Aadhaar Act, 2016
                                         </span>
                                     </label>
                                 </div>
 
-                                {error && <div className="error-message-large">{error}</div>}
+                                {error && <div className="lg-error">{error}</div>}
 
-                                <div className="form-actions-large">
-                                    <button
-                                        type="submit"
-                                        className="btn-primary-large"
-                                        disabled={loading}
-                                    >
-                                        {loading ? (
-                                            <>
-                                                <span className="loading-spinner-large"></span>
-                                                VERIFYING...
-                                            </>
-                                        ) : (
-                                            'VERIFY & SEND OTP →'
-                                        )}
-                                    </button>
-                                </div>
+                                <button type="submit" className="lg-btn-primary" disabled={loading}>
+                                    {loading ? <><span className="lg-btn-spinner"></span> VERIFYING…</> : 'VERIFY & SEND OTP →'}
+                                </button>
                             </form>
-                        </div>
+                        </>
                     )}
 
-                    {/* Step 2: OTP Verification */}
+                    {/* Step 2 */}
                     {step === 2 && (
-                        <div className="step-2-container-large">
-                            <div className="step-header-large">
-                                <button
-                                    className="back-button-large"
-                                    onClick={handleGoBack}
-                                >
-                                    ← BACK
-                                </button>
-                                <h2><span className="header-icon-large">🔢</span> OTP Verification</h2>
-                                <p className="step-description-large">
-                                    Enter the OTP sent to your registered mobile number
-                                </p>
+                        <>
+                            <div className="lg-form-head">
+                                <button className="lg-back-btn" onClick={handleGoBack}>← BACK</button>
+                                <h2>🔢 OTP Verification</h2>
+                                <p>Enter the OTP sent to your registered mobile number</p>
                             </div>
 
-                            <div className="aadhaar-display-large">
-                                <span className="display-label-large">AADHAAR NUMBER:</span>
-                                <span className="display-value-large">{formatAadhaar(aadhaarNumber)}</span>
+                            <div className="lg-aadhaar-display">
+                                <span className="lg-ad-label">AADHAAR NUMBER</span>
+                                <span className="lg-ad-val">{formatAadhaar(aadhaarNumber)}</span>
                             </div>
 
-                            <form onSubmit={handleOtpSubmit} className="otp-form-large">
-                                <div className="form-group-large">
-                                    <label htmlFor="otp" className="form-label-large">
-                                        ENTER OTP
-                                    </label>
+                            <form onSubmit={handleOtpSubmit} className="lg-form">
+                                <div className="lg-field">
+                                    <label className="lg-label">ENTER OTP</label>
                                     <input
                                         type="text"
-                                        id="otp"
                                         value={otp}
-                                        onChange={(e) => setOtp(e.target.value.replace(/\D/g, ''))}
+                                        onChange={e => setOtp(e.target.value.replace(/\D/g, ''))}
                                         placeholder="Enter 6-digit OTP"
                                         maxLength="6"
                                         required
-                                        className="otp-input-large"
+                                        className="lg-input lg-input--otp"
                                     />
-                                    <div className="otp-timer-large">
-                                        <span className="timer-icon-large">⏰</span>
-                                        OTP VALID FOR:
-                                        <span className="timer-value-large">
-                                            {Math.floor(otpTimer / 60)}:{(otpTimer % 60).toString().padStart(2, '0')}
-                                        </span>
+                                    <div className={`lg-timer ${otpTimer <= 30 ? 'lg-timer--warn' : ''}`}>
+                                        ⏰ OTP valid for:{' '}
+                                        <strong>{Math.floor(otpTimer / 60)}:{(otpTimer % 60).toString().padStart(2, '0')}</strong>
                                     </div>
                                 </div>
 
-                                <div className="otp-help-large">
-                                    <span className="help-icon-large">💡</span>
-                                    OTP has been sent to mobile number ending with
-                                    <strong> {mockUserDatabase[aadhaarNumber]?.mobileNumber?.slice(-4)}</strong>
-                                </div>
+                                {error && <div className="lg-error">{error}</div>}
 
-                                {error && <div className="error-message-large">{error}</div>}
-
-                                <div className="form-actions-large">
-                                    <button
-                                        type="button"
-                                        className="btn-secondary-large"
-                                        onClick={handleResendOtp}
-                                        disabled={otpTimer > 0}
-                                    >
+                                <div className="lg-btn-row">
+                                    <button type="button" className="lg-btn-secondary" onClick={handleResendOtp} disabled={otpTimer > 0}>
                                         RESEND OTP
                                     </button>
-                                    <button
-                                        type="submit"
-                                        className="btn-primary-large"
-                                    >
-                                        VERIFY OTP →
-                                    </button>
+                                    <button type="submit" className="lg-btn-primary">VERIFY OTP →</button>
                                 </div>
                             </form>
-                        </div>
+                        </>
                     )}
 
-                    {/* Step 3: User Details */}
+                    {/* Step 3 */}
                     {step === 3 && userData && (
-                        <div className="step-3-container-large">
-                            <div className="step-header-large">
-                                <button
-                                    className="back-button-large"
-                                    onClick={handleGoBack}
-                                >
-                                    ← BACK
-                                </button>
-                                <h2><span className="header-icon-large">✅</span> Verification Successful</h2>
-                                <p className="step-description-large">
-                                    Your identity has been verified successfully
-                                </p>
+                        <>
+                            <div className="lg-form-head">
+                                <button className="lg-back-btn" onClick={handleGoBack}>← BACK</button>
+                                <h2>✅ Verification Successful</h2>
+                                <p>Your identity has been verified successfully</p>
                             </div>
 
-                            <div className="verification-success-large">
-                                <div className="success-icon-large">✅</div>
-                                <h3 className="success-title-large">AADHAAR VERIFIED</h3>
-                                <p className="success-text-large">
-                                    Welcome back to the Government Portal
-                                </p>
-                            </div>
-
-                            <div className="user-profile-large">
-                                <div className="profile-header-large">
-                                    <div className="profile-photo-large">{userData.photo}</div>
-                                    <div className="profile-info-large">
-                                        <h3 className="user-name-large">{userData.fullName}</h3>
-                                        <p className="aadhaar-verified-large">
-                                            <span className="verified-icon-large">🆔</span>
-                                            Aadhaar: {formatAadhaar(userData.aadhaarNumber)}
-                                        </p>
-                                    </div>
-                                </div>
-
-                                <div className="user-details-grid-large">
-                                    <div className="detail-item-large">
-                                        <span className="detail-label-large">Mobile Number</span>
-                                        <span className="detail-value-large">{userData.mobileNumber}</span>
-                                    </div>
-                                    <div className="detail-item-large">
-                                        <span className="detail-label-large">Email Address</span>
-                                        <span className="detail-value-large">{userData.email}</span>
-                                    </div>
-                                    <div className="detail-item-large">
-                                        <span className="detail-label-large">Date of Birth</span>
-                                        <span className="detail-value-large">{userData.dob}</span>
-                                    </div>
-                                    <div className="detail-item-large">
-                                        <span className="detail-label-large">Gender</span>
-                                        <span className="detail-value-large">{userData.gender}</span>
-                                    </div>
+                            <div className="lg-success-banner">
+                                <div className="lg-success-icon">✅</div>
+                                <div>
+                                    <div className="lg-success-title">AADHAAR VERIFIED</div>
+                                    <div className="lg-success-sub">Welcome back to the Government Portal</div>
                                 </div>
                             </div>
 
-                            <div className="form-actions-large">
-                                <button
-                                    className="btn-success-large"
-                                    onClick={handleLogin}
-                                >
-                                    🚀 CONTINUE TO PORTAL
-                                </button>
+                            <div className="lg-user-card">
+                                <div className="lg-user-photo">{userData.photo}</div>
+                                <div>
+                                    <div className="lg-user-name">{userData.fullName}</div>
+                                    <div className="lg-user-aadhaar">🆔 {formatAadhaar(userData.aadhaarNumber)}</div>
+                                </div>
                             </div>
 
-                            <div className="security-notice-large">
-                                <span className="notice-icon-large">⚠️</span>
-                                <p className="notice-text-large">
-                                    This is a demo system. In production, Aadhaar authentication is done through UIDAI's secure authentication service.
-                                </p>
+                            <div className="lg-user-grid">
+                                {[
+                                    { label: "Mobile Number", val: userData.mobileNumber },
+                                    { label: "Email Address", val: userData.email },
+                                    { label: "Date of Birth", val: userData.dob },
+                                    { label: "Gender", val: userData.gender },
+                                ].map(d => (
+                                    <div key={d.label} className="lg-user-detail">
+                                        <div className="lg-ud-label">{d.label}</div>
+                                        <div className="lg-ud-val">{d.val}</div>
+                                    </div>
+                                ))}
                             </div>
-                        </div>
+
+                            <button className="lg-btn-success" onClick={handleLogin}>
+                                🚀 CONTINUE TO PORTAL
+                            </button>
+
+                            <div className="lg-security-notice">
+                                ⚠️ Demo system only. In production, authentication is done through UIDAI's secure service.
+                            </div>
+                        </>
                     )}
                 </div>
             </div>

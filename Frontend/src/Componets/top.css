@@ -1,43 +1,258 @@
-.government-top-banner {
-    /* background-color: rgb(100, 231, 231); */
-    background-color: rgb(39, 196, 196);
+@import url('https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600;700&family=DM+Sans:wght@400;500;600&family=Noto+Sans+Devanagari:wght@500;600;700&display=swap');
 
+/* ─────────────────────────────────────────
+   BANNER WRAPPER
+───────────────────────────────────────── */
+.top-banner {
+    background: linear-gradient(135deg, #0A1628 0%, #0C1B33 55%, #112240 100%);
+    position: relative;
+    overflow: hidden;
 }
 
+/* Subtle radial glow */
+.top-banner::before {
+    content: '';
+    position: absolute;
+    top: -60px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 600px;
+    height: 200px;
+    background: radial-gradient(ellipse, rgba(224, 123, 42, 0.08) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+.top-banner-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 22px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+}
+
+/* ─────────────────────────────────────────
+   EMBLEM
+───────────────────────────────────────── */
+.top-emblem {
+    flex-shrink: 0;
+}
+
+.top-chakra-ring {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.06);
+    border: 2px solid rgba(255, 255, 255, 0.14);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow:
+        0 0 0 5px rgba(255, 255, 255, 0.03),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    transition: border-color 0.3s;
+}
+
+.top-chakra-ring:hover {
+    border-color: rgba(224, 123, 42, 0.4);
+}
+
+.top-chakra {
+    font-size: 30px;
+    color: rgba(255, 255, 255, 0.9);
+    line-height: 1;
+    display: block;
+    animation: spin-slow 30s linear infinite;
+}
+
+@keyframes spin-slow {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* ─────────────────────────────────────────
+   TITLE BLOCK
+───────────────────────────────────────── */
+.top-title {
+    flex: 1;
+    text-align: center;
+}
+
+.top-title h1 {
+    font-family: 'Noto Sans Devanagari', 'Crimson Pro', serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: #FFFFFF;
+    margin: 0 0 5px;
+    letter-spacing: 0.5px;
+    line-height: 1.2;
+}
+
+.top-title h2 {
+    font-family: 'Crimson Pro', serif;
+    font-size: 16px;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.65);
+    margin: 0 0 10px;
+    letter-spacing: 0.3px;
+    font-style: italic;
+}
+
+.top-tagline-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.38);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    flex-wrap: wrap;
+}
+
+.top-tagline-dot {
+    width: 4px;
+    height: 4px;
+    background: #E07B2A;
+    border-radius: 50%;
+    opacity: 0.6;
+    flex-shrink: 0;
+}
+
+.top-tagline-sep {
+    color: rgba(255, 255, 255, 0.2);
+    font-weight: 300;
+}
+
+/* ─────────────────────────────────────────
+   TRICOLOR FLAG
+───────────────────────────────────────── */
+.top-flag {
+    flex-shrink: 0;
+    width: 72px;
+    height: 48px;
+    border-radius: 4px;
+    overflow: hidden;
+    border: 1.5px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+}
+
+.top-flag-stripe {
+    flex: 1;
+    position: relative;
+}
+
+.top-flag-stripe.saffron {
+    background: #FF9933;
+}
+
+.top-flag-stripe.white {
+    background: #FFFFFF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.top-flag-stripe.green {
+    background: #138808;
+}
+
+.top-flag-chakra {
+    font-size: 11px;
+    color: #000080;
+    line-height: 1;
+    display: block;
+}
+
+/* ─────────────────────────────────────────
+   BOTTOM ACCENT BAR
+───────────────────────────────────────── */
+.top-accent-bar {
+    display: flex;
+    height: 3px;
+}
+
+.top-accent-saffron {
+    flex: 1;
+    background: #FF9933;
+}
+
+.top-accent-white {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.7);
+}
+
+.top-accent-green {
+    flex: 1;
+    background: #138808;
+}
+
+/* ─────────────────────────────────────────
+   RESPONSIVE
+───────────────────────────────────────── */
 @media (max-width: 768px) {
-    .government-top-banner .container {
-        flex-direction: column;
-        text-align: center;
-        gap: 15px;
-        height: 150px;
+    .top-banner-inner {
+        padding: 18px 20px;
+        gap: 16px;
     }
 
-    .tricolor-flag {
-        width: 100px;
-        height: 60px;
+    .top-title h1 {
+        font-size: 20px;
     }
 
-    .portal-title h1 {
-        font-size: 22px;
+    .top-title h2 {
+        font-size: 13px;
     }
 
-    .portal-title h2 {
-        font-size: 16px;
+    .top-tagline-row {
+        display: none;
     }
 
-    .services-grid {
-        grid-template-columns: 1fr;
+    .top-chakra-ring {
+        width: 52px;
+        height: 52px;
     }
 
-    .stat-item {
-        min-width: 120px;
+    .top-chakra {
+        font-size: 24px;
     }
 
-    .stat-value {
-        font-size: 28px;
+    .top-flag {
+        width: 56px;
+        height: 38px;
+    }
+}
+
+@media (max-width: 480px) {
+    .top-emblem {
+        display: none;
     }
 
-    .citizen-links {
-        justify-content: center;
+    .top-title h1 {
+        font-size: 17px;
+    }
+
+    .top-title h2 {
+        font-size: 12px;
+        margin-bottom: 0;
+    }
+
+    .top-flag {
+        width: 44px;
+        height: 30px;
+    }
+
+    .top-flag-chakra {
+        font-size: 8px;
     }
 }

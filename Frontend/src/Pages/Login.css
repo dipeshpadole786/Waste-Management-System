@@ -1,818 +1,737 @@
-/* AadhaarLoginLarge.css */
-.aadhaar-login-large-page {
+@import url('https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600;700&family=DM+Sans:wght@400;500;600&family=Noto+Sans+Devanagari:wght@600;700&display=swap');
+
+.lg-page {
+    --navy: #0C1B33;
+    --navy-mid: #152238;
+    --navy-pale: #EEF2F8;
+    --saffron: #E07B2A;
+    --saffron-pale: #FEF3E7;
+    --green: #1A6B3A;
+    --green-pale: #EAF5EE;
+    --red: #C0392B;
+    --red-pale: #FDECEB;
+    --text: #0C1B33;
+    --text-2: #4A5568;
+    --text-3: #8A9BB0;
+    --border: #D8E0EB;
+    --border-light: #EEF2F8;
+    --bg: #F4F6FA;
+    --white: #FFFFFF;
+}
+
+.lg-page {
+    font-family: 'DM Sans', sans-serif;
+    display: flex;
     min-height: 100vh;
-    display: flex;
-    background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
-    font-family: 'Arial', sans-serif;
+    color: var(--text);
 }
 
-/* Left Panel - Government Information */
-.login-info-panel {
-    flex: 1;
-    background: linear-gradient(135deg, #000080 0%, #1A237E 100%);
-    color: white;
-    padding: 40px;
-    min-width: 400px;
+/* ── INFO PANEL (LEFT) ── */
+.lg-info-panel {
+    width: 420px;
+    flex-shrink: 0;
+    background: var(--navy);
+    padding: 48px 40px;
     display: flex;
     flex-direction: column;
-}
-
-.government-emblem-large {
-    display: flex;
-    align-items: center;
-    gap: 25px;
-    margin-bottom: 50px;
-}
-
-.ashoka-chakra-large {
-    font-size: 60px;
-    background: white;
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #000080;
-    border: 4px solid #FF9933;
-}
-
-.emblem-text h1 {
-    margin: 0;
-    font-size: 36px;
-    font-weight: 800;
-    letter-spacing: 1px;
-}
-
-.emblem-text h2 {
-    margin: 10px 0 0 0;
-    font-size: 24px;
-    font-weight: 400;
-    color: #E3F2FD;
-}
-
-.government-message {
-    flex-grow: 1;
-}
-
-.government-message h3 {
-    font-size: 28px;
-    margin-bottom: 30px;
-    display: flex;
-    align-items: center;
-    gap: 15px;
-}
-
-.message-icon {
-    font-size: 32px;
-}
-
-.large-text {
-    font-size: 20px;
-    line-height: 1.6;
-    color: #E3F2FD;
-    margin-bottom: 40px;
-}
-
-.features-list {
-    display: flex;
-    flex-direction: column;
-    gap: 25px;
-}
-
-.feature-item {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-}
-
-.feature-icon {
-    font-size: 28px;
-    background: rgba(255, 255, 255, 0.1);
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.feature-content h4 {
-    margin: 0 0 5px 0;
-    font-size: 22px;
-    font-weight: 600;
-}
-
-.feature-content p {
-    margin: 0;
-    font-size: 18px;
-    color: #BBDEFB;
-}
-
-.helpline-section {
-    margin-top: auto;
-    padding-top: 30px;
-    border-top: 2px solid rgba(255, 255, 255, 0.1);
-}
-
-.helpline-section h4 {
-    font-size: 24px;
-    margin-bottom: 20px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.helpline-icon {
-    font-size: 28px;
-}
-
-.helpline-number {
-    margin-bottom: 15px;
-}
-
-.number-label {
-    display: block;
-    font-size: 18px;
-    color: #BBDEFB;
-    margin-bottom: 5px;
-}
-
-.number-value {
-    font-size: 28px;
-    font-weight: 700;
-    color: #FF9933;
-    letter-spacing: 2px;
-}
-
-/* Right Panel - Login Form */
-.login-form-panel {
-    flex: 2;
-    background: white;
-    padding: 40px;
-    min-width: 700px;
-    display: flex;
-    flex-direction: column;
-}
-
-/* Step Indicators */
-.step-indicators-large {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 40px;
-    gap: 10px;
-}
-
-.step-indicator-large {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-}
-
-.step-number-large {
-    width: 60px;
-    height: 60px;
-    background: #F0F0F0;
-    color: #999;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 28px;
-    font-weight: 700;
-    transition: all 0.3s ease;
-}
-
-.step-indicator-large.active .step-number-large {
-    background: linear-gradient(135deg, #000080, #1A237E);
-    color: white;
-    box-shadow: 0 5px 15px rgba(0, 0, 128, 0.3);
-}
-
-.step-label-large {
-    font-size: 18px;
-    font-weight: 600;
-    color: #666;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-
-.step-indicator-large.active .step-label-large {
-    color: #000080;
-}
-
-.step-connector {
-    width: 100px;
-    height: 4px;
-    background: #F0F0F0;
-    margin: 0 10px;
-}
-
-.step-indicator-large.active+.step-connector {
-    background: linear-gradient(to right, #000080, #1A237E);
-}
-
-/* Login Form Container */
-.login-form-container-large {
-    flex-grow: 1;
-    max-width: 800px;
-    margin: 0 auto;
-    width: 100%;
-}
-
-/* Step Header */
-.step-header-large {
-    margin-bottom: 40px;
+    gap: 36px;
     position: relative;
+    overflow: hidden;
 }
 
-.back-button-large {
+.lg-info-panel::before {
+    content: '';
+    position: absolute;
+    bottom: -80px;
+    right: -80px;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(224, 123, 42, 0.1) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+.lg-info-panel::after {
+    content: '';
     position: absolute;
     top: 0;
     left: 0;
-    background: #F5F5F5;
-    color: #666;
-    border: 2px solid #E0E0E0;
-    padding: 12px 24px;
-    border-radius: 8px;
-    font-size: 18px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--saffron), #F5A623, var(--green));
 }
 
-.back-button-large:hover {
-    background: #000080;
-    color: white;
-    border-color: #000080;
+/* Emblem */
+.lg-emblem-wrap {
+    display: flex;
+    align-items: center;
+    gap: 16px;
 }
 
-.step-header-large h2 {
-    font-size: 36px;
-    color: #000080;
-    margin: 0 0 15px 0;
-    text-align: center;
+.lg-chakra-ring {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.07);
+    border: 1.5px solid rgba(255, 255, 255, 0.15);
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 15px;
+    flex-shrink: 0;
 }
 
-.header-icon-large {
-    font-size: 40px;
+.lg-chakra {
+    font-size: 26px;
+    color: #fff;
 }
 
-.step-description-large {
-    font-size: 22px;
-    color: #666;
-    text-align: center;
+.lg-emblem-text h1 {
+    font-family: 'Noto Sans Devanagari', serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: #fff;
     margin: 0;
+    line-height: 1.2;
 }
 
-/* Form Styles */
-.aadhaar-form-large,
-.otp-form-large {
-    margin-top: 20px;
+.lg-emblem-text h2 {
+    font-family: 'Crimson Pro', serif;
+    font-size: 14px;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.5);
+    margin: 2px 0 0;
+    font-style: italic;
 }
 
-.form-group-large {
-    margin-bottom: 40px;
-}
-
-.form-label-large {
-    display: block;
-    font-size: 24px;
-    font-weight: 700;
-    color: #333;
-    margin-bottom: 15px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-
-/* Large Input Fields */
-.govt-input-large {
-    width: 100%;
-    padding: 25px 30px;
-    font-size: 28px;
-    border: 3px solid #D0D0D0;
-    border-radius: 12px;
-    color: #000080;
-    background: #F8F9FA;
-    transition: all 0.3s ease;
-    letter-spacing: 2px;
-    font-weight: 600;
-}
-
-.govt-input-large:focus {
-    outline: none;
-    border-color: #000080;
-    box-shadow: 0 0 0 5px rgba(0, 0, 128, 0.1);
-    background: white;
-}
-
-.govt-input-large::placeholder {
-    color: #999;
-    font-weight: normal;
-    font-size: 24px;
-}
-
-.input-help-large {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-top: 15px;
-    font-size: 20px;
-    color: #666;
-}
-
-.help-icon-large {
-    font-size: 24px;
-}
-
-/* CAPTCHA Section Large */
-.captcha-section-large {
-    background: #F8F9FA;
-    border: 3px solid #E0E0E0;
-    border-radius: 12px;
-    padding: 30px;
-    margin: 40px 0;
-}
-
-.captcha-label-large {
-    display: block;
-    font-size: 24px;
-    font-weight: 700;
-    color: #333;
-    margin-bottom: 20px;
-    text-transform: uppercase;
-}
-
-.captcha-container-large {
-    display: flex;
-    align-items: center;
-    gap: 30px;
-    margin-bottom: 25px;
-}
-
-.captcha-canvas-large {
-    border: 3px solid #D0D0D0;
-    border-radius: 8px;
-    background: white;
-    flex-grow: 1;
-}
-
-.refresh-captcha-large {
-    background: #000080;
-    color: white;
-    border: none;
-    padding: 20px 30px;
-    border-radius: 8px;
+/* Info message */
+.lg-info-message h3 {
+    font-family: 'Crimson Pro', serif;
     font-size: 20px;
     font-weight: 600;
-    cursor: pointer;
+    color: #fff;
+    margin: 0 0 10px;
+}
+
+.lg-info-message>p {
+    font-size: 13.5px;
+    color: rgba(255, 255, 255, 0.5);
+    line-height: 1.65;
+    margin: 0 0 24px;
+}
+
+.lg-features {
     display: flex;
-    align-items: center;
-    gap: 10px;
-    transition: all 0.3s ease;
-    min-width: 180px;
+    flex-direction: column;
+    gap: 16px;
 }
 
-.refresh-captcha-large:hover {
-    background: #1A237E;
-    transform: scale(1.05);
-}
-
-.captcha-input-large {
-    width: 100%;
-    padding: 25px 30px;
-    font-size: 28px;
-    border: 3px solid #000080;
-    border-radius: 12px;
-    background: #F0F5FF;
-    color: #000080;
-    text-transform: uppercase;
-    letter-spacing: 5px;
-    font-weight: 700;
-    text-align: center;
-}
-
-/* Terms Section Large */
-.terms-section-large {
-    margin: 40px 0;
-    padding: 25px;
-    background: #FFF3E0;
-    border-radius: 12px;
-    border: 2px solid #FFCC80;
-}
-
-.checkbox-label-large {
+.lg-feature {
     display: flex;
+    gap: 12px;
     align-items: flex-start;
-    gap: 20px;
-    cursor: pointer;
-    font-size: 22px;
-    color: #333;
+}
+
+.lg-feature-icon {
+    width: 32px;
+    height: 32px;
+    background: rgba(255, 255, 255, 0.07);
+    border-radius: 7px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    flex-shrink: 0;
+}
+
+.lg-feature-title {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 2px;
+}
+
+.lg-feature-desc {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.45);
     line-height: 1.4;
 }
 
-.large-checkbox {
-    width: 30px;
-    height: 30px;
-    margin-top: 5px;
-}
-
-.checkmark-large {
-    position: relative;
-    top: 5px;
-    min-width: 30px;
-    height: 30px;
-    background: white;
-    border: 3px solid #D0D0D0;
-    border-radius: 6px;
-    display: inline-block;
-}
-
-.large-checkbox:checked+.checkmark-large {
-    background: #000080;
-    border-color: #000080;
-}
-
-.large-checkbox:checked+.checkmark-large::after {
-    content: '✓';
-    position: absolute;
-    top: 0;
-    left: 5px;
-    color: white;
-    font-size: 24px;
-    font-weight: bold;
-}
-
-.terms-text-large {
-    flex-grow: 1;
-}
-
-/* Aadhaar Display Large */
-.aadhaar-display-large {
-    background: linear-gradient(135deg, #E3F2FD, #F0F5FF);
-    border: 3px solid #2196F3;
-    border-radius: 12px;
-    padding: 30px;
-    margin: 30px 0;
-    text-align: center;
-}
-
-.display-label-large {
-    font-size: 24px;
-    font-weight: 700;
-    color: #000080;
-    margin-right: 20px;
-}
-
-.display-value-large {
-    font-family: monospace;
-    font-size: 36px;
-    font-weight: 800;
-    color: #000080;
-    letter-spacing: 4px;
-}
-
-/* OTP Input Large */
-.otp-input-large {
-    width: 100%;
-    padding: 30px;
-    font-size: 42px;
-    font-weight: 800;
-    border: 4px solid #000080;
-    border-radius: 15px;
-    background: #F0F5FF;
-    color: #000080;
-    text-align: center;
-    letter-spacing: 15px;
-    margin-bottom: 20px;
-}
-
-.otp-timer-large {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 15px;
-    font-size: 24px;
-    color: #666;
-    margin-top: 20px;
-}
-
-.timer-icon-large {
-    font-size: 28px;
-}
-
-.timer-value-large {
-    font-size: 32px;
-    font-weight: 800;
-    color: #F44336;
-    margin-left: 10px;
-}
-
-.otp-help-large {
-    background: #FFF3E0;
-    border: 2px solid #FF9800;
-    border-radius: 12px;
-    padding: 25px 30px;
-    margin: 30px 0;
-    font-size: 22px;
-    color: #666;
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    text-align: center;
-}
-
-.help-icon-large {
-    font-size: 28px;
-    color: #FF9800;
-}
-
-/* Error Message Large */
-.error-message-large {
-    background: #FFEBEE;
-    color: #D32F2F;
-    padding: 25px 30px;
-    border-radius: 12px;
-    border: 3px solid #FFCDD2;
-    margin: 30px 0;
-    font-size: 24px;
-    font-weight: 600;
-    text-align: center;
-}
-
-/* Form Actions Large */
-.form-actions-large {
-    display: flex;
-    gap: 30px;
-    margin-top: 50px;
-}
-
-.form-actions-large button {
-    flex: 1;
-    padding: 30px;
-    font-size: 24px;
-    font-weight: 800;
-    border-radius: 12px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 15px;
-    border: none;
-}
-
-.btn-primary-large {
-    background: linear-gradient(135deg, #000080, #1A237E);
-    color: white;
-    border: none;
-}
-
-.btn-primary-large:hover:not(:disabled) {
-    background: linear-gradient(135deg, #1A237E, #000080);
-    transform: translateY(-5px);
-    box-shadow: 0 10px 25px rgba(0, 0, 128, 0.3);
-}
-
-.btn-primary-large:disabled {
-    background: #B0B0B0;
-    cursor: not-allowed;
-    transform: none;
-    box-shadow: none;
-}
-
-.btn-secondary-large {
-    background: white;
-    color: #000080;
-    border: 3px solid #000080;
-}
-
-.btn-secondary-large:hover:not(:disabled) {
-    background: #000080;
-    color: white;
-    transform: translateY(-5px);
-}
-
-.btn-secondary-large:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-    transform: none;
-}
-
-.btn-success-large {
-    background: linear-gradient(135deg, #138808, #4CAF50);
-    color: white;
-    border: none;
-    font-size: 28px;
-    padding: 35px;
-}
-
-.btn-success-large:hover {
-    background: linear-gradient(135deg, #4CAF50, #138808);
-    transform: translateY(-5px);
-    box-shadow: 0 10px 25px rgba(19, 136, 8, 0.3);
-}
-
-.loading-spinner-large {
-    width: 30px;
-    height: 30px;
-    border: 4px solid white;
-    border-top: 4px solid transparent;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-}
-
-/* Step 3 - Success */
-.verification-success-large {
-    text-align: center;
-    padding: 40px;
-    background: linear-gradient(135deg, #E8F5E9, #C8E6C9);
-    border: 3px solid #4CAF50;
-    border-radius: 15px;
-    margin: 30px 0;
-}
-
-.success-icon-large {
-    font-size: 60px;
-    color: #138808;
-    margin-bottom: 20px;
-}
-
-.success-title-large {
-    font-size: 32px;
-    color: #138808;
-    margin: 0 0 15px 0;
-}
-
-.success-text-large {
-    font-size: 24px;
-    color: #2E7D32;
-    margin: 0;
-}
-
-/* User Profile Large */
-.user-profile-large {
-    background: #F8F9FA;
-    border-radius: 15px;
-    padding: 40px;
-    margin: 40px 0;
-    border: 3px solid #E0E0E0;
-}
-
-.profile-header-large {
-    display: flex;
-    align-items: center;
-    gap: 40px;
-    margin-bottom: 40px;
-    padding-bottom: 30px;
-    border-bottom: 3px solid #E0E0E0;
-}
-
-.profile-photo-large {
-    width: 120px;
-    height: 120px;
-    background: white;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 60px;
-    border: 4px solid #000080;
-}
-
-.profile-info-large .user-name-large {
-    margin: 0 0 15px 0;
-    font-size: 32px;
-    color: #000080;
-}
-
-.aadhaar-verified-large {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    font-size: 24px;
-    color: #666;
-}
-
-.verified-icon-large {
-    color: #138808;
-    font-size: 28px;
-}
-
-/* User Details Grid Large */
-.user-details-grid-large {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 30px;
-}
-
-.detail-item-large {
-    background: white;
-    border: 2px solid #E0E0E0;
+/* Helpline */
+.lg-helpline {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 10px;
-    padding: 25px;
+    padding: 16px 18px;
 }
 
-.detail-label-large {
-    display: block;
-    font-size: 18px;
-    color: #666;
-    margin-bottom: 10px;
+.lg-helpline-head {
+    font-size: 13px;
     font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 1px;
+    color: rgba(255, 255, 255, 0.6);
+    margin-bottom: 12px;
 }
 
-.detail-value-large {
-    display: block;
-    font-size: 24px;
-    color: #000080;
-    font-weight: 700;
-    word-break: break-all;
-}
-
-/* Security Notice Large */
-.security-notice-large {
-    background: #FFF3E0;
-    border: 3px solid #FFCC80;
-    border-radius: 12px;
-    padding: 30px;
-    margin-top: 40px;
+.lg-helpline-row {
     display: flex;
-    gap: 20px;
-    align-items: flex-start;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
-.notice-icon-large {
-    font-size: 32px;
-    color: #FF9800;
-    flex-shrink: 0;
-    margin-top: 5px;
+.lg-helpline-row:last-child {
+    border-bottom: none;
 }
 
-.notice-text-large {
-    margin: 0;
+.lg-helpline-label {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.45);
+}
+
+.lg-helpline-num {
+    font-family: 'Crimson Pro', serif;
     font-size: 20px;
-    color: #666;
+    font-weight: 700;
+    color: var(--saffron);
+}
+
+/* ── FORM PANEL (RIGHT) ── */
+.lg-form-panel {
+    flex: 1;
+    background: var(--bg);
+    padding: 48px 56px;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+    overflow-y: auto;
+}
+
+/* Steps */
+.lg-steps {
+    display: flex;
+    align-items: center;
+    gap: 0;
+}
+
+.lg-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    opacity: 0.35;
+    transition: opacity 0.25s;
+}
+
+.lg-step.active {
+    opacity: 1;
+}
+
+.lg-step-num {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 2px solid var(--border);
+    background: var(--white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-2);
+    transition: all 0.25s;
+}
+
+.lg-step.active .lg-step-num {
+    background: var(--navy);
+    border-color: var(--navy);
+    color: #fff;
+}
+
+.lg-step.current .lg-step-num {
+    background: var(--saffron);
+    border-color: var(--saffron);
+    color: #fff;
+    box-shadow: 0 3px 10px rgba(224, 123, 42, 0.3);
+}
+
+.lg-step-label {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text-2);
+    white-space: nowrap;
+}
+
+.lg-step-connector {
+    flex: 1;
+    height: 2px;
+    background: var(--border);
+    margin: 0 6px;
+    margin-bottom: 18px;
+    transition: background 0.3s;
+}
+
+.lg-step-connector.active {
+    background: var(--navy);
+}
+
+/* Form Box */
+.lg-form-box {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 36px 40px;
+    box-shadow: 0 4px 24px rgba(12, 27, 51, 0.08);
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.lg-form-head h2 {
+    font-family: 'Crimson Pro', serif;
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--navy);
+    margin: 0 0 6px;
+    line-height: 1.2;
+}
+
+.lg-form-head p {
+    font-size: 13.5px;
+    color: var(--text-2);
+    margin: 0;
     line-height: 1.5;
 }
 
-/* Animations */
-@keyframes spin {
-    0% {
-        transform: rotate(0deg);
-    }
+/* Form */
+.lg-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
 
-    100% {
+.lg-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.lg-label {
+    font-size: 10.5px;
+    font-weight: 700;
+    color: var(--text-3);
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+}
+
+.lg-input {
+    width: 100%;
+    padding: 11px 14px;
+    border: 1.5px solid var(--border);
+    border-radius: 7px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--navy);
+    background: var(--white);
+    font-family: 'DM Sans', sans-serif;
+    transition: border-color 0.18s, box-shadow 0.18s;
+    outline: none;
+}
+
+.lg-input:focus {
+    border-color: var(--navy);
+    box-shadow: 0 0 0 3px rgba(12, 27, 51, 0.07);
+}
+
+.lg-input--otp {
+    font-family: 'Crimson Pro', serif;
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: 8px;
+    text-align: center;
+}
+
+.lg-field-hint {
+    font-size: 12px;
+    color: var(--text-3);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+/* CAPTCHA */
+.lg-captcha-row {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.lg-captcha-canvas {
+    border: 1.5px solid var(--border);
+    border-radius: 7px;
+    display: block;
+}
+
+.lg-captcha-refresh {
+    padding: 8px 14px;
+    background: var(--navy-pale);
+    border: 1.5px solid var(--border);
+    border-radius: 6px;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--navy);
+    cursor: pointer;
+    white-space: nowrap;
+    font-family: 'DM Sans', sans-serif;
+    transition: all 0.18s;
+}
+
+.lg-captcha-refresh:hover {
+    background: var(--navy);
+    color: #fff;
+    border-color: var(--navy);
+}
+
+/* Checkbox */
+.lg-checkbox-row {}
+
+.lg-checkbox-label {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    cursor: pointer;
+}
+
+.lg-checkbox {
+    width: 16px;
+    height: 16px;
+    margin-top: 2px;
+    accent-color: var(--navy);
+    flex-shrink: 0;
+}
+
+.lg-checkbox-text {
+    font-size: 12.5px;
+    color: var(--text-2);
+    line-height: 1.55;
+}
+
+/* Timer */
+.lg-timer {
+    font-size: 12.5px;
+    color: var(--text-2);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.lg-timer--warn {
+    color: var(--red);
+}
+
+.lg-timer strong {
+    font-family: 'Crimson Pro', serif;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+/* Error */
+.lg-error {
+    background: var(--red-pale);
+    border: 1px solid rgba(192, 57, 43, 0.2);
+    border-left: 3px solid var(--red);
+    color: var(--red);
+    font-size: 13px;
+    font-weight: 500;
+    padding: 10px 14px;
+    border-radius: 7px;
+}
+
+/* Buttons */
+.lg-btn-primary {
+    width: 100%;
+    padding: 13px 20px;
+    background: var(--navy);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13.5px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.18s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.lg-btn-primary:hover:not(:disabled) {
+    background: #152238;
+    transform: translateY(-1px);
+}
+
+.lg-btn-primary:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+}
+
+.lg-btn-secondary {
+    flex: 1;
+    padding: 12px 16px;
+    background: transparent;
+    color: var(--navy);
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.18s;
+}
+
+.lg-btn-secondary:hover:not(:disabled) {
+    background: var(--navy-pale);
+    border-color: var(--navy);
+}
+
+.lg-btn-secondary:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.lg-btn-success {
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(135deg, var(--green), #0d5a2f);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: all 0.18s;
+    box-shadow: 0 4px 16px rgba(26, 107, 58, 0.25);
+}
+
+.lg-btn-success:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(26, 107, 58, 0.35);
+}
+
+.lg-btn-row {
+    display: flex;
+    gap: 10px;
+}
+
+.lg-btn-spinner {
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(255, 255, 255, 0.35);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: lg-spin 0.7s linear infinite;
+}
+
+@keyframes lg-spin {
+    to {
         transform: rotate(360deg);
     }
 }
 
-/* Responsive Design */
-@media (max-width: 1200px) {
-    .aadhaar-login-large-page {
-        flex-direction: column;
-    }
+/* Back button */
+.lg-back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: none;
+    border: none;
+    color: var(--text-2);
+    font-size: 12.5px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    padding: 0;
+    margin-bottom: 10px;
+    font-family: 'DM Sans', sans-serif;
+    transition: color 0.18s;
+}
 
-    .login-info-panel,
-    .login-form-panel {
-        min-width: 100%;
-    }
+.lg-back-btn:hover {
+    color: var(--navy);
+}
 
-    .step-indicators-large {
-        flex-wrap: wrap;
-    }
+/* Aadhaar display */
+.lg-aadhaar-display {
+    background: var(--navy-pale);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
 
-    .step-connector {
-        display: none;
+.lg-ad-label {
+    font-size: 10.5px;
+    font-weight: 700;
+    color: var(--text-3);
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+}
+
+.lg-ad-val {
+    font-family: 'Crimson Pro', serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--navy);
+    letter-spacing: 2px;
+}
+
+/* Success Banner */
+.lg-success-banner {
+    background: var(--green-pale);
+    border: 1px solid rgba(26, 107, 58, 0.2);
+    border-left: 3px solid var(--green);
+    border-radius: 9px;
+    padding: 14px 18px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.lg-success-icon {
+    font-size: 28px;
+    flex-shrink: 0;
+}
+
+.lg-success-title {
+    font-size: 13.5px;
+    font-weight: 700;
+    color: var(--green);
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+}
+
+.lg-success-sub {
+    font-size: 12.5px;
+    color: #228B4A;
+}
+
+/* User card */
+.lg-user-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: var(--navy-pale);
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    padding: 14px 18px;
+}
+
+.lg-user-photo {
+    font-size: 32px;
+    flex-shrink: 0;
+}
+
+.lg-user-name {
+    font-family: 'Crimson Pro', serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--navy);
+    line-height: 1.1;
+    margin-bottom: 4px;
+}
+
+.lg-user-aadhaar {
+    font-size: 12px;
+    color: var(--text-3);
+    font-weight: 500;
+}
+
+/* User grid */
+.lg-user-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+    background: var(--bg);
+    border: 1px solid var(--border-light);
+    border-radius: 9px;
+    padding: 16px;
+}
+
+@media (max-width: 500px) {
+    .lg-user-grid {
+        grid-template-columns: 1fr;
     }
 }
 
-@media (max-width: 768px) {
-    .login-form-container-large {
-        padding: 20px;
-    }
+.lg-ud-label {
+    font-size: 10.5px;
+    font-weight: 600;
+    color: var(--text-3);
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    margin-bottom: 3px;
+}
 
-    .govt-input-large,
-    .otp-input-large,
-    .captcha-input-large {
-        font-size: 24px;
-        padding: 20px;
-    }
+.lg-ud-val {
+    font-size: 13.5px;
+    font-weight: 500;
+    color: var(--text);
+}
 
-    .form-actions-large {
+/* Security notice */
+.lg-security-notice {
+    font-size: 11.5px;
+    color: var(--text-3);
+    background: var(--bg);
+    border: 1px solid var(--border-light);
+    border-radius: 7px;
+    padding: 10px 14px;
+    line-height: 1.5;
+    text-align: center;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 960px) {
+    .lg-page {
         flex-direction: column;
     }
 
-    .user-details-grid-large {
-        grid-template-columns: 1fr;
+    .lg-info-panel {
+        width: 100%;
+        padding: 28px 24px;
+    }
+
+    .lg-features {
+        display: none;
+    }
+
+    .lg-form-panel {
+        padding: 28px 24px;
+    }
+
+    .lg-form-box {
+        padding: 24px 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .lg-form-panel {
+        padding: 20px 16px;
+    }
+
+    .lg-form-box {
+        padding: 20px 16px;
+    }
+
+    .lg-input--otp {
+        font-size: 22px;
+        letter-spacing: 5px;
     }
 }

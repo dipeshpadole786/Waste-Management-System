@@ -1,72 +1,461 @@
-/* PAGE */
-.gov-success-page {
-    background-color: #f2f2f2;
-    padding: 30px 10px;
-    min-height: 80vh;
+@import url('https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600;700&family=DM+Sans:wght@400;500;600&display=swap');
+
+.fc-page {
+    --navy: #0C1B33;
+    --navy-pale: #EEF2F8;
+    --saffron: #E07B2A;
+    --saffron-pale: #FEF3E7;
+    --green: #1A6B3A;
+    --green-pale: #EAF5EE;
+    --red: #C0392B;
+    --text: #0C1B33;
+    --text-2: #4A5568;
+    --text-3: #8A9BB0;
+    --border: #D8E0EB;
+    --border-light: #EEF2F8;
+    --bg: #F4F6FA;
+    --white: #FFFFFF;
+    --shadow-sm: 0 1px 4px rgba(12, 27, 51, 0.07);
+    --shadow-md: 0 4px 16px rgba(12, 27, 51, 0.1);
 }
 
-/* CONTAINER */
-.gov-container {
-    max-width: 700px;
+.fc-page {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    min-height: 100vh;
+    color: var(--text);
+    padding-bottom: 60px;
+}
+
+.fc-container {
+    max-width: 1160px;
     margin: 0 auto;
+    padding: 32px 24px;
 }
 
-/* CARD */
-.gov-card {
-    background: white;
-    padding: 25px;
-    border: 1px solid #d0d0d0;
-    border-radius: 6px;
-    box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.1);
+/* ── PAGE HEADER ── */
+.fc-page-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 20px;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
 }
 
-/* HEADER TEXT */
-.gov-title {
-    font-size: 22px;
-    color: #064e3b;
-    /* Dark government green */
+.fc-eyebrow {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--saffron);
+    letter-spacing: 1px;
+    text-transform: uppercase;
     margin-bottom: 5px;
-    text-align: center;
 }
 
-.gov-subtitle {
-    font-size: 14px;
-    color: #333;
-    text-align: center;
-    margin-bottom: 20px;
+.fc-page-title {
+    font-family: 'Crimson Pro', serif;
+    font-size: 30px;
+    font-weight: 700;
+    color: var(--navy);
+    margin: 0 0 6px;
+    line-height: 1.1;
 }
 
-/* DETAILS BOX */
-.gov-details-box {
-    background: #fafafa;
-    border: 1px solid #ccc;
-    padding: 15px;
-    border-radius: 6px;
-    margin-bottom: 20px;
+.fc-page-sub {
+    font-size: 13.5px;
+    color: var(--text-2);
+    line-height: 1.6;
+    margin: 0;
+    max-width: 460px;
 }
 
-.gov-details-box p {
-    margin: 8px 0;
+.fc-id-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--navy);
+    color: rgba(255, 255, 255, 0.75);
+    font-family: 'Crimson Pro', serif;
+    font-size: 16px;
+    font-weight: 600;
+    padding: 8px 18px;
+    border-radius: 7px;
+    letter-spacing: 1px;
+    flex-shrink: 0;
+}
+
+/* ── LAYOUT GRID ── */
+.fc-grid {
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 24px;
+    align-items: start;
+}
+
+@media (max-width: 960px) {
+    .fc-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ── CARD ── */
+.fc-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    margin-bottom: 18px;
+}
+
+.fc-card:last-child {
+    margin-bottom: 0;
+}
+
+.fc-card-head {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 15px 20px;
+    background: var(--navy);
+    border-bottom: 2px solid var(--saffron);
+}
+
+.fc-card-head h3 {
+    font-family: 'Crimson Pro', serif;
+    font-size: 16px;
+    font-weight: 600;
+    color: #fff;
+    margin: 0;
+}
+
+.fc-card-head span {
     font-size: 15px;
-    color: #222;
 }
 
-/* BUTTONS */
-.gov-actions {
+.fc-card-body {
+    padding: 22px 20px;
+}
+
+/* ── FORM ── */
+.fc-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.fc-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.fc-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+@media (max-width: 560px) {
+    .fc-row {
+        grid-template-columns: 1fr;
+    }
+}
+
+.fc-label {
+    font-size: 10.5px;
+    font-weight: 700;
+    color: var(--text-3);
+    letter-spacing: 0.7px;
+    text-transform: uppercase;
+}
+
+.fc-required {
+    color: var(--red);
+    margin-left: 1px;
+}
+
+.fc-input,
+.fc-textarea,
+.fc-select {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1.5px solid var(--border);
+    border-radius: 7px;
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--navy);
+    background: var(--white);
+    font-family: 'DM Sans', sans-serif;
+    transition: border-color 0.18s, box-shadow 0.18s;
+    outline: none;
+    box-sizing: border-box;
+}
+
+.fc-input:focus,
+.fc-textarea:focus,
+.fc-select:focus {
+    border-color: var(--navy);
+    box-shadow: 0 0 0 3px rgba(12, 27, 51, 0.06);
+}
+
+.fc-textarea {
+    resize: vertical;
+    min-height: 100px;
+    line-height: 1.6;
+}
+
+.fc-select-wrap {
+    position: relative;
+}
+
+.fc-select {
+    appearance: none;
+    padding-right: 36px;
+    cursor: pointer;
+}
+
+.fc-select-arrow {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-3);
+    pointer-events: none;
+    font-size: 12px;
+}
+
+.fc-field-hint {
+    font-size: 11.5px;
+    color: var(--text-3);
+    text-align: right;
+}
+
+/* Form footer */
+.fc-form-footer {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding-top: 8px;
+    border-top: 1px solid var(--border-light);
+}
+
+.fc-disclaimer {
+    font-size: 12px;
+    color: var(--text-3);
+    line-height: 1.55;
+    background: var(--bg);
+    border: 1px solid var(--border-light);
+    border-radius: 7px;
+    padding: 10px 14px;
+}
+
+.fc-submit-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: 13px 20px;
+    background: var(--navy);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.18s;
+}
+
+.fc-submit-btn:hover {
+    background: var(--saffron);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 14px rgba(224, 123, 42, 0.3);
+}
+
+/* ── INFO COLUMN ── */
+.fc-info-col {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Progress card */
+.fc-progress-card {
+    padding: 16px 20px;
+    overflow: visible;
+}
+
+.fc-progress-card.fc-card {
+    overflow: visible;
+}
+
+.fc-progress-head {
     display: flex;
     justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--navy);
 }
 
-.gov-btn {
-    background-color: #14532d;
-    /* govt green */
-    color: white;
-    padding: 10px 16px;
+.fc-progress-pct {
+    color: var(--saffron);
+}
+
+.fc-progress-track {
+    height: 7px;
+    background: var(--border-light);
     border-radius: 4px;
-    text-decoration: none;
-    font-size: 14px;
+    overflow: hidden;
 }
 
-.gov-btn:hover {
-    background-color: #0e3d22;
+.fc-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--saffron), #F5A623);
+    border-radius: 4px;
+    transition: width 0.4s ease;
+}
+
+/* Preview */
+.fc-preview-body {
+    padding: 0;
+}
+
+.fc-preview-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px 20px;
+    border-bottom: 1px solid var(--border-light);
+}
+
+.fc-preview-row:last-child {
+    border-bottom: none;
+}
+
+.fc-preview-label {
+    font-size: 10.5px;
+    font-weight: 700;
+    color: var(--text-3);
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    min-width: 90px;
+    flex-shrink: 0;
+    padding-top: 1px;
+}
+
+.fc-preview-val {
+    font-size: 13px;
+    color: var(--text);
+    font-weight: 500;
+    line-height: 1.4;
+    flex: 1;
+}
+
+.fc-preview-empty {
+    color: var(--text-3);
+    font-style: italic;
+}
+
+/* Tips */
+.fc-tips {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.fc-tip {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 13px;
+    color: var(--text-2);
+    line-height: 1.5;
+}
+
+.fc-tip-num {
+    width: 20px;
+    height: 20px;
+    background: var(--saffron);
+    color: #fff;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+/* Helpline */
+.fc-helpline-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: var(--navy);
+    border-radius: 12px;
+    padding: 18px 20px;
+    margin-bottom: 18px;
+    box-shadow: var(--shadow-sm);
+}
+
+.fc-helpline-icon {
+    font-size: 26px;
+    width: 44px;
+    height: 44px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.fc-helpline-title {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.45);
+    margin-bottom: 3px;
+    font-weight: 500;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+}
+
+.fc-helpline-num {
+    font-family: 'Crimson Pro', serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1;
+    margin-bottom: 2px;
+}
+
+.fc-helpline-sub {
+    font-size: 11.5px;
+    color: rgba(255, 255, 255, 0.4);
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 768px) {
+    .fc-container {
+        padding: 20px 16px;
+    }
+
+    .fc-page-title {
+        font-size: 24px;
+    }
+
+    .fc-page-header {
+        flex-direction: column;
+    }
+
+    .fc-id-chip {
+        align-self: flex-start;
+    }
 }
