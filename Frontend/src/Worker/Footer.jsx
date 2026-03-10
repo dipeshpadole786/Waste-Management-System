@@ -5,24 +5,34 @@ const Footerw = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="worker-footer">
-      <div className="footer-main">
-        <div className="footer-section">
-          <div className="footer-logo">
-            <div className="footer-logo-icon">♻️</div>
-            <div className="footer-logo-text">
-              <h3>Smart Waste Management</h3>
-              <p>Clean India Initiative</p>
+    <footer className="fw-footer">
+      <div className="fw-tricolor" />
+
+      <div className="fw-main">
+
+        {/* Col 1 — Brand */}
+        <div className="fw-col fw-col--brand">
+          <div className="fw-logo">
+            <span className="fw-logo-icon">♻️</span>
+            <div>
+              <div className="fw-logo-title">Smart Waste Management</div>
+              <div className="fw-logo-sub">Clean India Initiative</div>
             </div>
           </div>
-          <p className="footer-description">
-            A Government of India initiative to revolutionize waste management through technology and community participation.
+          <p className="fw-desc">
+            A Government of India initiative to revolutionize waste management
+            through technology and community participation.
           </p>
+          <div className="fw-badges">
+            <span className="fw-badge">🇮🇳 Digital India</span>
+            <span className="fw-badge">🏛️ Govt. of India</span>
+          </div>
         </div>
 
-        <div className="footer-section">
-          <h4>Quick Links</h4>
-          <ul className="footer-links">
+        {/* Col 2 — Quick Links */}
+        <div className="fw-col">
+          <h4 className="fw-col-title">Quick Links</h4>
+          <ul className="fw-links">
             <li><a href="/worker/dashboard">Dashboard</a></li>
             <li><a href="/worker/complaints">My Complaints</a></li>
             <li><a href="/worker/route">Collection Route</a></li>
@@ -31,9 +41,10 @@ const Footerw = () => {
           </ul>
         </div>
 
-        <div className="footer-section">
-          <h4>Resources</h4>
-          <ul className="footer-links">
+        {/* Col 3 — Resources */}
+        <div className="fw-col">
+          <h4 className="fw-col-title">Resources</h4>
+          <ul className="fw-links">
             <li><a href="/worker/manual">Worker Manual</a></li>
             <li><a href="/safety-guidelines">Safety Guidelines</a></li>
             <li><a href="/training-materials">Training Materials</a></li>
@@ -42,55 +53,55 @@ const Footerw = () => {
           </ul>
         </div>
 
-        <div className="footer-section">
-          <h4>Contact</h4>
-          <div className="contact-info">
-            <div className="contact-item">
-              <span className="contact-icon">📞</span>
-              <span>24x7 Helpline: 1800-XXX-XXXX</span>
-            </div>
-            <div className="contact-item">
-              <span className="contact-icon">📧</span>
+        {/* Col 4 — Contact */}
+        <div className="fw-col">
+          <h4 className="fw-col-title">Contact</h4>
+          <ul className="fw-contact-list">
+            <li>
+              <span className="fw-contact-icon">📞</span>
+              <span>24×7 Helpline: <strong>1800-XXX-XXXX</strong></span>
+            </li>
+            <li>
+              <span className="fw-contact-icon">📧</span>
               <span>support@wastemgmt.gov.in</span>
-            </div>
-            <div className="contact-item">
-              <span className="contact-icon">🏢</span>
-              <span>Ministry of Housing and Urban Affairs</span>
-            </div>
-          </div>
-          
-          <div className="emergency-contact">
-            <h5>Emergency Contacts</h5>
-            <p>Supervisor: +91-9876543210</p>
-            <p>Control Room: 100</p>
+            </li>
+            <li>
+              <span className="fw-contact-icon">🏢</span>
+              <span>Ministry of Housing &amp; Urban Affairs</span>
+            </li>
+          </ul>
+
+          <div className="fw-emergency">
+            <div className="fw-emergency-title">🚨 Emergency</div>
+            <div className="fw-emergency-row"><span>Supervisor</span><a href="tel:+919876543210">+91-98765 43210</a></div>
+            <div className="fw-emergency-row"><span>Control Room</span><a href="tel:100">100</a></div>
           </div>
         </div>
       </div>
 
-      <div className="footer-bottom">
-        <div className="footer-bottom-content">
-          <div className="copyright">
-            © {currentYear} Smart Waste Management System. Government of India. All rights reserved.
+      {/* Bottom bar */}
+      <div className="fw-bottom">
+        <div className="fw-bottom-inner">
+          <div className="fw-copy">
+            © {currentYear} Smart Waste Management System · Government of India · All rights reserved.
           </div>
-          
-          <div className="footer-stats">
-            <div className="stat">
-              <span className="stat-number">1,247</span>
-              <span className="stat-label">Bins Managed</span>
-            </div>
-            <div className="stat">
-              <span className="stat-number">84%</span>
-              <span className="stat-label">Efficiency</span>
-            </div>
-            <div className="stat">
-              <span className="stat-number">24/7</span>
-              <span className="stat-label">Monitoring</span>
-            </div>
+
+          <div className="fw-stats">
+            {[
+              { val: '1,247', lbl: 'Bins Managed' },
+              { val: '84%', lbl: 'Efficiency' },
+              { val: '24/7', lbl: 'Monitoring' },
+            ].map(s => (
+              <div key={s.lbl} className="fw-stat">
+                <span className="fw-stat-val">{s.val}</span>
+                <span className="fw-stat-lbl">{s.lbl}</span>
+              </div>
+            ))}
           </div>
-          
-          <div className="footer-legal">
+
+          <div className="fw-legal">
             <a href="/privacy-policy">Privacy Policy</a>
-            <a href="/terms">Terms of Service</a>
+            <a href="/terms">Terms</a>
             <a href="/accessibility">Accessibility</a>
             <a href="/sitemap">Sitemap</a>
           </div>

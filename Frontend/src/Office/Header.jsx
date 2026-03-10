@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import "./Header.css";
 import API from "../API/api_req";
 
@@ -8,7 +8,6 @@ const Headerh = () => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
 
-    // Get Aadhaar from localStorage
     const storedUser = JSON.parse(localStorage.getItem("loggedInUser"));
     const aadhaarNumber = storedUser?.aadhaarNumber;
 
@@ -25,13 +24,8 @@ const Headerh = () => {
                 setLoading(false);
             }
         };
-
-        if (aadhaarNumber) {
-            fetchProfile();
-        } else {
-            navigate("/login");
-            setLoading(false);
-        }
+        if (aadhaarNumber) fetchProfile();
+        else { navigate("/login"); setLoading(false); }
     }, [aadhaarNumber, navigate]);
 
     const handleLogout = () => {
@@ -39,46 +33,44 @@ const Headerh = () => {
         navigate("/");
     };
 
-    if (loading) return null; // prevent flicker
+    if (loading) return null;
+
+    const isMonitor = user?.role === "monitor";
 
     return (
-        <header className="simple-header">
-
-            {/* Main Header */}
-            <div className="main-header">
-                <div className="container">
-                    <div className="header-left">
-                        <h1 className="system-title">
-                            {user?.role === "monitor" ? "SWMS Monitor" : "SWMS User"}
-                        </h1>
-                        <p className="system-subtitle">
-                            Smart Waste Management System
-                        </p>
+        <header className="hh-header">
+            <div className="hh-tricolor"></div>
+            <div className="hh-inner">
+                <div className="hh-brand">
+                    <div className="hh-emblem">☸</div>
+                    <div className="hh-brand-text">
+                        <div className="hh-title">
+                            {isMonitor ? "SWMS Monitor" : "SWMS Portal"}
+                        </div>
+                        <div className="hh-subtitle">Smart Waste Management System</div>
                     </div>
 
-                    <div className="header-right">
-                        {user && (
-                            <div className="user-section">
-                                <span className="user-name">
-                                    👤 {user.fullName}
-                                </span>
-                                <span className="user-role">
-                                    ({user.role})
-                                </span>
-                                <button
-                                    className="logout-btn"
-                                    onClick={handleLogout}
-                                >
-                                    Logout
-                                </button>
-                            </div>
-                        )}
-                    </div>
+                    {isMonitor && (
+                        <div className="hh-monitor-pill">Monitor</div>
+                    )}
+                    <a href="/">Home</a>
                 </div>
+
+                {user && (
+                    <div className="hh-user">
+                        <div className="hh-user-info">
+                            <div className="hh-avatar">{user.fullName?.charAt(0).toUpperCase()}</div>
+                            <div className="hh-user-text">
+                                <div className="hh-user-name">{user.fullName}</div>
+                                <div className="hh-user-role">{user.role}</div>
+                            </div>
+                        </div>
+                        <button className="hh-logout" onClick={handleLogout}>Logout</button>
+                    </div>
+                )}
             </div>
-
-
         </header>
+
     );
 };
 

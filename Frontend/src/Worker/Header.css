@@ -1,182 +1,251 @@
-/* Header.css - Smart Waste Management Worker Header */
-/* Colors matched exactly from project screenshots */
+@import url('https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@600;700&family=DM+Sans:wght@400;500;600&display=swap');
 
-.worker-header {
-    background: #1a2472;
-    border-bottom: 3px solid #FF6B00;
-    box-shadow: 0 3px 0 0 #FF6B00, 0 5px 0 0 #00a550;
-    padding: 10px 24px;
+.hw-header {
+    --navy: #0C1B33;
+    --saffron: #E07B2A;
+    --green: #1A6B3A;
+    font-family: 'DM Sans', sans-serif;
+    background: var(--navy);
+    box-shadow: 0 2px 16px rgba(12, 27, 51, 0.28);
+}
+
+.hw-tricolor {
+    height: 3px;
+    background: linear-gradient(90deg, #E07B2A 33.3%, #fff 33.3% 66.6%, #1A6B3A 66.6%);
+}
+
+.hw-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 24px;
+    height: 58px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-    font-family: 'Segoe UI', 'Roboto', 'Arial', sans-serif;
-    min-height: 60px;
-}
-
-/* LEFT: Title */
-.header-left {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.header-left h2 {
-    margin: 0;
-    color: #FFFFFF;
-    font-size: 18px;
-    font-weight: 600;
-    letter-spacing: 0.3px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.header-left h2::before {
-    content: '♻️';
-    font-size: 20px;
-}
-
-/* RIGHT */
-.header-right {
-    display: flex;
-    align-items: center;
     gap: 16px;
 }
 
-/* Profile Container */
-.profile-container {
+/* ── Brand ── */
+.hw-brand {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+}
+
+.hw-emblem {
+    font-size: 20px;
+    line-height: 1;
+}
+
+.hw-brand-text {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+}
+
+.hw-title {
+    font-family: 'Crimson Pro', serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1;
+}
+
+.hw-subtitle {
+    font-size: 10px;
+    color: rgba(255, 255, 255, 0.38);
+    letter-spacing: 0.3px;
+}
+
+.hw-role-pill {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+    color: #4ade80;
+    background: rgba(26, 107, 58, 0.22);
+    border: 1px solid rgba(26, 107, 58, 0.38);
+    padding: 3px 10px;
+    border-radius: 12px;
+}
+
+/* ── Right ── */
+.hw-right {
+    display: flex;
+    align-items: center;
+}
+
+.hw-chip {
+    font-size: 12px;
+}
+
+.hw-chip--muted {
+    color: rgba(255, 255, 255, 0.38);
+}
+
+.hw-chip--error {
+    color: #f87171;
+}
+
+/* ── Profile button ── */
+.hw-profile-wrap {
     position: relative;
 }
 
-.profile-btn {
-    background: rgba(255, 255, 255, 0.08);
-    border: 1.5px solid rgba(255, 255, 255, 0.2);
-    border-radius: 8px;
-    color: #FFFFFF;
+.hw-profile-btn {
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 7px 14px 7px 8px;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid rgba(255, 255, 255, 0.11);
+    border-radius: 30px;
+    padding: 5px 12px 5px 5px;
     cursor: pointer;
-    transition: background 0.2s ease, border-color 0.2s ease;
-    font-family: inherit;
+    transition: background 0.18s;
 }
 
-.profile-btn:hover {
-    background: rgba(255, 107, 0, 0.18);
-    border-color: #FF6B00;
+.hw-profile-btn:hover {
+    background: rgba(255, 255, 255, 0.13);
 }
 
-.profile-avatar {
-    width: 36px;
-    height: 36px;
-    background: #FF6B00;
+.hw-avatar {
+    width: 30px;
+    height: 30px;
+    background: var(--saffron);
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
+    font-family: 'Crimson Pro', serif;
+    font-size: 14px;
     font-weight: 700;
-    font-size: 15px;
-    color: #FFFFFF;
+    color: #fff;
     flex-shrink: 0;
 }
 
-.profile-name {
-    font-size: 14px;
-    font-weight: 500;
-    color: #FFFFFF;
+.hw-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.82);
     max-width: 140px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
 
-/* Dropdown */
-.profile-dropdown {
+.hw-chevron {
+    font-size: 9px;
+    color: rgba(255, 255, 255, 0.32);
+}
+
+/* ── Dropdown ── */
+.hw-dropdown {
     position: absolute;
+    top: calc(100% + 8px);
     right: 0;
-    top: calc(100% + 10px);
-    background: #FFFFFF;
-    border: 1px solid #e5e7eb;
-    border-top: 3px solid #FF6B00;
-    border-radius: 8px;
-    min-width: 220px;
-    box-shadow: 0 8px 24px rgba(10, 14, 46, 0.18);
-    padding: 14px;
-    z-index: 999;
-    animation: dropdownFadeIn 0.16s ease;
+    background: #fff;
+    border: 1.5px solid #D8E0EB;
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(12, 27, 51, 0.15);
+    min-width: 232px;
+    z-index: 200;
+    overflow: hidden;
+    animation: hwSlide 0.16s ease;
 }
 
-@keyframes dropdownFadeIn {
-    from { opacity: 0; transform: translateY(-6px); }
-    to   { opacity: 1; transform: translateY(0); }
+@keyframes hwSlide {
+    from {
+        opacity: 0;
+        transform: translateY(-6px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
-.profile-dropdown p {
-    margin: 0 0 4px;
-    color: #1a1a2e;
-    font-size: 13px;
-    line-height: 1.4;
-    font-family: 'Segoe UI', sans-serif;
+.hw-dropdown-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 16px;
+    background: #EEF2F8;
 }
 
-.profile-dropdown p:first-child strong {
-    color: #1a2472;
-    font-size: 15px;
+.hw-dropdown-avatar {
+    width: 36px;
+    height: 36px;
+    background: #0C1B33;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Crimson Pro', serif;
+    font-size: 17px;
+    font-weight: 700;
+    color: #fff;
+    flex-shrink: 0;
 }
 
-.profile-dropdown hr {
-    border: none;
-    border-top: 1px solid #e5e7eb;
-    margin: 10px 0;
+.hw-dropdown-name {
+    font-size: 13.5px;
+    font-weight: 700;
+    color: #0C1B33;
+    margin-bottom: 2px;
+    line-height: 1.2;
 }
 
-/* Dropdown Buttons */
-.dropdown-btn,
-.logout-btn {
-    display: block;
+.hw-dropdown-email {
+    font-size: 11.5px;
+    color: #8A9BB0;
+}
+
+.hw-dropdown-sep {
+    height: 1px;
+    background: #D8E0EB;
+}
+
+.hw-dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
     width: 100%;
-    padding: 9px 14px;
+    padding: 11px 16px;
+    font-size: 13.5px;
+    font-weight: 500;
+    color: #0C1B33;
+    background: none;
     border: none;
-    border-radius: 6px;
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
     text-align: left;
-    margin-top: 6px;
-    transition: all 0.2s ease;
-    font-family: inherit;
-    letter-spacing: 0.3px;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: background 0.15s;
 }
 
-.dropdown-btn {
-    background: #eef0fb;
-    color: #1a2472;
-    border: 1.5px solid #1a2472;
+.hw-dropdown-item:hover {
+    background: #F4F6FA;
 }
 
-.dropdown-btn:hover {
-    background: #1a2472;
-    color: #FFFFFF;
+.hw-dropdown-item--logout {
+    color: #C0392B;
 }
 
-.logout-btn {
-    background: #fff1eb;
-    color: #FF6B00;
-    border: 1.5px solid #FF6B00;
+.hw-dropdown-item--logout:hover {
+    background: #FDECEB;
 }
 
-.logout-btn:hover {
-    background: #FF6B00;
-    color: #FFFFFF;
-}
+/* ── Responsive ── */
+@media (max-width: 520px) {
+    .hw-name {
+        display: none;
+    }
 
-/* Responsive */
-@media (max-width: 600px) {
-    .header-left h2 { font-size: 15px; }
-    .profile-name { display: none; }
-    .profile-btn { padding: 7px 10px; }
+    .hw-subtitle {
+        display: none;
+    }
+
+    .hw-inner {
+        padding: 0 14px;
+    }
 }

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import "./UserProgress.css"; // Import the CSS file
+import "./UserProgress.css";
 import API from "../API/api_req";
 
 const UserProgress = () => {
@@ -14,17 +14,14 @@ const UserProgress = () => {
     const [recentCompletions, setRecentCompletions] = useState([]);
     const [showNotifications, setShowNotifications] = useState(false);
 
-    // Filter out broken records
     const data = (state || []).filter(item => item.user && item.article);
 
-    // Calculate statistics
     const totalUsers = new Set(data.map(item => item.user?._id)).size;
     const avgProgress = data.length > 0
         ? (data.reduce((sum, item) => sum + (item.progressPercent || 0), 0) / data.length).toFixed(1)
         : 0;
     const completed = data.filter(item => item.progressPercent === 100).length;
 
-    // Find recently completed articles (within last 7 days)
     useEffect(() => {
         const recent = data.filter(item => {
             if (item.progressPercent === 100 && item.completedAt) {
@@ -38,63 +35,42 @@ const UserProgress = () => {
         setRecentCompletions(recent);
     }, [data]);
 
-    if (data.length === 0) {
-        return (
-            <div className="empty-state">
-                <div className="empty-icon">📊</div>
-                <h3>No User Progress Found</h3>
-                <p>There are currently no user progress records to display.</p>
-                <button className="back-button" onClick={() => navigate(-1)}>
-                    ← Back to Dashboard
-                </button>
-            </div>
-        );
-    }
+    if (data.length === 0) return (
+        <div className="up-empty">
+            <div className="up-empty-icon">📊</div>
+            <h3>No User Progress Found</h3>
+            <p>There are currently no user progress records to display.</p>
+            <button className="up-btn up-btn--primary" onClick={() => navigate(-1)}>← Back to Dashboard</button>
+        </div>
+    );
 
-    // Filter by search
     const filtered = data.filter(item =>
         item.user?.fullName?.toLowerCase().includes(search.toLowerCase()) ||
         item.user?.mobileNumber?.includes(search) ||
         item.article?.title?.toLowerCase().includes(search.toLowerCase())
     );
 
-    // Get status class
     const getStatusClass = (status) => {
-        switch (status?.toLowerCase()) {
-            case 'completed': return 'status-completed';
-            case 'in-progress': return 'status-in-progress';
-            case 'in_progress': return 'status-in-progress';
-            case 'pending': return 'status-pending';
-            default: return 'status-pending';
-        }
+        const s = status?.toLowerCase();
+        if (s === 'completed') return 'up-status--completed';
+        if (s === 'in-progress' || s === 'in_progress') return 'up-status--progress';
+        return 'up-status--pending';
     };
 
-    // Get user initial for avatar
-    const getUserInitial = (name) => {
-        return name?.charAt(0)?.toUpperCase() || 'U';
-    };
+    const getUserInitial = (name) => name?.charAt(0)?.toUpperCase() || 'U';
 
-    // Handle send message
     const handleSendMessage = (user, article) => {
-        setSelectedUser({
-            ...user,
-            articleTitle: article?.title,
-            articleId: article?._id
-        });
-
-        // Default message based on type
+        setSelectedUser({ ...user, articleTitle: article?.title, articleId: article?._id });
         const defaultMessages = {
-            congratulations: `Congratulations ${user.fullName}! 🎉\nYou have successfully completed the article "${article?.title}". Keep up the great work!`,
-            encouragement: `Great progress ${user.fullName}! 👏\nYou're doing well with "${article?.title}". Keep learning and growing!`,
-            reminder: `Reminder ${user.fullName} 📚\nYou've started "${article?.title}". Don't forget to complete it to earn your certificate!`,
-            certificate: `Certificate Ready ${user.fullName}! 🏆\nYour certificate for "${article?.title}" is now available for download.`
+            congratulations: `Congratulations ${user.fullName}! 🎉\nYou have successfully completed "${article?.title}". Keep up the great work!`,
+            encouragement: `Great progress ${user.fullName}! 👏\nYou're doing well with "${article?.title}". Keep learning!`,
+            reminder: `Reminder ${user.fullName} 📚\nYou've started "${article?.title}". Don't forget to complete it!`,
+            certificate: `Certificate Ready ${user.fullName}! 🏆\nYour certificate for "${article?.title}" is now available.`
         };
-
         setMessage(defaultMessages[messageType]);
         setShowMessageModal(true);
     };
 
-    // Submit message
     const submitMessage = async () => {
         try {
             await API.post("/messages/send", {
@@ -104,159 +80,108 @@ const UserProgress = () => {
                 messageType,
                 relatedArticle: selectedUser.articleId
             });
-
             alert(`Message sent to ${selectedUser.fullName} 🎉`);
-
             setShowMessageModal(false);
             setMessage("");
             setMessageType("congratulations");
             setSelectedUser(null);
-
         } catch (error) {
-            console.error(error);
             alert("Failed to send message. Please try again.");
         }
     };
 
-
     return (
-        <div className="user-progress-container">
+        <div className="up-page">
+
             {/* Header */}
-            <div className="user-progress-header">
-                <div className="header-left">
-                    <h2>User Progress Dashboard</h2>
+            <div className="up-header">
+                <div className="up-header-left">
+                    <div className="up-eyebrow">Admin Dashboard</div>
+                    <h1 className="up-title">User Progress</h1>
                     {recentCompletions.length > 0 && (
-                        <button
-                            className="notification-badge"
-                            onClick={() => setShowNotifications(!showNotifications)}
-                        >
+                        <button className="up-notif-btn" onClick={() => setShowNotifications(!showNotifications)}>
                             🎉 {recentCompletions.length} New Completions
-                            <span className="notification-indicator">🔴</span>
+                            <span className="up-notif-dot"></span>
                         </button>
                     )}
                 </div>
-                <div className="header-actions">
-                    <button className="back-button" onClick={() => navigate(-1)}>
-                        ← Back
-                    </button>
-                </div>
+                <button className="up-btn up-btn--ghost" onClick={() => navigate(-1)}>← Back</button>
             </div>
 
-            {/* Recent Completions Dropdown */}
+            {/* Notifications Panel */}
             {showNotifications && recentCompletions.length > 0 && (
-                <div className="recent-completions-panel">
-                    <div className="panel-header">
-                        <h4>🎯 Recent Article Completions</h4>
-                        <span className="close-panel" onClick={() => setShowNotifications(false)}>×</span>
+                <div className="up-notif-panel">
+                    <div className="up-notif-panel-head">
+                        <h4>🎯 Recent Completions (Last 7 days)</h4>
+                        <button className="up-close-btn" onClick={() => setShowNotifications(false)}>✕</button>
                     </div>
-                    <div className="completions-list">
-                        {recentCompletions.slice(0, 5).map((item, index) => (
-                            <div key={index} className="completion-item">
-                                <div className="completion-avatar">
-                                    {getUserInitial(item.user.fullName)}
-                                </div>
-                                <div className="completion-info">
-                                    <div className="completion-user">
+                    <div className="up-notif-list">
+                        {recentCompletions.slice(0, 5).map((item, i) => (
+                            <div key={i} className="up-notif-item">
+                                <div className="up-notif-avatar">{getUserInitial(item.user.fullName)}</div>
+                                <div className="up-notif-info">
+                                    <div className="up-notif-name">
                                         <strong>{item.user.fullName}</strong>
-                                        <span className="completion-time">
-                                            {new Date(item.completedAt).toLocaleDateString()}
-                                        </span>
+                                        <span className="up-notif-date">{new Date(item.completedAt).toLocaleDateString()}</span>
                                     </div>
-                                    <div className="completion-article">
-                                        Completed: "{item.article.title}"
-                                    </div>
+                                    <div className="up-notif-article">Completed: "{item.article.title}"</div>
                                 </div>
-                                <button
-                                    className="message-quick-btn"
-                                    onClick={() => handleSendMessage(item.user, item.article)}
-                                >
+                                <button className="up-btn up-btn--sm" onClick={() => handleSendMessage(item.user, item.article)}>
                                     💬 Message
                                 </button>
                             </div>
                         ))}
                     </div>
-                    <div className="panel-footer">
-                        <button
-                            className="message-all-btn"
-                            onClick={() => {
-                                // Handle sending message to all recent completions
-                                alert("Message all feature coming soon!");
-                            }}
-                        >
+                    <div className="up-notif-foot">
+                        <button className="up-btn up-btn--primary" onClick={() => alert("Message all feature coming soon!")}>
                             📢 Message All Recent Completers
                         </button>
                     </div>
                 </div>
             )}
 
-            {/* Statistics Overview */}
-            <div className="stats-overview">
-                <div className="stat-card">
-                    <div className="stat-icon" style={{ background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' }}>
-                        👥
+            {/* Stats */}
+            <div className="up-stats">
+                {[
+                    { val: totalUsers, lbl: "Total Users", icon: "👥", color: "#6366f1" },
+                    { val: `${avgProgress}%`, lbl: "Avg Progress", icon: "📊", color: "#1A6B3A" },
+                    { val: completed, lbl: "Completed", icon: "✅", color: "#0C1B33" },
+                    { val: filtered.length, lbl: "Records Found", icon: "🔍", color: "#E07B2A" },
+                ].map(s => (
+                    <div className="up-stat" key={s.lbl}>
+                        <div className="up-stat-icon" style={{ background: s.color }}>{s.icon}</div>
+                        <div>
+                            <div className="up-stat-val">{s.val}</div>
+                            <div className="up-stat-lbl">{s.lbl}</div>
+                        </div>
                     </div>
-                    <div className="stat-content">
-                        <h3>{totalUsers}</h3>
-                        <p>Total Users</p>
-                    </div>
-                </div>
-                <div className="stat-card">
-                    <div className="stat-icon" style={{ background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)' }}>
-                        📊
-                    </div>
-                    <div className="stat-content">
-                        <h3>{avgProgress}%</h3>
-                        <p>Average Progress</p>
-                    </div>
-                </div>
-                <div className="stat-card">
-                    <div className="stat-icon" style={{ background: 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)' }}>
-                        ✅
-                    </div>
-                    <div className="stat-content">
-                        <h3>{completed}</h3>
-                        <p>Completed</p>
-                    </div>
-                </div>
-                <div className="stat-card">
-                    <div className="stat-icon" style={{ background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)' }}>
-                        🔄
-                    </div>
-                    <div className="stat-content">
-                        <h3>{filtered.length}</h3>
-                        <p>Records Found</p>
-                    </div>
-                </div>
+                ))}
             </div>
 
-            {/* Search Bar */}
-            <div className="search-container">
-                <span className="search-icon">🔍</span>
+            {/* Search */}
+            <div className="up-search-wrap">
+                <span className="up-search-icon">🔍</span>
                 <input
                     type="text"
-                    className="search-input"
-                    placeholder="Search by name, mobile, or article..."
+                    className="up-search"
+                    placeholder="Search by name, mobile, or article title…"
                     value={search}
                     onChange={e => setSearch(e.target.value)}
                 />
+                {search && <button className="up-search-clear" onClick={() => setSearch('')}>✕</button>}
             </div>
 
-            {/* Table Container */}
-            <div className="table-container">
-                <div className="table-header">
+            {/* Table */}
+            <div className="up-table-card">
+                <div className="up-table-head">
                     <h3>User Progress Details</h3>
-                    <div className="table-count">
-                        Showing {filtered.length} of {data.length} records
-                        {completed > 0 && (
-                            <span className="completed-count">
-                                • {completed} completed articles
-                            </span>
-                        )}
+                    <div className="up-table-count">
+                        Showing <strong>{filtered.length}</strong> of {data.length} records
+                        {completed > 0 && <span className="up-completed-tag">• {completed} completed</span>}
                     </div>
                 </div>
-
-                <div className="table-responsive">
-                    <table className="user-progress-table">
+                <div className="up-table-wrap">
+                    <table className="up-table">
                         <thead>
                             <tr>
                                 <th>User</th>
@@ -268,78 +193,50 @@ const UserProgress = () => {
                         </thead>
                         <tbody>
                             {filtered.map(item => (
-                                <tr key={item._id} className={item.progressPercent === 100 ? "row-completed" : ""}>
-                                    {/* User Column */}
+                                <tr key={item._id} className={item.progressPercent === 100 ? 'up-row--completed' : ''}>
                                     <td>
-                                        <div className="user-name-cell">
-                                            <div className="user-avatar">
-                                                {getUserInitial(item.user.fullName)}
-                                            </div>
-                                            <div className="user-info">
-                                                <div className="user-name">
+                                        <div className="up-user-cell">
+                                            <div className="up-user-avatar">{getUserInitial(item.user.fullName)}</div>
+                                            <div>
+                                                <div className="up-user-name">
                                                     {item.user.fullName}
-                                                    {item.progressPercent === 100 && (
-                                                        <span className="completion-badge">🎓 Completed</span>
-                                                    )}
+                                                    {item.progressPercent === 100 && <span className="up-grad-badge">🎓</span>}
                                                 </div>
-                                                <div className="user-mobile">{item.user.mobileNumber}</div>
+                                                <div className="up-user-mobile">{item.user.mobileNumber}</div>
                                             </div>
                                         </div>
                                     </td>
-
-                                    {/* Article Column */}
-                                    <td className="article-cell">
-                                        <div className="article-title">{item.article.title}</div>
-                                        <span className="article-category">
-                                            {item.article.category || 'General'}
-                                        </span>
+                                    <td>
+                                        <div className="up-article-title">{item.article.title}</div>
+                                        <span className="up-cat-tag">{item.article.category || 'General'}</span>
                                     </td>
-
-                                    {/* Status Column */}
-                                    <td className={`status-cell ${getStatusClass(item.status)}`}>
-                                        {item.status?.replace('_', ' ') || 'Pending'}
+                                    <td>
+                                        <span className={`up-status ${getStatusClass(item.status)}`}>
+                                            {item.status?.replace('_', ' ') || 'Pending'}
+                                        </span>
                                         {item.completedAt && item.progressPercent === 100 && (
-                                            <div className="completion-date">
-                                                {new Date(item.completedAt).toLocaleDateString()}
-                                            </div>
+                                            <div className="up-comp-date">{new Date(item.completedAt).toLocaleDateString()}</div>
                                         )}
                                     </td>
-
-                                    {/* Progress Column */}
-                                    <td className="progress-cell">
-                                        <div className="progress-container">
-                                            <div className="progress-bar">
+                                    <td>
+                                        <div className="up-progress-wrap">
+                                            <div className="up-progress-track">
                                                 <div
-                                                    className="progress-fill"
+                                                    className="up-progress-fill"
                                                     style={{ width: `${item.progressPercent || 0}%` }}
-                                                />
+                                                ></div>
                                             </div>
-                                            <span className="progress-text">
-                                                {item.progressPercent || 0}%
-                                            </span>
+                                            <span className="up-progress-pct">{item.progressPercent || 0}%</span>
                                         </div>
                                     </td>
-
-                                    {/* Actions Column */}
-                                    <td className="action-cell">
-                                        <div className="action-buttons">
-                                            <button
-                                                className="details-button"
-                                                onClick={() => {
-                                                    // Add your details view logic here
-                                                    console.log('View details for:', item._id);
-                                                }}
-                                            >
-                                                View Details
+                                    <td>
+                                        <div className="up-actions">
+                                            <button className="up-btn up-btn--outline" onClick={() => console.log('details:', item._id)}>
+                                                Details
                                             </button>
-
                                             {item.progressPercent === 100 && (
-                                                <button
-                                                    className="message-button"
-                                                    onClick={() => handleSendMessage(item.user, item.article)}
-                                                    title="Send congratulatory message"
-                                                >
-                                                    💬 Message
+                                                <button className="up-btn up-btn--sm" onClick={() => handleSendMessage(item.user, item.article)}>
+                                                    💬
                                                 </button>
                                             )}
                                         </div>
@@ -349,121 +246,87 @@ const UserProgress = () => {
                         </tbody>
                     </table>
                 </div>
-
-                {/* Footer */}
-                <div className="table-footer">
-                    <div className="table-info">
+                <div className="up-table-foot">
+                    <div className="up-foot-info">
                         Last updated: {new Date().toLocaleString()}
-                        {recentCompletions.length > 0 && (
-                            <span className="recent-info">
-                                • {recentCompletions.length} new completions today
-                            </span>
-                        )}
+                        {recentCompletions.length > 0 && <span className="up-recent-tag">• {recentCompletions.length} new this week</span>}
                     </div>
-                    <div className="pagination">
-                        <button className="pagination-button" disabled>
-                            ← Previous
-                        </button>
-                        <button className="pagination-button active">1</button>
-                        <button className="pagination-button">2</button>
-                        <button className="pagination-button">3</button>
-                        <button className="pagination-button">
-                            Next →
-                        </button>
+                    <div className="up-pagination">
+                        {['← Prev', '1', '2', '3', 'Next →'].map((p, i) => (
+                            <button key={p} className={`up-page-btn ${p === '1' ? 'active' : ''}`} disabled={p === '← Prev'}>{p}</button>
+                        ))}
                     </div>
                 </div>
             </div>
 
             {/* Message Modal */}
             {showMessageModal && selectedUser && (
-                <div className="modal-overlay">
-                    <div className="message-modal">
-                        <div className="modal-header">
-                            <h3>Send Message to User</h3>
-                            <button
-                                className="modal-close"
-                                onClick={() => setShowMessageModal(false)}
-                            >
-                                ×
-                            </button>
+                <div className="up-modal-overlay" onClick={() => setShowMessageModal(false)}>
+                    <div className="up-modal" onClick={e => e.stopPropagation()}>
+                        <div className="up-modal-head">
+                            <h3>Send Message</h3>
+                            <button className="up-close-btn" onClick={() => setShowMessageModal(false)}>✕</button>
                         </div>
-
-                        <div className="modal-body">
-                            <div className="recipient-info">
-                                <div className="recipient-avatar">
-                                    {getUserInitial(selectedUser.fullName)}
-                                </div>
-                                <div className="recipient-details">
-                                    <h4>{selectedUser.fullName}</h4>
-                                    <p>Article Completed: <strong>{selectedUser.articleTitle}</strong></p>
+                        <div className="up-modal-body">
+                            <div className="up-recipient">
+                                <div className="up-recipient-avatar">{getUserInitial(selectedUser.fullName)}</div>
+                                <div>
+                                    <div className="up-recipient-name">{selectedUser.fullName}</div>
+                                    <div className="up-recipient-article">Article: <strong>{selectedUser.articleTitle}</strong></div>
                                 </div>
                             </div>
 
-                            <div className="message-type-selector">
-                                <label>Message Type:</label>
-                                <div className="type-buttons">
-                                    <button
-                                        className={`type-btn ${messageType === 'congratulations' ? 'active' : ''}`}
-                                        onClick={() => setMessageType('congratulations')}
-                                    >
-                                        🎉 Congratulations
-                                    </button>
-                                    <button
-                                        className={`type-btn ${messageType === 'encouragement' ? 'active' : ''}`}
-                                        onClick={() => setMessageType('encouragement')}
-                                    >
-                                        👏 Encouragement
-                                    </button>
-                                    <button
-                                        className={`type-btn ${messageType === 'certificate' ? 'active' : ''}`}
-                                        onClick={() => setMessageType('certificate')}
-                                    >
-                                        🏆 Certificate
-                                    </button>
-                                    <button
-                                        className={`type-btn ${messageType === 'reminder' ? 'active' : ''}`}
-                                        onClick={() => setMessageType('reminder')}
-                                    >
-                                        📚 Reminder
-                                    </button>
+                            <div className="up-msg-types">
+                                <div className="up-msg-types-label">Message Type</div>
+                                <div className="up-msg-type-row">
+                                    {[
+                                        { id: 'congratulations', label: '🎉 Congrats' },
+                                        { id: 'encouragement', label: '👏 Encourage' },
+                                        { id: 'certificate', label: '🏆 Certificate' },
+                                        { id: 'reminder', label: '📚 Reminder' },
+                                    ].map(t => (
+                                        <button
+                                            key={t.id}
+                                            className={`up-type-btn ${messageType === t.id ? 'active' : ''}`}
+                                            onClick={() => {
+                                                setMessageType(t.id);
+                                                const msgs = {
+                                                    congratulations: `Congratulations ${selectedUser.fullName}! 🎉\nYou completed "${selectedUser.articleTitle}". Keep it up!`,
+                                                    encouragement: `Great going ${selectedUser.fullName}! 👏\nKeep making progress on "${selectedUser.articleTitle}".`,
+                                                    certificate: `Certificate Ready ${selectedUser.fullName}! 🏆\nYour certificate for "${selectedUser.articleTitle}" is available.`,
+                                                    reminder: `Reminder ${selectedUser.fullName} 📚\nDon't forget to complete "${selectedUser.articleTitle}".`,
+                                                };
+                                                setMessage(msgs[t.id]);
+                                            }}
+                                        >
+                                            {t.label}
+                                        </button>
+                                    ))}
                                 </div>
                             </div>
 
-                            <div className="message-editor">
-                                <label>Your Message:</label>
+                            <div className="up-msg-editor">
+                                <label className="up-msg-label">Your Message</label>
                                 <textarea
-                                    className="message-textarea"
+                                    className="up-msg-textarea"
                                     value={message}
-                                    onChange={(e) => setMessage(e.target.value)}
-                                    placeholder="Type your message here..."
-                                    rows="6"
+                                    onChange={e => setMessage(e.target.value)}
+                                    rows={5}
+                                    placeholder="Type your message…"
                                 />
                             </div>
 
-                            <div className="message-preview">
-                                <h5>Preview:</h5>
-                                <div className="preview-content">
-                                    <div className="preview-header">
-                                        From: <strong>Admin (Safe City Portal)</strong>
-                                    </div>
-                                    <div className="preview-message">{message}</div>
+                            <div className="up-msg-preview">
+                                <div className="up-preview-label">Preview</div>
+                                <div className="up-preview-box">
+                                    <div className="up-preview-from">From: <strong>Admin · Safe City Portal</strong></div>
+                                    <div className="up-preview-msg">{message}</div>
                                 </div>
                             </div>
                         </div>
-
-                        <div className="modal-footer">
-                            <button
-                                className="modal-btn secondary"
-                                onClick={() => setShowMessageModal(false)}
-                            >
-                                Cancel
-                            </button>
-                            <button
-                                className="modal-btn primary"
-                                onClick={submitMessage}
-                            >
-                                📤 Send Message
-                            </button>
+                        <div className="up-modal-foot">
+                            <button className="up-btn up-btn--outline" onClick={() => setShowMessageModal(false)}>Cancel</button>
+                            <button className="up-btn up-btn--primary" onClick={submitMessage}>📤 Send Message</button>
                         </div>
                     </div>
                 </div>
