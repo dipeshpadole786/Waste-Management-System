@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import API from "../API/api_req";
 import "./Home.css";
+import WasteBotWidget from "../Componets/WasteBotWidget";
 
 const STATUS_META = {
     pending: { label: '⏳ Pending', cls: 'pending' },
@@ -185,6 +186,7 @@ const WorkerDashboard = () => {
                     })}
                 </div>
             )}
+            <WasteBotWidget />
         </div>
     );
 };

@@ -1,6 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const port = 3000;
+const port = process.env.PORT || 3000;
 const app = express();
 const User = require("./Models/user");
 const Article = require("./Models/Training");
@@ -17,7 +17,11 @@ const main = async () => {
     console.log("mongodb is connected ");
 };
 app.use(cors({
-    origin: "http://localhost:5173" // or your React dev server port
+    origin: (origin, cb) => {
+        if (!origin) return cb(null, true);
+        if (/^http:\/\/(localhost|127\.0\.0\.1):5173$/.test(origin)) return cb(null, true);
+        return cb(null, false);
+    }
 }));
 
 
@@ -1116,6 +1120,90 @@ app.put("/worker/complaints/:id/status", async (req, res) => {
 
 
 
+
+// =======================
+// WasteBot (RAG) PROXY ROUTES
+// =======================
+// WasteBot runs as a separate Python service (default: http://127.0.0.1:8001).
+// Frontend talks only to this backend, and the backend forwards requests to WasteBot.
+const http = require("http");
+const https = require("https");
+const { URL } = require("url");
+
+const WASTEBOT_URL = (process.env.WASTEBOT_URL || "http://127.0.0.1:8001").replace(/\/+$/, "");
+
+const requestJson = ({ url, method, body, timeoutMs = 45000 }) =>
+    new Promise((resolve, reject) => {
+        const u = new URL(url);
+        const lib = u.protocol === "https:" ? https : http;
+
+        const payload = body ? Buffer.from(JSON.stringify(body)) : null;
+        const reqUp = lib.request(
+            {
+                protocol: u.protocol,
+                hostname: u.hostname,
+                port: u.port,
+                path: `${u.pathname}${u.search || ""}`,
+                method,
+                headers: {
+                    Accept: "application/json",
+                    ...(payload ? { "Content-Type": "application/json", "Content-Length": payload.length } : {}),
+                },
+                timeout: timeoutMs,
+            },
+            (resp) => {
+                let raw = "";
+                resp.setEncoding("utf8");
+                resp.on("data", (chunk) => (raw += chunk));
+                resp.on("end", () => {
+                    let json = null;
+                    try {
+                        json = raw ? JSON.parse(raw) : null;
+                    } catch {
+                        json = null;
+                    }
+                    resolve({ status: resp.statusCode || 0, json, raw });
+                });
+            }
+        );
+
+        reqUp.on("timeout", () => reqUp.destroy(new Error("Upstream timeout")));
+        reqUp.on("error", reject);
+        if (payload) reqUp.write(payload);
+        reqUp.end();
+    });
+
+app.get("/wastebot/health", async (req, res) => {
+    try {
+        const upstream = await requestJson({ url: `${WASTEBOT_URL}/health`, method: "GET" });
+        res.status(upstream.status || 502).json(upstream.json || { status: "unavailable" });
+    } catch (e) {
+        res.status(503).json({ status: "unavailable", error: e.message });
+    }
+});
+
+app.post("/wastebot/chat", async (req, res) => {
+    try {
+        const question = (req.body?.question || "").toString().trim();
+        if (!question) return res.status(400).json({ error: "question is required" });
+
+        const upstream = await requestJson({
+            url: `${WASTEBOT_URL}/chat`,
+            method: "POST",
+            body: { question },
+        });
+
+        if (upstream.status >= 200 && upstream.status < 300) return res.json(upstream.json || {});
+
+        return res.status(502).json({
+            error: "WasteBot upstream error",
+            upstreamStatus: upstream.status,
+            upstream: upstream.json || undefined,
+        });
+    } catch (e) {
+        return res.status(503).json({ error: "WasteBot service unavailable", detail: e.message });
+    }
+});
 
 app.listen(port, () => {
     console.log("Server is runningo on port " + port);
