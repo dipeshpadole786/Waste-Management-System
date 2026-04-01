@@ -33,6 +33,7 @@ import Footerw from "./Worker/Footer";
 import { Top } from "./Componets/top";
 import ProtectedRoute from "./Componets/ProtectedRoute";
 import WorkerProfile from "./Worker/Profile";
+import WasteBotWidget from "./Componets/WasteBotWidget";
 
 function Layout() {
   const [role, setRole] = useState(null);
@@ -221,6 +222,7 @@ function Layout() {
 
 
       {/* 🔻 FOOTER */}
+      <WasteBotWidget />
       {role === "worker" ? <Footerw /> : <Footer />}
     </>
   );

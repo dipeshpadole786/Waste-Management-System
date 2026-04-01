@@ -40,6 +40,19 @@ LOCAL_STORE_FILENAME = "local_store.json"
 
 
 def _try_import_faiss_store():
+    """
+    Return LangChain's FAISS vector store class only when FAISS is truly usable.
+
+    On Windows, `langchain_community.vectorstores.FAISS` can import even when the
+    underlying `faiss` python module is missing, which then crashes at runtime
+    (e.g., on `load_local()`).
+    """
+
+    try:
+        import faiss  # type: ignore  # noqa: F401
+    except Exception:
+        return None
+
     try:
         from langchain_community.vectorstores import FAISS  # type: ignore
 
@@ -227,13 +240,16 @@ def load_vectorstore():
         faiss_store = _try_import_faiss_store()
         if faiss_store is not None and (Path(save_path) / "index.faiss").exists():
             logger.info(f"Loading FAISS vector store from: {save_path}/")
-            vectorstore = faiss_store.load_local(
-                folder_path=save_path,
-                embeddings=embedding_model,
-                allow_dangerous_deserialization=True,
-            )
-            logger.info("  [OK] Vector store loaded from disk.")
-            return vectorstore
+            try:
+                vectorstore = faiss_store.load_local(
+                    folder_path=save_path,
+                    embeddings=embedding_model,
+                    allow_dangerous_deserialization=True,
+                )
+                logger.info("  [OK] Vector store loaded from disk.")
+                return vectorstore
+            except Exception as e:
+                logger.warning(f"FAISS load failed ({e}); falling back to local vector store if present.")
         # Can't load FAISS here (faiss missing) -> fall through to local if present.
 
     local_file = Path(save_path) / LOCAL_STORE_FILENAME
@@ -290,4 +306,3 @@ if __name__ == "__main__":
     vs = get_or_build_vectorstore(chunks)
     results = search_similar("How do I compost kitchen waste?", vs, top_k=4)
     print(f"Retrieved {len(results)} docs")
-

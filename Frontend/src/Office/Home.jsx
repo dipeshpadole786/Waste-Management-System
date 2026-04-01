@@ -5,7 +5,6 @@ import 'leaflet/dist/leaflet.css';
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 import './Home2.css';
-import WasteBotWidget from "../Componets/WasteBotWidget";
 
 const API = axios.create({ baseURL: "http://localhost:3000" });
 
@@ -500,7 +499,6 @@ const Homeh = () => {
                 <button className="h2-btn h2-btn--sm" onClick={fetchDashboardData} disabled={loading}>{loading ? '🔄 Refreshing…' : '🔄 Refresh'}</button>
             </footer>
 
-            <WasteBotWidget />
         </div>
     );
 };

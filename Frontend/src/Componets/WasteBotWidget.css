@@ -1,8 +1,7 @@
-.wb-fab {
+.wb-container {
   position: fixed;
-  right: 18px;
-  bottom: 18px;
   z-index: 9999;
+  touch-action: none;
 }
 
 .wb-fab-btn {
@@ -33,12 +32,8 @@
 }
 
 .wb-panel {
-  position: fixed;
-  right: 18px;
-  bottom: 18px;
   width: min(420px, calc(100vw - 36px));
   height: min(560px, calc(100vh - 36px));
-  z-index: 9999;
   background: #ffffff;
   border: 1px solid rgba(10, 22, 40, 0.12);
   border-radius: 16px;
@@ -56,6 +51,8 @@
   align-items: center;
   justify-content: space-between;
   gap: 10px;
+  cursor: move;
+  user-select: none;
 }
 
 .wb-title {
@@ -163,4 +160,3 @@
   opacity: 0.6;
   cursor: not-allowed;
 }
-
