@@ -1,0 +1,642 @@
+@import url('https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600;700&family=DM+Sans:wght@400;500;600&display=swap');
+
+.pf-wrap {
+    --navy: #0C1B33;
+    --navy-mid: #152238;
+    --navy-pale: #EEF2F8;
+    --saffron: #E07B2A;
+    --saffron-pale: #FEF3E7;
+    --green: #1A6B3A;
+    --green-pale: #EAF5EE;
+    --red: #C0392B;
+    --red-pale: #FDECEB;
+    --text: #0C1B33;
+    --text-2: #4A5568;
+    --text-3: #8A9BB0;
+    --border: #D8E0EB;
+    --border-light: #EEF2F8;
+    --bg: #F4F6FA;
+    --white: #FFFFFF;
+    --shadow-sm: 0 1px 4px rgba(12, 27, 51, 0.07);
+    --shadow-md: 0 4px 16px rgba(12, 27, 51, 0.1);
+}
+
+.pf-wrap {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    min-height: 100vh;
+    color: var(--text);
+    display: flex;
+    flex-direction: column;
+}
+
+/* ── LAYOUT ── */
+.pf-layout {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    gap: 0;
+    flex: 1;
+    max-width: 1280px;
+    margin: 0 auto;
+    width: 100%;
+    padding: 32px 24px;
+    gap: 28px;
+    align-items: start;
+}
+
+@media (max-width: 900px) {
+    .pf-layout {
+        grid-template-columns: 1fr;
+        padding: 20px 16px;
+    }
+}
+
+/* ── STATE SCREENS ── */
+.pf-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 60vh;
+    gap: 14px;
+    text-align: center;
+    font-family: 'DM Sans', sans-serif;
+    padding: 20px;
+    color: var(--navy, #0C1B33);
+}
+
+.pf-state h3 {
+    font-family: 'Crimson Pro', serif;
+    font-size: 22px;
+    font-weight: 600;
+    margin: 0;
+}
+
+.pf-state p {
+    font-size: 14px;
+    color: #4A5568;
+    margin: 0;
+}
+
+.pf-state-icon {
+    font-size: 48px;
+}
+
+.pf-spinner {
+    width: 38px;
+    height: 38px;
+    border: 3px solid #D8E0EB;
+    border-top-color: #E07B2A;
+    border-radius: 50%;
+    animation: pf-spin 0.8s linear infinite;
+}
+
+@keyframes pf-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* ── SIDEBAR ── */
+.pf-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.pf-user-card {
+    background: var(--navy);
+    border-radius: 14px;
+    padding: 24px 20px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.pf-user-card::before {
+    content: '';
+    position: absolute;
+    top: -30px;
+    right: -30px;
+    width: 120px;
+    height: 120px;
+    background: radial-gradient(circle, rgba(224, 123, 42, 0.15) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+.pf-avatar {
+    width: 68px;
+    height: 68px;
+    border-radius: 50%;
+    border: 3px solid rgba(255, 255, 255, 0.15);
+    overflow: hidden;
+    margin: 0 auto 12px;
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.pf-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.pf-avatar-initial {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Crimson Pro', serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: #fff;
+    background: var(--saffron);
+}
+
+.pf-user-name {
+    font-family: 'Crimson Pro', serif;
+    font-size: 17px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 3px;
+    line-height: 1.2;
+}
+
+.pf-user-sub {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.45);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 12px;
+}
+
+.pf-aadhaar-chip {
+    display: inline-block;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: rgba(255, 255, 255, 0.65);
+    font-size: 11.5px;
+    font-weight: 500;
+    padding: 5px 12px;
+    border-radius: 20px;
+    letter-spacing: 0.5px;
+}
+
+/* Nav */
+.pf-nav {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    padding: 8px;
+}
+
+.pf-nav-label {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--text-3);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    padding: 8px 10px 6px;
+}
+
+.pf-nav-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 7px;
+    font-size: 13.5px;
+    font-weight: 500;
+    color: var(--text-2);
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: all 0.18s;
+    font-family: 'DM Sans', sans-serif;
+    text-align: left;
+}
+
+.pf-nav-btn:hover {
+    background: var(--bg);
+    color: var(--navy);
+}
+
+.pf-nav-btn.active {
+    background: var(--navy-pale);
+    color: var(--navy);
+    font-weight: 600;
+}
+
+.pf-nav-btn.active .pf-nav-icon {
+    opacity: 1;
+}
+
+.pf-nav-icon {
+    font-size: 15px;
+    flex-shrink: 0;
+    opacity: 0.6;
+    transition: opacity 0.18s;
+}
+
+.pf-nav-btn:hover .pf-nav-icon {
+    opacity: 1;
+}
+
+.pf-nav-label-text {
+    flex: 1;
+}
+
+.pf-nav-badge {
+    background: var(--saffron);
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    min-width: 18px;
+    height: 18px;
+    border-radius: 9px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 4px;
+}
+
+/* ── MAIN ── */
+.pf-main {
+    min-width: 0;
+}
+
+.pf-section {}
+
+.pf-section-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+}
+
+.pf-eyebrow {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--saffron);
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+}
+
+.pf-section-title {
+    font-family: 'Crimson Pro', serif;
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--navy);
+    margin: 0;
+    line-height: 1.1;
+}
+
+/* Stats row */
+.pf-stats-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin-bottom: 22px;
+}
+
+.pf-stat {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px 16px;
+    text-align: center;
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.2s;
+}
+
+.pf-stat:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-md);
+}
+
+.pf-stat-icon {
+    font-size: 22px;
+    margin-bottom: 8px;
+}
+
+.pf-stat-val {
+    font-family: 'Crimson Pro', serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--navy);
+    line-height: 1;
+    margin-bottom: 4px;
+}
+
+.pf-stat-lbl {
+    font-size: 11px;
+    color: var(--text-3);
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    font-weight: 500;
+}
+
+/* Card */
+.pf-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    margin-bottom: 18px;
+}
+
+.pf-card-head {
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--border-light);
+    background: var(--navy);
+    border-bottom: 2px solid var(--saffron);
+}
+
+.pf-card-head h3 {
+    font-family: 'Crimson Pro', serif;
+    font-size: 16px;
+    font-weight: 600;
+    color: #fff;
+    margin: 0;
+}
+
+.pf-card-body {
+    padding: 20px;
+}
+
+/* Info grid */
+.pf-info-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+}
+
+@media (max-width: 600px) {
+    .pf-info-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.pf-info-label {
+    font-size: 10.5px;
+    font-weight: 600;
+    color: var(--text-3);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+}
+
+.pf-info-val {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text);
+}
+
+/* Address */
+.pf-address {
+    font-size: 14px;
+    color: var(--text-2);
+    line-height: 1.6;
+    margin: 0 0 12px;
+}
+
+.pf-location-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--navy-pale);
+    color: var(--navy);
+    font-size: 13px;
+    font-weight: 500;
+    padding: 6px 14px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+}
+
+/* Buttons */
+.pf-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 9px 18px;
+    border-radius: 7px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: all 0.18s;
+    font-family: 'DM Sans', sans-serif;
+    text-decoration: none;
+}
+
+.pf-btn--primary {
+    background: var(--saffron);
+    color: #fff;
+    box-shadow: 0 3px 10px rgba(224, 123, 42, 0.25);
+}
+
+.pf-btn--primary:hover {
+    background: #C96D20;
+    transform: translateY(-1px);
+}
+
+.pf-btn--ghost {
+    background: transparent;
+    color: var(--navy);
+    border: 1.5px solid var(--border);
+}
+
+.pf-btn--ghost:hover {
+    background: var(--navy-pale);
+    border-color: var(--navy);
+}
+
+/* Complaints */
+.pf-complaints {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.pf-complaint-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    transition: box-shadow 0.2s;
+}
+
+.pf-complaint-card:hover {
+    box-shadow: var(--shadow-md);
+}
+
+.pf-complaint-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 18px;
+    background: var(--bg);
+    border-bottom: 1px solid var(--border-light);
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.pf-complaint-id {
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--text-2);
+}
+
+.pf-status-badge {
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 12px;
+    border-radius: 20px;
+    letter-spacing: 0.3px;
+    text-transform: capitalize;
+}
+
+.pf-status-badge--resolved {
+    background: var(--green-pale);
+    color: var(--green);
+}
+
+.pf-status-badge--pending {
+    background: var(--saffron-pale);
+    color: var(--saffron);
+}
+
+.pf-status-badge--review {
+    background: var(--navy-pale);
+    color: var(--navy);
+}
+
+.pf-complaint-type {
+    font-family: 'Crimson Pro', serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--navy);
+    margin: 0 0 6px;
+    padding: 14px 18px 0;
+}
+
+.pf-complaint-desc {
+    font-size: 13.5px;
+    color: var(--text-2);
+    line-height: 1.6;
+    padding: 0 18px 12px;
+    margin: 0;
+}
+
+.pf-complaint-meta {
+    display: flex;
+    gap: 20px;
+    padding: 10px 18px;
+    background: var(--bg);
+    border-top: 1px solid var(--border-light);
+    font-size: 12.5px;
+    color: var(--text-2);
+    flex-wrap: wrap;
+}
+
+.pf-meta-icon {
+    margin-right: 3px;
+}
+
+.pf-complaint-foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 11px 18px;
+    border-top: 1px solid var(--border-light);
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.pf-complaint-date {
+    font-size: 12px;
+    color: var(--text-3);
+    font-weight: 500;
+}
+
+/* Empty */
+.pf-empty {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 60px 20px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    box-shadow: var(--shadow-sm);
+}
+
+.pf-empty-icon {
+    font-size: 48px;
+}
+
+.pf-empty h3 {
+    font-family: 'Crimson Pro', serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--navy);
+    margin: 0;
+}
+
+.pf-empty p {
+    font-size: 14px;
+    color: var(--text-2);
+    margin: 0;
+}
+
+/* Footer */
+.pf-footer {
+    border-top: 1px solid var(--border);
+    background: var(--navy);
+    padding: 18px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+    font-size: 12.5px;
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.pf-footer-links {
+    display: flex;
+    gap: 16px;
+}
+
+.pf-footer-links a {
+    color: rgba(255, 255, 255, 0.45);
+    text-decoration: none;
+    transition: color 0.18s;
+}
+
+.pf-footer-links a:hover {
+    color: var(--saffron);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .pf-stats-row {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+    }
+
+    .pf-section-title {
+        font-size: 22px;
+    }
+}

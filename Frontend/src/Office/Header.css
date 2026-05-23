@@ -1,0 +1,153 @@
+@import url('https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@600;700&family=DM+Sans:wght@400;500;600&display=swap');
+
+.hh-header {
+    --navy: #0C1B33;
+    --saffron: #E07B2A;
+    --green: #1A6B3A;
+    --border: #D8E0EB;
+    --text-2: #4A5568;
+    --text-3: #8A9BB0;
+    font-family: 'DM Sans', sans-serif;
+    background: var(--navy);
+    box-shadow: 0 2px 16px rgba(12, 27, 51, 0.25);
+}
+
+/* Tricolor accent bar */
+.hh-tricolor {
+    height: 3px;
+    background: linear-gradient(90deg, var(--saffron) 33.3%, #fff 33.3% 66.6%, var(--green) 66.6%);
+}
+
+.hh-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 24px;
+    height: 58px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+/* Brand */
+.hh-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.hh-emblem {
+    font-size: 22px;
+    color: rgba(255, 255, 255, 0.55);
+    line-height: 1;
+}
+
+
+
+.hh-title {
+    font-family: 'Crimson Pro', serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1;
+    margin-bottom: 1px;
+}
+
+.hh-subtitle {
+    font-size: 10.5px;
+    color: rgba(255, 255, 255, 0.38);
+    font-weight: 500;
+    letter-spacing: 0.3px;
+}
+
+.hh-monitor-pill {
+    background: rgba(224, 123, 42, 0.18);
+    border: 1px solid rgba(224, 123, 42, 0.35);
+    color: var(--saffron);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+    padding: 3px 9px;
+    border-radius: 12px;
+}
+
+/* User section */
+.hh-user {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.hh-user-info {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+}
+
+.hh-avatar {
+    width: 32px;
+    height: 32px;
+    background: var(--saffron);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Crimson Pro', serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: #fff;
+    flex-shrink: 0;
+}
+
+.hh-user-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.85);
+    line-height: 1.1;
+    max-width: 160px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.hh-user-role {
+    font-size: 10px;
+    color: rgba(255, 255, 255, 0.35);
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    font-weight: 500;
+}
+
+.hh-logout {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    color: rgba(255, 255, 255, 0.65);
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12.5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.18s;
+    white-space: nowrap;
+}
+
+.hh-logout:hover {
+    background: rgba(255, 255, 255, 0.16);
+    color: #fff;
+}
+
+@media (max-width: 560px) {
+    .hh-subtitle {
+        display: none;
+    }
+
+    .hh-user-text {
+        display: none;
+    }
+
+    .hh-inner {
+        padding: 0 16px;
+    }
+}

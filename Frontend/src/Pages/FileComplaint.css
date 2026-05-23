@@ -1,0 +1,770 @@
+/* FileComplaint.css */
+.file-complaint-page {
+    background: #F8F9FA;
+    min-height: 100vh;
+    padding-bottom: 40px;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Header Banner */
+.complaint-header-banner {
+    background: linear-gradient(135deg, #000080, #1A237E);
+    color: white;
+    padding: 25px 0;
+    border-bottom: 4px solid #FF9933;
+    margin-bottom: 30px;
+}
+
+.complaint-header-banner .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.complaint-header-banner h1 {
+    margin: 0;
+    font-size: 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.header-icon {
+    font-size: 32px;
+    margin-right: 15px;
+}
+
+.sub-header {
+    font-size: 16px;
+    color: #E3F2FD;
+    font-weight: 400;
+    margin-top: 5px;
+}
+
+.header-badge {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 10px 20px;
+    border-radius: 30px;
+    border: 2px solid #4CAF50;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    backdrop-filter: blur(10px);
+}
+
+.badge-icon {
+    font-size: 18px;
+}
+
+/* Progress Steps */
+.complaint-progress {
+    margin-bottom: 30px;
+}
+
+.progress-steps {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    position: relative;
+}
+
+.step.active .step-number {
+    background: #000080;
+    color: white;
+    border-color: #000080;
+}
+
+.step-number {
+    width: 40px;
+    height: 40px;
+    background: white;
+    border: 2px solid #D0D0D0;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    color: #666;
+    transition: all 0.3s ease;
+}
+
+.step-label {
+    font-size: 12px;
+    color: #666;
+    font-weight: 500;
+    text-align: center;
+}
+
+.step-divider {
+    width: 100px;
+    height: 2px;
+    background: #D0D0D0;
+    margin: 0 5px;
+}
+
+/* Main Content Layout */
+.complaint-main-content {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 30px;
+}
+
+@media (max-width: 992px) {
+    .complaint-main-content {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Government Card Base */
+.government-card {
+    background: white;
+    border-radius: 8px;
+    border: 1px solid #E0E0E0;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.government-card .card-header {
+    background: linear-gradient(to right, #F5F5F5, #FAFAFA);
+    padding: 20px;
+    border-bottom: 2px solid #000080;
+    border-radius: 8px 8px 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.government-card .card-header h3 {
+    margin: 0;
+    font-size: 20px;
+    color: #000080;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.card-icon {
+    font-size: 22px;
+}
+
+.form-info {
+    background: #FFF3E0;
+    color: #EF6C00;
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.info-icon {
+    font-size: 14px;
+}
+
+/* Success Message */
+.success-message {
+    padding: 40px 30px;
+    text-align: center;
+}
+
+.success-icon {
+    font-size: 60px;
+    color: #4CAF50;
+    margin-bottom: 20px;
+}
+
+.success-message h3 {
+    color: #000080;
+    margin-bottom: 20px;
+    font-size: 24px;
+}
+
+.complaint-id-display {
+    background: #E3F2FD;
+    border: 2px dashed #2196F3;
+    border-radius: 8px;
+    padding: 15px;
+    margin: 20px 0;
+    display: inline-block;
+}
+
+.id-label {
+    font-size: 14px;
+    color: #666;
+    margin-right: 10px;
+}
+
+.id-value {
+    font-family: monospace;
+    font-size: 20px;
+    font-weight: 700;
+    color: #000080;
+    letter-spacing: 1px;
+}
+
+.success-message p {
+    color: #666;
+    margin-bottom: 25px;
+}
+
+.next-steps {
+    background: #F5F5F5;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 25px 0;
+    text-align: left;
+}
+
+.next-steps h4 {
+    color: #000080;
+    margin-bottom: 15px;
+    font-size: 16px;
+}
+
+.next-steps ul {
+    margin: 0;
+    padding-left: 20px;
+    color: #666;
+}
+
+.next-steps li {
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+.next-steps li:last-child {
+    margin-bottom: 0;
+}
+
+/* Form Styling */
+.complaint-form {
+    padding: 20px;
+}
+
+.form-section {
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #F0F0F0;
+}
+
+.form-section:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.form-section h4 {
+    color: #000080;
+    font-size: 16px;
+    margin: 0 0 20px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.section-icon {
+    font-size: 18px;
+}
+
+/* Form Groups */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+}
+
+.form-group label::after {
+    content: ' *';
+    color: #F44336;
+}
+
+.form-group label:has(+ input:not([required]))::after {
+    content: '';
+}
+
+/* Government Input Styles */
+.govt-input,
+.govt-select,
+.govt-textarea {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #D0D0D0;
+    border-radius: 4px;
+    font-size: 14px;
+    color: #333;
+    background: white;
+    transition: all 0.3s ease;
+}
+
+.govt-input:focus,
+.govt-select:focus,
+.govt-textarea:focus {
+    outline: none;
+    border-color: #000080;
+    box-shadow: 0 0 0 3px rgba(0, 0, 128, 0.1);
+}
+
+.govt-select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23000080' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 15px center;
+    background-size: 16px;
+    padding-right: 45px;
+}
+
+.govt-textarea {
+    resize: vertical;
+    min-height: 100px;
+    max-height: 200px;
+}
+
+.char-count {
+    text-align: right;
+    font-size: 12px;
+    color: #999;
+    margin-top: 5px;
+}
+
+/* Priority Section */
+.priority-section label {
+    display: block;
+    margin-bottom: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+}
+
+.priority-options {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.priority-option {
+    flex: 1;
+    min-width: 100px;
+    padding: 12px;
+    border: 2px solid;
+    border-radius: 6px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 14px;
+    font-weight: 500;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    background: white;
+}
+
+.priority-option:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.priority-option.selected {
+    background: rgba(0, 0, 128, 0.05);
+    font-weight: 600;
+}
+
+.priority-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+}
+
+/* File Upload */
+.file-upload-area {
+    border: 2px dashed #D0D0D0;
+    border-radius: 8px;
+    padding: 20px;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.file-upload-area:hover {
+    border-color: #000080;
+    background: rgba(0, 0, 128, 0.02);
+}
+
+.file-input {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.upload-placeholder {
+    text-align: center;
+    color: #666;
+}
+
+.upload-icon {
+    font-size: 32px;
+    display: block;
+    margin-bottom: 10px;
+}
+
+.upload-text p {
+    margin: 5px 0;
+    font-size: 14px;
+}
+
+.file-types {
+    font-size: 12px;
+    color: #999;
+}
+
+.file-preview {
+    background: #E3F2FD;
+    border-radius: 6px;
+    padding: 10px 15px;
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+}
+
+.file-icon {
+    font-size: 18px;
+}
+
+.file-name {
+    flex-grow: 1;
+    color: #000080;
+    font-weight: 500;
+}
+
+.file-size {
+    color: #666;
+    font-size: 12px;
+}
+
+/* Checkbox Styling */
+.checkbox-label {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    cursor: pointer;
+    font-size: 14px;
+    color: #333;
+    position: relative;
+}
+
+.govt-checkbox {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.checkmark {
+    position: relative;
+    top: 2px;
+    min-width: 18px;
+    height: 18px;
+    background: white;
+    border: 2px solid #D0D0D0;
+    border-radius: 3px;
+    display: inline-block;
+}
+
+.govt-checkbox:checked + .checkmark {
+    background: #000080;
+    border-color: #000080;
+}
+
+.govt-checkbox:checked + .checkmark::after {
+    content: '✓';
+    position: absolute;
+    top: -1px;
+    left: 2px;
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.anonymous-option {
+    margin-bottom: 20px;
+}
+
+.consent-section {
+    background: #FFF3E0;
+    border-radius: 6px;
+    padding: 15px;
+    margin: 20px 0;
+}
+
+.consent-text {
+    font-size: 13px;
+    color: #666;
+    line-height: 1.5;
+}
+
+/* Contact Fields */
+.contact-fields {
+    margin-top: 20px;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+@media (max-width: 768px) {
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Form Actions */
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #F0F0F0;
+}
+
+/* Right Column - Information Cards */
+.info-card,
+.categories-card,
+.tracking-card {
+    padding: 20px;
+}
+
+.info-card h4,
+.categories-card h4,
+.tracking-card h4 {
+    margin: 0 0 20px 0;
+    color: #000080;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Info List */
+.info-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.info-item {
+    display: flex;
+    gap: 15px;
+}
+
+.info-icon {
+    font-size: 20px;
+    color: #000080;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.info-content h5 {
+    margin: 0 0 5px 0;
+    color: #333;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.info-content p {
+    margin: 0;
+    font-size: 12px;
+    color: #666;
+    line-height: 1.4;
+}
+
+/* Categories List */
+.categories-list {
+    display: grid;
+    gap: 12px;
+}
+
+.category-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    border: 1px solid #F0F0F0;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+.category-item:hover {
+    background: #F8F9FA;
+    border-color: #000080;
+    transform: translateX(5px);
+}
+
+.category-icon {
+    font-size: 16px;
+    color: #000080;
+}
+
+.category-text {
+    font-size: 13px;
+    color: #333;
+    font-weight: 500;
+}
+
+/* Tracking Card */
+.tracking-card p {
+    color: #666;
+    font-size: 13px;
+    margin-bottom: 20px;
+}
+
+.tracking-methods {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.method {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    background: #F8F9FA;
+    border-radius: 4px;
+}
+
+.method-icon {
+    font-size: 16px;
+    color: #000080;
+}
+
+.method span {
+    font-size: 13px;
+    color: #333;
+}
+
+.track-link {
+    display: block;
+    text-align: center;
+    color: #000080;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 13px;
+    padding: 10px;
+    border: 1px solid #000080;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+.track-link:hover {
+    background: #000080;
+    color: white;
+}
+
+/* Button Styles */
+.btn {
+    padding: 12px 25px;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.btn-primary {
+    background: #000080;
+    color: white;
+}
+
+.btn-primary:hover:not(:disabled) {
+    background: #1A237E;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.btn-primary:disabled {
+    background: #B0B0B0;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.btn-secondary {
+    background: #F5F5F5;
+    color: #333;
+    border: 1px solid #D0D0D0;
+}
+
+.btn-secondary:hover {
+    background: #E0E0E0;
+    transform: translateY(-2px);
+}
+
+.submit-icon {
+    font-size: 16px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .complaint-header-banner h1 {
+        font-size: 22px;
+    }
+    
+    .progress-steps {
+        flex-direction: column;
+        gap: 20px;
+    }
+    
+    .step-divider {
+        width: 2px;
+        height: 20px;
+    }
+    
+    .form-actions {
+        flex-direction: column;
+    }
+    
+    .form-actions .btn {
+        width: 100%;
+    }
+}
