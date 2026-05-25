@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import API from "../API/api_req";
+import WasteBotAPI from "../API/wastebot_api";
 import "./WasteBotWidget.css";
 
 const initialMessages = [
@@ -22,6 +22,7 @@ export default function WasteBotWidget() {
 
   const containerRef = useRef(null);
   const bodyRef = useRef(null);
+  const inputRef = useRef(null);
   const dragRef = useRef({ active: false, startX: 0, startY: 0, originX: 0, originY: 0, moved: false });
 
   const canSend = useMemo(() => input.trim().length > 0 && !busy, [input, busy]);
@@ -52,7 +53,6 @@ export default function WasteBotWidget() {
     };
     window.addEventListener("resize", onResize);
     return () => window.removeEventListener("resize", onResize);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -62,7 +62,6 @@ export default function WasteBotWidget() {
       if (!pos || !hasDragged) snapToBottomRight();
       else setPos((p) => (p ? clampToViewport(p.x, p.y) : p));
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open]);
 
   useEffect(() => {
@@ -73,17 +72,26 @@ export default function WasteBotWidget() {
 
   useEffect(() => {
     if (!open) return;
+    const t = setTimeout(() => inputRef.current?.focus?.(), 0);
+    return () => clearTimeout(t);
+  }, [open]);
+
+  useEffect(() => {
+    if (!open) return;
     let cancelled = false;
-    (async () => {
-      try {
-        const res = await API.get("/wastebot/health");
-        if (!cancelled) setStatus(res?.data?.status === "ok" ? "online" : "offline");
-      } catch {
-        if (!cancelled) setStatus("offline");
-      }
-    })();
+
+    const check = async () => {
+      const res = await WasteBotAPI.checkHealth();
+      if (cancelled) return;
+      setStatus(res.success && res?.data?.status === "ok" ? "online" : "offline");
+    };
+
+    check();
+    const id = setInterval(check, 5000);
+
     return () => {
       cancelled = true;
+      clearInterval(id);
     };
   }, [open]);
 
@@ -131,18 +139,23 @@ export default function WasteBotWidget() {
     setMessages((m) => [...m, { role: "user", text: question }]);
 
     try {
-      const res = await API.post("/wastebot/chat", { question });
+      const res = await WasteBotAPI.chat({ question });
+      if (!res.success) {
+        throw res.error;
+      }
+
+      setStatus("online");
       const answer = res?.data?.answer || "Sorry, I couldn’t generate an answer.";
       const sources = Array.isArray(res?.data?.sources) ? res.data.sources : [];
       setMessages((m) => [...m, { role: "bot", text: answer, sources }]);
     } catch (e) {
-      const backendMsg = e?.response?.data?.error || e?.response?.data?.detail;
       const msg =
-        backendMsg ||
-        (e?.code === "ERR_NETWORK" ? "Backend is not reachable on port 3000." : e?.message) ||
-        "WasteBot is not available. Start the WasteBot server and try again.";
+        e?.message ||
+        "WasteBot is not available. Start the WasteBot server on port 8001 and try again.";
 
-      setStatus("offline");
+      // If the backend responded (HTTP error), it is reachable even if the request failed.
+      if (typeof e?.status === "number") setStatus("online");
+      else setStatus("offline");
       setMessages((m) => [
         ...m,
         {
@@ -150,9 +163,9 @@ export default function WasteBotWidget() {
           text:
             `Error: ${msg}\n\n` +
             "To fix:\n" +
-            "1) Start Backend (port 3000)\n" +
-            "2) Start WasteBot API: `cd WasteBot` then `python main.py --server --warmup`\n" +
-            "3) Ensure `GROQ_API_KEY` is set in `WasteBot/.env`",
+            "1) Start WasteBot API: `cd WasteBot` then `python main.py --server --warmup`\n" +
+            "2) Ensure `GROQ_API_KEY` is set in `WasteBot/.env`\n" +
+            "3) Confirm the API is reachable at `http://127.0.0.1:8001/wastebot/health`",
         },
       ]);
     } finally {
@@ -239,6 +252,11 @@ export default function WasteBotWidget() {
               )}
             </div>
           ))}
+          {busy && (
+            <div className="wb-msg wb-msg--bot" aria-live="polite">
+              Thinking…
+            </div>
+          )}
         </div>
 
         <div className="wb-footer">
@@ -249,15 +267,23 @@ export default function WasteBotWidget() {
               send();
             }}
           >
-            <input
+            <textarea
+              ref={inputRef}
               className="wb-input"
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder="Ask a waste-management question..."
               disabled={busy}
+              rows={2}
+              onKeyDown={(e) => {
+                if (e.key !== "Enter") return;
+                if (e.shiftKey) return;
+                e.preventDefault();
+                send();
+              }}
             />
             <button className="wb-send" type="submit" disabled={!canSend}>
-              {busy ? "..." : "Send"}
+              {busy ? "Sending..." : "Send"}
             </button>
           </form>
         </div>

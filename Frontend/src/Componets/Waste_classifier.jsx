@@ -1,11 +1,14 @@
 import React, { useEffect, useMemo, useState } from "react";
-import api from "../API/model_api";
+import api from "../API/waste_classifier_api";
 import "./WasteClassifier.css";
 
 const WasteClassifier = () => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
   const [prediction, setPrediction] = useState(null);
+  const [uploadUrl, setUploadUrl] = useState(null);
+  const [outputUrl, setOutputUrl] = useState(null);
+  const [history, setHistory] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [dragOver, setDragOver] = useState(false);
@@ -13,6 +16,7 @@ const WasteClassifier = () => {
 
   useEffect(() => {
     checkApiHealth();
+    loadHistory();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -20,6 +24,11 @@ const WasteClassifier = () => {
     const result = await api.checkHealth();
     if (result.success && result.data?.status === "healthy") setApiStatus("connected");
     else setApiStatus("disconnected");
+  };
+
+  const loadHistory = async () => {
+    const res = await api.getHistory(10);
+    if (res.success) setHistory(res.data?.items || []);
   };
 
   const processFile = (file) => {
@@ -36,6 +45,8 @@ const WasteClassifier = () => {
     setSelectedFile(file);
     setError(null);
     setPrediction(null);
+    setUploadUrl(null);
+    setOutputUrl(null);
 
     const reader = new FileReader();
     reader.onloadend = () => setPreviewUrl(reader.result);
@@ -67,6 +78,8 @@ const WasteClassifier = () => {
     setSelectedFile(null);
     setPreviewUrl(null);
     setPrediction(null);
+    setUploadUrl(null);
+    setOutputUrl(null);
     setError(null);
     setDragOver(false);
   };
@@ -84,9 +97,17 @@ const WasteClassifier = () => {
     setLoading(true);
     setError(null);
     try {
-      const result = await api.predictImage(selectedFile);
-      if (result.success && result.data?.success) setPrediction(result.data);
-      else setError(result.error || result.data?.error || "Prediction failed");
+      const result = await api.detectImage(selectedFile);
+      const data = result.data;
+      const ok = result.success && data && (data.id || data.success === true);
+      if (ok) {
+        setPrediction(data);
+        setUploadUrl(api.resolveFileUrl(data.uploadUrl));
+        setOutputUrl(api.resolveFileUrl(data.outputUrl));
+        loadHistory();
+      } else {
+        setError(result.error?.message || data?.error || "Detection failed");
+      }
     } catch (err) {
       setError("Failed to connect to server. Please check if the backend is running.");
       // eslint-disable-next-line no-console
@@ -110,11 +131,12 @@ const WasteClassifier = () => {
     return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" });
   };
 
-  const disposal = useMemo(() => {
+const disposal = useMemo(() => {
     if (!prediction) return { label: null, icon: "❓", className: "" };
-    if (prediction.isRecyclable === true) return { label: "Recyclable", icon: "♻️", className: "recyclable" };
-    if (prediction.isRecyclable === false) return { label: "Organic", icon: "🌱", className: "organic" };
-    return { label: "Unknown", icon: "❓", className: "" };
+    if (prediction.status === "Clean") return { label: "Clean", icon: "✅", className: "recyclable" };
+    if (prediction.status === "Moderate") return { label: "Moderate", icon: "⚠️", className: "organic" };
+    if (prediction.status) return { label: prediction.status, icon: "❗", className: "" };
+    return { label: null, icon: "❓", className: "" };
   }, [prediction]);
 
   return (
@@ -219,39 +241,37 @@ const WasteClassifier = () => {
                 <div className="prediction-type">
                   <div className="type-icon">{disposal.icon}</div>
                   <div className="type-info">
-                    <h3>{prediction.prediction}</h3>
+                    <h3>{disposal.label || "Analysis complete"}</h3>
                     <p className="type-description">
-                      {disposal.label === "Recyclable"
-                        ? "This item is likely recyclable."
-                        : disposal.label === "Organic"
-                          ? "This item is likely organic/compostable."
-                          : "Disposal type could not be determined from the label."}
+                      {prediction.status
+                        ? `Cleanliness status: ${prediction.status}`
+                        : "Detection completed successfully."}
                     </p>
                   </div>
                 </div>
                 <div className="confidence-score">
-                  <div className="score-value">{prediction.confidence}%</div>
-                  <div className="score-label">Confidence</div>
+                  <div className="score-value">{prediction.cleanlinessScore ?? prediction.confidence ?? "—"}</div>
+                  <div className="score-label">Cleanliness</div>
                 </div>
               </div>
 
               <div className="prediction-details">
                 <div className="details-grid">
                   <div className="detail-box">
-                    <span className="detail-label">Prediction</span>
-                    <span className="detail-value">{prediction.prediction}</span>
+                    <span className="detail-label">Total Waste</span>
+                    <span className="detail-value">{prediction.totalWasteCount ?? "—"}</span>
                   </div>
                   <div className="detail-box">
-                    <span className="detail-label">Disposal Type</span>
-                    <span className="detail-value">{disposal.label}</span>
+                    <span className="detail-label">Humans</span>
+                    <span className="detail-value">{prediction.humanCount ?? "—"}</span>
                   </div>
                   <div className="detail-box">
-                    <span className="detail-label">Probability</span>
-                    <span className="detail-value">{prediction.probability}</span>
+                    <span className="detail-label">Status</span>
+                    <span className="detail-value">{prediction.status ?? "—"}</span>
                   </div>
                   <div className="detail-box">
                     <span className="detail-label">Time</span>
-                    <span className="detail-value">{formatTime(prediction.timestamp)}</span>
+                    <span className="detail-value">{formatTime(prediction.createdAt || prediction.timestamp)}</span>
                   </div>
                 </div>
               </div>
@@ -259,13 +279,85 @@ const WasteClassifier = () => {
               <div className="recommendation">
                 <h4>💡 Recommendation</h4>
                 <p>
-                  {prediction.isRecyclable === true
-                    ? "Place this item in the recycling bin. Make sure it is clean and dry before recycling."
-                    : prediction.isRecyclable === false
-                      ? "This organic material should be composted or placed in the organic waste bin."
-                      : "Please follow your local municipal guidelines for disposal of this item."}
+                  {prediction.status === "Clean"
+                    ? "Area looks clean. Maintain regular monitoring to prevent littering."
+                    : prediction.status === "Moderate"
+                      ? "Area needs attention. Schedule cleanup and ensure bins are accessible."
+                      : "Area is likely dirty. Dispatch a cleanup team and consider adding more bins/signage."}
                 </p>
               </div>
+
+              <div className="prediction-details">
+                <div className="details-grid">
+                  <div className="detail-box">
+                    <span className="detail-label">Waste</span>
+                    <span className="detail-value">{prediction.counts?.waste ?? 0}</span>
+                  </div>
+                  <div className="detail-box">
+                    <span className="detail-label">Garbage Piles</span>
+                    <span className="detail-value">{prediction.counts?.garbage_piles ?? 0}</span>
+                  </div>
+                  <div className="detail-box">
+                    <span className="detail-label">Litter</span>
+                    <span className="detail-value">{prediction.counts?.litter ?? 0}</span>
+                  </div>
+                  <div className="detail-box">
+                    <span className="detail-label">Dustbins</span>
+                    <span className="detail-value">{prediction.counts?.dustbins ?? 0}</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="prediction-details">
+                <div className="details-grid">
+                  <div className="detail-box">
+                    <span className="detail-label">Uploaded Image</span>
+                    <span className="detail-value">
+                      {previewUrl ? (
+                        <img src={previewUrl} alt="Uploaded preview" style={{ width: "100%", borderRadius: 8 }} />
+                      ) : (
+                        "—"
+                      )}
+                    </span>
+                  </div>
+                  <div className="detail-box">
+                    <span className="detail-label">Annotated Image</span>
+                    <span className="detail-value">
+                      {outputUrl ? (
+                        <img src={outputUrl} alt="Annotated output" style={{ width: "100%", borderRadius: 8 }} />
+                      ) : (
+                        "—"
+                      )}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {history?.length > 0 && (
+                <div className="recommendation">
+                  <h4>🕒 Recent History</h4>
+                  <div style={{ display: "grid", gap: 8 }}>
+                    {history.slice(0, 5).map((item) => (
+                      <div
+                        key={item.id}
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          gap: 12,
+                          padding: 10,
+                          borderRadius: 10,
+                          background: "rgba(255,255,255,0.06)",
+                        }}
+                      >
+                        <div>
+                          <strong>#{item.id}</strong> • {formatTime(item.createdAt)} • {item.status}
+                        </div>
+                        <div>Score: {item.cleanlinessScore}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
 
               <div className="action-buttons">
                 <button onClick={handleReset} className="primary-btn" type="button">
@@ -296,4 +388,3 @@ const WasteClassifier = () => {
 };
 
 export default WasteClassifier;
-

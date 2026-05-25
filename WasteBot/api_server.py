@@ -27,6 +27,7 @@ except Exception:
     pass
 
 from fastapi import FastAPI, HTTPException
+from fastapi.routing import APIRouter
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
@@ -37,13 +38,37 @@ logger = logging.getLogger("wastebot.api")
 os.environ.setdefault("WASTEBOT_NO_PROMPT", "1")
 
 app = FastAPI(title="WasteBot API", version="1.0.0")
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=os.getenv("WASTEBOT_CORS_ORIGINS", "*").split(","),
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+
+# CORS:
+# - By default, allow localhost/127.0.0.1 on any port (Vite may pick a different port).
+# - If you want to lock it down in production, set WASTEBOT_CORS_ORIGINS to a comma-separated list.
+_origins_raw = (os.getenv("WASTEBOT_CORS_ORIGINS") or "").strip()
+_origins = [o.strip() for o in _origins_raw.split(",") if o.strip()]
+
+if _origins and "*" in _origins:
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=["*"],
+        allow_credentials=False,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
+elif _origins:
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=_origins,
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
+else:
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origin_regex=r"^https?://(localhost|127\.0\.0\.1)(:\d+)?$",
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
 
 _chain_lock = threading.Lock()
 _chain: Any | None = None
@@ -88,13 +113,15 @@ def _startup() -> None:
     except Exception:
         logger.exception("Startup warmup failed.")
 
+router = APIRouter(prefix="/wastebot", tags=["wastebot"])
 
-@app.get("/health")
+
+@router.get("/health")
 def health() -> dict[str, str]:
     return {"status": "ok"}
 
 
-@app.post("/chat", response_model=ChatResponse)
+@router.post("/chat", response_model=ChatResponse)
 def chat(req: ChatRequest) -> ChatResponse:
     question = (req.question or "").strip()
     if not question:
@@ -118,6 +145,20 @@ def chat(req: ChatRequest) -> ChatResponse:
             continue
 
     return ChatResponse(answer=str(result.get("answer") or ""), sources=sources_out)
+
+
+# Backwards-compatible aliases (no /wastebot prefix)
+@app.get("/health")
+def health_alias() -> dict[str, str]:
+    return health()
+
+
+@app.post("/chat", response_model=ChatResponse)
+def chat_alias(req: ChatRequest) -> ChatResponse:
+    return chat(req)
+
+
+app.include_router(router)
 
 
 def main() -> None:

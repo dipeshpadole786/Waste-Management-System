@@ -13,6 +13,7 @@ import torch
 
 MODEL_ID = os.getenv("MODEL_ID", "watersplash/waste-classification")
 TOP_K = int(os.getenv("TOP_K", "5"))
+HISTORY_MAX = int(os.getenv("HISTORY_MAX", "50"))
 
 
 def _utc_iso() -> str:
@@ -96,11 +97,16 @@ app.add_middleware(
     allow_origins=[
         "http://localhost:5173",
         "http://127.0.0.1:5173",
+        "http://localhost:5174",
+        "http://127.0.0.1:5174",
     ],
+    allow_origin_regex=r"^http://(localhost|127\\.0\\.0\\.1):\\d+$",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+_history: List[Dict[str, Any]] = []
 
 
 @app.on_event("startup")
@@ -179,8 +185,7 @@ def _predict_bytes(image_bytes: bytes) -> Tuple[Dict[str, Any], int]:
     return payload, elapsed_ms
 
 
-@app.post("/api/predict")
-async def predict(image: UploadFile = File(...)) -> JSONResponse:
+async def _handle_predict(image: UploadFile) -> JSONResponse:
     if not image.content_type or not image.content_type.startswith("image/"):
         return JSONResponse({"success": False, "error": "Please upload an image file."}, status_code=400)
 
@@ -190,9 +195,39 @@ async def predict(image: UploadFile = File(...)) -> JSONResponse:
 
     try:
         payload, _ = _predict_bytes(data)
+        item = {
+            "id": int(time.time() * 1000),
+            "createdAt": payload.get("timestamp"),
+            "outputUrl": None,
+            "cleanlinessScore": payload.get("confidence"),
+            "status": "OK",
+            "statusColor": "green",
+            "counts": {},
+            "raw": payload,
+        }
+        _history.insert(0, item)
+        del _history[HISTORY_MAX:]
         return JSONResponse(payload)
     except Exception as e:
         return JSONResponse({"success": False, "error": f"Prediction failed: {str(e)}"}, status_code=500)
+
+
+@app.post("/api/detect")
+async def detect(image: UploadFile = File(...)) -> JSONResponse:
+    # Compatibility with frontend expecting /api/detect
+    return await _handle_predict(image)
+
+
+@app.post("/api/predict")
+async def predict(image: UploadFile = File(...)) -> JSONResponse:
+    # Backwards compatibility
+    return await _handle_predict(image)
+
+
+@app.get("/api/history")
+def history(limit: int = 20) -> JSONResponse:
+    limit = max(1, min(int(limit), 100))
+    return JSONResponse({"items": _history[:limit]})
 
 
 @app.post("/api/batch-predict")
@@ -217,4 +252,3 @@ async def batch_predict(images: List[UploadFile] = File(...)) -> JSONResponse:
             results.append({"success": False, "filename": f.filename, "error": str(e)})
 
     return JSONResponse({"success": True, "count": len(results), "results": results, "timestamp": _utc_iso()})
-

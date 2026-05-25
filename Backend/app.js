@@ -19,13 +19,30 @@ const main = async () => {
     await mongoose.connect("mongodb://localhost:27017/waste-management");
     console.log("mongodb is connected ");
 };
-app.use(cors({
-    origin: (origin, cb) => {
-        if (!origin) return cb(null, true);
-        if (/^http:\/\/(localhost|127\.0\.0\.1):5173$/.test(origin)) return cb(null, true);
-        return cb(null, false);
-    }
-}));
+const extraCorsOrigins = (process.env.CORS_ORIGINS || "")
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean);
+
+const isAllowedOrigin = (origin) => {
+    if (!origin) return true;
+
+    // Allow common local dev origins (Vite/React/Next/etc).
+    if (/^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin)) return true;
+
+    // Allow explicit extra origins from env.
+    if (extraCorsOrigins.includes(origin)) return true;
+
+    return false;
+};
+
+const corsOptions = {
+    origin: (origin, cb) => cb(null, isAllowedOrigin(origin)),
+    credentials: true,
+};
+
+app.use(cors(corsOptions));
+app.options(/.*/, cors(corsOptions));
 
 // =======================
 // UPLOADS (Complaint Images)

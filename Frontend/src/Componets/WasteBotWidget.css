@@ -139,6 +139,7 @@
   padding: 10px 12px;
   font-size: 14px;
   outline: none;
+  resize: none;
 }
 
 .wb-input:focus {
